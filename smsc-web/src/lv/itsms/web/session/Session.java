@@ -98,8 +98,6 @@ public class Session {
 	}
 	
 	public void updateSessionAttribute(String attribute, Object value) {
-		System.out.println("Session:");
-		System.out.println("Session:"+session);
 		session.setAttribute(attribute, value);
 	}
 	

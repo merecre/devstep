@@ -54,17 +54,13 @@ public class LoginRequestController extends HttpServlet {
 		
 		session.setRequest(request);
 		session.setSession(request.getSession());			
-		System.out.println("Session 1 " + session);
 		try {
 			Customer customer = validateUserInputtedLoginFormData(request);
 			String loginName = customer.getUserLogin();
 			String userPassword = customer.getPassword();
-			System.out.println("Session 2 " + session);
 			doLogging(loginName, userPassword, request, response);
-			System.out.println("Session 3 " + session);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Session 4 " + session);
 			session.updateSessionAttribute("error", e.getMessage());
 			forwardToLoginErrorPage(request, response);
 		}
@@ -111,11 +107,8 @@ public class LoginRequestController extends HttpServlet {
 	private void doLogging(String loginName, String userPassword, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Customer customer = repository.getCustomerByLoginAndPassword(loginName, userPassword);	
 		isCorrectCustomerLogin(customer);
-		System.out.println("Session 11 " + session);
 		PageRequestCommand requestCommand = new DoLoginFormRequestCommand(customer, session);
-		System.out.println("Session 12 " + session);
 		requestCommand.execute();
-		System.out.println("Session 13 " + session);
 		returnToBackPage(request, response);
 	}
 	
