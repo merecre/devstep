@@ -41,9 +41,13 @@
     <servlet-name>ReqistrationRequestController</servlet-name>
     <servlet-class>lv.itsms.web.page.registration.RegistrationRequestController</servlet-class>
   </servlet>
-    <servlet>
+  <servlet>
     <servlet-name>ReportRequestController</servlet-name>
     <servlet-class>lv.itsms.web.page.report.ReportPageRequestController</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ProfilePageController</servlet-name>
+    <servlet-class>lv.itsms.web.page.profile.ProfilePageController</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>MenuBuilder</servlet-name>
@@ -77,9 +81,13 @@
     <servlet-name>ReqistrationRequestController</servlet-name>
     <url-pattern>/login/registration.jsp</url-pattern>
   </servlet-mapping>
-    <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>ReportRequestController</servlet-name>
     <url-pattern>/reportrequest.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ProfilePageController</servlet-name>
+    <url-pattern>/profileloader.jsp</url-pattern>
   </servlet-mapping>
   <resource-ref>
     <description>IT SMS database configuration</description>

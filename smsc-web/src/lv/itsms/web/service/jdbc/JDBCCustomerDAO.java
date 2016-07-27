@@ -100,6 +100,7 @@ public class JDBCCustomerDAO implements CustomerDAO {
 		customer.setName(resultSet.getString("name"));
 		customer.setSurname(resultSet.getString("surname"));
 		customer.setPassword(resultSet.getString("password"));
+		customer.setUserLogin(resultSet.getString("login"));
 		customer.setEmail(resultSet.getString("email"));
 		
 		return customer;
