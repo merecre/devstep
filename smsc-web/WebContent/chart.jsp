@@ -1,70 +1,66 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <link href="css/ion.calendar.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  
-<%@ include file="/header.jsp" %>
+
+<%@ include file="/header.jsp"%>
 </head>
 <body>
-<%@ include file="/WEB-INF/menu/menu.jsp" %>
+	<%@ include file="/WEB-INF/menu/menu.jsp"%>
 
-<c:if test="${not empty sessionScope.userid}">
-	<%@ include file="/WEB-INF/menu/customermenu.jsp" %>
-</c:if>
+	<c:if test="${not empty sessionScope.userid}">
+		<%@ include file="/WEB-INF/menu/customermenu.jsp"%>
+	</c:if>
 
-<form method="post" action="<%= request.getContextPath() %>/chart.jsp">
-<table>
-<tr>
-<td>
-<p>Start Date:</p>
-</td>
-<td>
-<input type="text" value="" name="startdate" id="startdate" data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
-<script src="js/moment-with-locales.min.js"></script> 
-<script src="js/ion.calendar.js"></script> 
-<script>
+	<form method="post" action="<%= request.getContextPath() %>/chart.jsp">
+		<table>
+			<tr>
+				<td>
+					<p>Start Date:</p>
+				</td>
+				<td><input type="text" value="" name="startdate" id="startdate"
+					data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" />
+					<script
+						src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+					<script src="js/moment-with-locales.min.js"></script> <script
+						src="js/ion.calendar.js"></script> <script>
 $(function(){
     $("#startdate").ionDatePicker();
 });
-</script>
-</td>
-<td>
-<p>End Date:</p>
-</td>
-<td>
-<input type="text" value="" name="enddate" id="enddate" data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" />
-<script>
+</script></td>
+				<td>
+					<p>End Date:</p>
+				</td>
+				<td><input type="text" value="" name="enddate" id="enddate"
+					data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" />
+					<script>
 $(function(){
     $("#enddate").ionDatePicker();
 });
-</script>
-</td>
-<td>
-<input type="submit" value="view" name="view">
-</td>
-</tr>
-</table>
-</form>
+</script></td>
+				<td><input type="submit" value="view" name="view"></td>
+			</tr>
+		</table>
+	</form>
 
-<div id="linechart_material"></div>
-<div id="demo1"></div>
-<div id="result-1">...</div>
+	<div id="linechart_material"></div>
+	<div id="demo1"></div>
+	<div id="result-1">...</div>
 
-<% 
+	<% 
 if (request.getParameter("view")==null) {
     return;
 }
 %>
 
-<%@ page import="java.util.*" %>
-<%@ page import ="java.sql.*" %>
+	<%@ page import="java.util.*"%>
+	<%@ page import="java.sql.*"%>
 
-<%
+	<%
 Class.forName("com.mysql.jdbc.Driver");
 Connection conSchema = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_schema",
         "root", "Rjvfyljh78");
@@ -102,7 +98,7 @@ smsStatement.close();
 conSchema.close();
 %>
 
-<script type="text/javascript">
+	<script type="text/javascript">
     google.load('visualization', '1.1', {packages: ['line'], 'language': 'en'});
     google.setOnLoadCallback(drawChart);
 

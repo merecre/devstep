@@ -41,8 +41,8 @@ function add_fields(divName, inpName, bntName, btnDelId) {
         document.getElementById(tableID).deleteRow(d);
      }
 </script>
-<%@ page import="java.util.*" %>
-<%@ page import ="java.sql.*" %>
+<%@ page import="java.util.*"%>
+<%@ page import="java.sql.*"%>
 
 <%
 Class.forName("com.mysql.jdbc.Driver");
@@ -58,17 +58,12 @@ out.println("sql:"+sqlRequest);
 <%-- form group description fields --%>
 
 <table>
-<tr>
-    <td>
-    Group description:
-    </td>
-    <td>
-    <input type="text" name="g_common_name" value="" />
-    </td>
-    <td>
-    <input type="submit" value="save group" name="save">
-    </td>
-</tr>
+	<tr>
+		<td>Group description:</td>
+		<td><input type="text" name="g_common_name" value="" /></td>
+		<td><input type="submit" value="save group" name="save">
+		</td>
+	</tr>
 </table>
 
 <br>
@@ -76,60 +71,60 @@ out.println("sql:"+sqlRequest);
 <%-- form group message fields --%>
 
 <table>
-<tr>
-<td> Message: </td>
-<td> <input type="text" name="g_common_message" value="" size="60" /></td>
-</tr>
+	<tr>
+		<td>Message:</td>
+		<td><input type="text" name="g_common_message" value="" size="60" /></td>
+	</tr>
 </table>
 
 <%-- form send date and time fields --%>
 
 <table>
-<tr>
-<td>
-<p>Send date:</p>
-</td>
-<td>
-<input type="text" value="" id="startdate" data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" size="10" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
-<script src="js/moment-with-locales.min.js"></script> 
-<script src="js/ion.calendar.js"></script> 
-<script>
+	<tr>
+		<td>
+			<p>Send date:</p>
+		</td>
+		<td><input type="text" value="" id="startdate" data-lang="lv"
+			data-years="2015-2035" data-format="YYYY-MM-DD" size="10" /> <script
+				src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+			<script src="js/moment-with-locales.min.js"></script> <script
+				src="js/ion.calendar.js"></script> <script>
 $(function(){
     $("#startdate").ionDatePicker();
 });
-</script>
-</td>
-<td>Time:</td>
-<td><input type="time" name="grp_send_time_hour" maxlength="2" size="2"></td>
-<td>:</td>
-<td><input type="time" name="grp_send_time_min" maxlength="2" size="2"></td>
-</tr>
+</script></td>
+		<td>Time:</td>
+		<td><input type="time" name="grp_send_time_hour" maxlength="2"
+			size="2"></td>
+		<td>:</td>
+		<td><input type="time" name="grp_send_time_min" maxlength="2"
+			size="2"></td>
+	</tr>
 </table>
 
 <%-- Phone numbers list and input buttons: deleteRow; addRow  --%>
 
 <table id="phone_group">
-<thead>
-<tr>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th> Phone </th>
-</tr>
-<tr>
-<td><input type="text" name="phone" value=""/></td>
-<td>
-<input type="button" id="more_fields" onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');" value="Add row" />
-</td>
-<td>
-<input type="button" id="delete" onclick="deleteLastRow('phone_group');" value="Delete row" />
-</td>
-</tr>
-<tr>
-<td><input type="text" name="phone" value=""/></td>
-<td><input type="button" id="delete" onClick="deleteThisRow(this, 'phone_group')" value="Delete"/></td>
-</tr>
-</tbody>
+	<thead>
+		<tr>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>Phone</th>
+		</tr>
+		<tr>
+			<td><input type="text" name="phone" value="" /></td>
+			<td><input type="button" id="more_fields"
+				onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');"
+				value="Add row" /></td>
+			<td><input type="button" id="delete"
+				onclick="deleteLastRow('phone_group');" value="Delete row" /></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="phone" value="" /></td>
+			<td><input type="button" id="delete"
+				onClick="deleteThisRow(this, 'phone_group')" value="Delete" /></td>
+		</tr>
+	</tbody>
 </table>

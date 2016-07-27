@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <script language="JavaScript">
 function add_fields(divName, inpName, bntName, btnDelId) {
@@ -50,17 +50,13 @@ function add_fields(divName, inpName, bntName, btnDelId) {
 <%-- form group description fields --%>
 
 <table>
-<tr>
-    <td>
-    Group description:
-    </td>
-    <td>
-    <input type="text" name="g_common_name" value="${smsgrouprec.smsGroupName}" />
-    </td>
-    <td>
-    <input type="submit" value="save group" name="save">
-    </td>
-</tr>
+	<tr>
+		<td>Group description:</td>
+		<td><input type="text" name="g_common_name"
+			value="${smsgrouprec.smsGroupName}" /></td>
+		<td><input type="submit" value="save group" name="save">
+		</td>
+	</tr>
 </table>
 
 <br>
@@ -68,77 +64,82 @@ function add_fields(divName, inpName, bntName, btnDelId) {
 <%-- form group message fields --%>
 
 <table>
-<tr>
-<td> Message: </td>
-<td> <input type="text" name="g_common_message" value="${smsgrouprec.groupMessage}" size="60" /></td>
-</tr>
+	<tr>
+		<td>Message:</td>
+		<td><input type="text" name="g_common_message"
+			value="${smsgrouprec.groupMessage}" size="60" /></td>
+	</tr>
 </table>
 
 <%-- form send date and time fields --%>
 
 <table>
-<tr>
-<td>
-<p>Send date:</p>
-</td>
-<td>
-<c:set var="datetime" value="${smsgrouprec.sendTime}" scope="page"/>
-<fmt:formatDate var="date" value="${datetime}" pattern="yyyy-MM-dd" />
-<fmt:formatDate var="hour" value="${datetime}" pattern="HH" />
-<fmt:formatDate var="minutes" value="${datetime}" pattern="mm" />
-<input type="text" value="${date}" name="grp_send_date" id="grp_send_date" data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" size="10" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
-<script src="js/moment-with-locales.min.js"></script> 
-<script src="js/ion.calendar.js"></script> 
-<script>
+	<tr>
+		<td>
+			<p>Send date:</p>
+		</td>
+		<td><c:set var="datetime" value="${smsgrouprec.sendTime}"
+				scope="page" /> <fmt:formatDate var="date" value="${datetime}"
+				pattern="yyyy-MM-dd" /> <fmt:formatDate var="hour"
+				value="${datetime}" pattern="HH" /> <fmt:formatDate var="minutes"
+				value="${datetime}" pattern="mm" /> <input type="text"
+			value="${date}" name="grp_send_date" id="grp_send_date"
+			data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD"
+			size="10" /> <script
+				src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+			<script src="js/moment-with-locales.min.js"></script> <script
+				src="js/ion.calendar.js"></script> <script>
 $(function(){
     $("#grp_send_date").ionDatePicker();
 });
-</script>
-</td>
-<td>Time:</td>
-<td><input type="time" value="${hour}" name="grp_send_time_hour" maxlength="2" size="2"></td>
-<td>:</td>
-<td><input type="time" value="${minutes}" name="grp_send_time_min" maxlength="2" size="2"></td>
-</tr>
+</script></td>
+		<td>Time:</td>
+		<td><input type="time" value="${hour}" name="grp_send_time_hour"
+			maxlength="2" size="2"></td>
+		<td>:</td>
+		<td><input type="time" value="${minutes}"
+			name="grp_send_time_min" maxlength="2" size="2"></td>
+	</tr>
 </table>
 
 <%-- Phone numbers list and input buttons: deleteRow; addRow  --%>
 
 <table id="phone_group">
-<thead>
-<tr>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th> Phone </th>
-</tr>
-<c:set var="counter" value="0" scope="page" />
-<c:forEach items="${phonegroups}" var="phonegroup">
-  <c:set var="counter" value="${counter + 1}" scope="page"/>  
-  <c:choose>
-    <c:when test="${counter eq 1}">
-        <c:set var="phonenumber1" value="${phonegroup.phonenumber}" scope="page" />
-          <tr>      
-            <td><input type="text" name="phone" value="${phonenumber1}"/></td>
-          <td>
-            <input type="button" id="more_fields" onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');" value="Add row" />
-          </td>
-          <td>
-            <input type="button" id="delete" onclick="deleteLastRow('phone_group');" value="Delete row" />
-          </td>
-          </tr>
-     </c:when>
-  </c:choose> 
-  
-  <c:if test="${counter gt 1}">
-    <tr>
-      <td><input type="text" name="phone" value="<c:out value="${phonegroup.phonenumber}"/>"/></td>
-      <td><input type="button" id="delete" onClick="deleteThisRow(this, 'phone_group')" value="Delete"/></td>
-    </tr>
-  </c:if>
-  
-</c:forEach>
-</tbody>
+	<thead>
+		<tr>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>Phone</th>
+		</tr>
+		<c:set var="counter" value="0" scope="page" />
+		<c:forEach items="${phonegroups}" var="phonegroup">
+			<c:set var="counter" value="${counter + 1}" scope="page" />
+			<c:choose>
+				<c:when test="${counter eq 1}">
+					<c:set var="phonenumber1" value="${phonegroup.phonenumber}"
+						scope="page" />
+					<tr>
+						<td><input type="text" name="phone" value="${phonenumber1}" /></td>
+						<td><input type="button" id="more_fields"
+							onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');"
+							value="Add row" /></td>
+						<td><input type="button" id="delete"
+							onclick="deleteLastRow('phone_group');" value="Delete row" /></td>
+					</tr>
+				</c:when>
+			</c:choose>
+
+			<c:if test="${counter gt 1}">
+				<tr>
+					<td><input type="text" name="phone"
+						value="<c:out value="${phonegroup.phonenumber}"/>" /></td>
+					<td><input type="button" id="delete"
+						onClick="deleteThisRow(this, 'phone_group')" value="Delete" /></td>
+				</tr>
+			</c:if>
+
+		</c:forEach>
+	</tbody>
 </table>
