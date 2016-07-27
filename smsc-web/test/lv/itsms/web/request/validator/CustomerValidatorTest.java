@@ -14,56 +14,56 @@ public class CustomerValidatorTest {
 
 	@Test(expected=RuntimeException.class)
 	public void testUserInputtedNameIsEmpty () {
-			
+
 		Customer customer = new Customer();
-		
+
 		String customerName = "";
 		customer.setName(customerName);
-		
+
 		List<Rule> rules = new ArrayList<>();
-		
+
 		Rule customerRule = new CustomerNameNotEmpty(customerName);	
 		rules.add(customerRule);
-		
+
 		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
-		
-	    customerValidator.validate();
+
+		customerValidator.validate();
 	}
-	
+
 	@Test(expected=RuntimeException.class)
 	public void testUserInputtedNameIsNull () {
-			
+
 		Customer customer = new Customer();
-		
+
 		String customerName = null;
 		customer.setName(customerName);
-		
+
 		List<Rule> rules = new ArrayList<>();
-		
+
 		Rule customerRule = new CustomerNameNotEmpty(customerName);	
 		rules.add(customerRule);
-		
+
 		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
-		
-	    customerValidator.validate();
+
+		customerValidator.validate();
 	}
-	
+
 	@Test
 	public void testUserInputtedNameIsValid () {
-			
+
 		Customer customer = new Customer();
-		
+
 		String customerName = "Name";
 		customer.setName(customerName);
-		
+
 		List<Rule> rules = new ArrayList<>();
-		
+
 		Rule customerRule = new CustomerNameNotEmpty(customerName);	
 		rules.add(customerRule);
-		
+
 		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
-		
-	    boolean result = customerValidator.validate();
-	    assertTrue(result);
+
+		boolean result = customerValidator.validate();
+		assertTrue(result);
 	}
 }

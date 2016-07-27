@@ -12,17 +12,17 @@ public class CustomerMenuRequestParameterTest {
 
 	@Test
 	public void userSelectCustomerSmsPanelPage() {
-	
+
 		String menuIdURL = "cusMenu";
 		String customerSMSPanelMenuURL = "smsPanel";
-		
+
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 		when(request.getParameter(menuIdURL)).thenReturn(customerSMSPanelMenuURL);
-		
+
 		CustomerMenuRequestParameter menuURLParameter = new CustomerMenuRequestParameter();
 		menuURLParameter.update(request);
 		String requestValue = menuURLParameter.getParameter();
-		
+
 		assertEquals(customerSMSPanelMenuURL, requestValue);	
 	}
 }
