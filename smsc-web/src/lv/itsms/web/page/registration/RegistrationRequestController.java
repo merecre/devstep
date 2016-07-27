@@ -131,11 +131,6 @@ public class RegistrationRequestController extends HttpServlet {
 	}
 	
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
-		
-		//Session session = new Session(request);
-		//System.out.println("session " + session + " " + request);
-		//System.out.println("request  " + request);
-		//session.setRequest(request);
 		String exceptionMessage = e.getMessage();
 		session.updateSessionAttribute("error", exceptionMessage);
 	}

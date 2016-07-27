@@ -16,6 +16,7 @@ import lv.itsms.web.service.jdbc.JDBCRegistrationInfoDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
 import transfer.domain.Customer;
 import transfer.domain.PhoneGroup;
+import transfer.domain.Sms;
 import transfer.domain.SmsGroup;
 
 public class Repository {
@@ -25,6 +26,7 @@ public class Repository {
 	CustomerDAO customerDAO;
 	LoginInfoDAO loginInfoDAO;
 	RegistrationInfoDAO registrationInfoDAO;
+	SmsDAO smsDAO;
 	
 	public Repository() {	
 		this(DAOFactory.DB_DAO);
@@ -38,6 +40,7 @@ public class Repository {
 		this.smsGroupDAO = factoryDAO.getSmsGroupDAO();	
 		this.loginInfoDAO = factoryDAO.getLoginInfoDAO();	
 		this.registrationInfoDAO = factoryDAO.getRegistrationInfoDAO();	
+		this.smsDAO = factoryDAO.getSmsDAO();
 	}	
 	
 	public void deleteSmsGroupByUserIdAndGroupName(int userId, String smsGroupName) {
@@ -192,6 +195,19 @@ public class Repository {
 		} 	
 	}
 
+	public List<Sms> findSmsGroupsByDatePeriod(long userId, String startDate, String endDate) {
+		final String ERROR_MESSAGE = "Error during sms loading occurred.";
+		
+		List<Sms> smsGroup = null;
+		try {
+			smsGroup = smsDAO.findSmsGroupsByDatePeriodAndUserId(userId, startDate, endDate);
+		} catch (Exception e) {	
+			e.printStackTrace();
+			throw new RuntimeException(ERROR_MESSAGE);
+		} 
+		
+		return smsGroup;
+	}
 
 	private void saveSmsGroup(SmsGroup smsGroup) throws Exception {
 		

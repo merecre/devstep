@@ -27,7 +27,8 @@ public class CustomerValidatorTest {
 
 		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
 
-		customerValidator.validate();
+		boolean result = customerValidator.validate();
+		assertTrue(result);
 	}
 
 	@Test(expected=RuntimeException.class)
@@ -45,7 +46,8 @@ public class CustomerValidatorTest {
 
 		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
 
-		customerValidator.validate();
+		boolean result = customerValidator.validate();
+		assertTrue(result);
 	}
 
 	@Test

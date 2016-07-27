@@ -177,8 +177,8 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 		statement.close();
 		factory.closeConnection(connection);
 		
-		System.out.println("Select "+statement.toString());
-		System.out.println("Select "+groupId+" "+groupId);
+		//System.out.println("Select "+statement.toString());
+		//System.out.println("Select "+groupId+" "+groupId);
 		
 		return groupId;
 	}

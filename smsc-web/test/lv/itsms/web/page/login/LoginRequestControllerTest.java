@@ -104,7 +104,7 @@ public class LoginRequestControllerTest {
 
 		loginServlet.doPost(request, response); 
 
-		String errorMessage =  (String) attributes.get("error");
+		String errorMessage = (String) attributes.get("error");
 
 		assertEquals("Customer not found.", errorMessage);
 	}
