@@ -31,7 +31,7 @@ public class DoGetSmsGroupNameCommand implements PageRequestCommand {
 	
 	private void updateSession(List<SmsGroup> smsGroups) {
 		Session session = factory.getSession();
-		session.updateSessionAttribute("smsgroups", smsGroups);
+		session.updateSessionAttribute(Session.SESSION_SMSGROUPS_PARAMETER, smsGroups);
 	}
 
 }

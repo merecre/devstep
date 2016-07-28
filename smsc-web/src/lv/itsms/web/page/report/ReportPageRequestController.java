@@ -102,6 +102,6 @@ public class ReportPageRequestController extends HttpServlet {
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
 		
 		String exceptionMessage = e.getMessage();
-		session.updateSessionAttribute("error", exceptionMessage);
+		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}
 }

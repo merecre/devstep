@@ -28,7 +28,7 @@ public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 		
 		RegistrationInfo registrationInfo = repository.getRegistrationInfoByLanguage(language);
 	//System.out.println("registrationInfo"+registrationInfo+" ln="+language);	
-		session.updateSessionAttribute("registrationinfo", registrationInfo);
+		session.updateSessionAttribute(Session.SESSION_REGISTRATION_PARAMETER, registrationInfo);
 	}
 
 }

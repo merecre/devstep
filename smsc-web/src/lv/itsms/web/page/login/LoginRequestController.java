@@ -61,7 +61,7 @@ public class LoginRequestController extends HttpServlet {
 			doLogging(loginName, userPassword, request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.updateSessionAttribute("error", e.getMessage());
+			session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, e.getMessage());
 			forwardToLoginErrorPage(request, response);
 		}
 	}

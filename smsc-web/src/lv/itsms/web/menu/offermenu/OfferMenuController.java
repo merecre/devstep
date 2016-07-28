@@ -24,6 +24,8 @@ import lv.itsms.web.session.Session;
 public class OfferMenuController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
+	final static String ATTRIBUTE_OFFER = "offerpageinfo";
+	
 	@Resource(name = "jdbc/ITSMSDBWebInfo") 
     private DataSource dataSource;
 	
@@ -50,7 +52,7 @@ public class OfferMenuController extends HttpServlet {
 		String pageOfferId = session.getSessionSubMenuId();
 		
 		OfferInfo offerPageInfo = getOfferInfoFromDB(language, pageOfferId);
-		request.setAttribute("offerpageinfo", offerPageInfo);
+		request.setAttribute(ATTRIBUTE_OFFER, offerPageInfo);
 	}
 
 	/**

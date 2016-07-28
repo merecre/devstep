@@ -35,6 +35,10 @@ import lv.itsms.web.session.Session;
  */
 public class MenuBuilderController extends HttpServlet {
     
+	final static String ATTRIBUTE_MENUS = "menues";
+	final static String ATTRIBUTE_SUB_MENUS = "submenues";
+	final static String ATTRIBUTE_CUSTOMER_MENUS = "customermenues";
+	
 	@Resource(name = "jdbc/ITSMSDBMenu") 
     private DataSource dataSource;
 	
@@ -122,17 +126,17 @@ public class MenuBuilderController extends HttpServlet {
 		String menuId = session.getSessionMenuId();
 		List<MenuContext> menues = menuBuilder.buildMenuByLanguage(menuId, language);
 		
-        request.setAttribute("menues", menues);
+        request.setAttribute(ATTRIBUTE_MENUS, menues);
 		
         menuBuilder = new SubMenuContextBuilder(subMenues, titles);
         List<MenuContext> subMenues = menuBuilder.buildMenuByLanguage(menuId, language);
-        request.setAttribute("submenues", subMenues);
+        request.setAttribute(ATTRIBUTE_SUB_MENUS, subMenues);
         
         if (session.isUserLoggedIn()) {
            menuBuilder = new CustomerMenuContextBuilder(customerMenues, titles);
            String customerMenuId = session.getSessionCustomerMenuId();
            List<MenuContext> customerMenues = menuBuilder.buildMenuByLanguage(customerMenuId, language);
-           request.setAttribute("customermenues", customerMenues);
+           request.setAttribute(ATTRIBUTE_CUSTOMER_MENUS , customerMenues);
         }
 	}
 	

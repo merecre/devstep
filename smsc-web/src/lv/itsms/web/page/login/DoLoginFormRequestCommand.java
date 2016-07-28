@@ -25,7 +25,7 @@ public class DoLoginFormRequestCommand implements PageRequestCommand {
 
 	@Override
 	public void execute() throws RuntimeException {
-		session.updateSessionAttribute("userid", customer.getUserLogin());
-        session.updateSessionAttribute("customerid", customer.getId());
+		session.updateSessionAttribute(Session.SESSION_CUSTOMER_LOGIN_PARAMETER, customer.getUserLogin());
+        session.updateSessionAttribute(Session.SESSION_CUSTOMER_ID_PARAMETER, customer.getId());
 	}
 }

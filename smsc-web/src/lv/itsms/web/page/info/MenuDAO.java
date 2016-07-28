@@ -14,6 +14,8 @@ import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 
 public class MenuDAO extends JDBCDataAccessObject {
 
+	final static String DB_TABLE = "menu";
+	
 	public MenuDAO(DataSource dataSource) {
 		super(dataSource);
 	}
@@ -26,7 +28,7 @@ public class MenuDAO extends JDBCDataAccessObject {
 		
 		List<Menu> menues = new ArrayList<>();
 
-		PreparedStatement statement = connection.prepareStatement("SELECT * FROM menu");
+		PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE);
 		ResultSet resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {

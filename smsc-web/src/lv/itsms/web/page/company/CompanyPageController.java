@@ -22,6 +22,8 @@ import lv.itsms.web.session.Session;
 public class CompanyPageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
+	final static String ATTRIBUTE_COMPANYINFO = "companyinfo";
+	
 	@Resource(name = "jdbc/ITSMSDBWeb") 
     private DataSource dataSource;
 	
@@ -48,7 +50,7 @@ public class CompanyPageController extends HttpServlet {
 		String language = session.getSessionLanguage();
 		
 		CompanyInfo companyPageInfo = getCompanyInfoFromDB(language);
-		request.setAttribute("companyinfo", companyPageInfo);
+		request.setAttribute(ATTRIBUTE_COMPANYINFO, companyPageInfo);
 	}
 
 	/**

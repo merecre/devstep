@@ -131,7 +131,7 @@ public class RegistrationRequestController extends HttpServlet {
 	
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
 		String exceptionMessage = e.getMessage();
-		session.updateSessionAttribute("error", exceptionMessage);
+		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}
 	
 	private void returnToBackPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

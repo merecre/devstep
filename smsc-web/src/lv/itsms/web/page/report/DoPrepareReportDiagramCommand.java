@@ -51,7 +51,7 @@ public class DoPrepareReportDiagramCommand implements PageRequestCommand {
 				chartLines = prepareChartDiagram(smsRecordList);
 			}
 		}
-		session.updateSessionAttribute("chartLines", chartLines);
+		session.updateSessionAttribute(Session.SESSION_CHARTLINE_PARAMETER, chartLines);
 	}
 
 	private List<String> formatSMSendDate(List<Sms> smsGroup) {

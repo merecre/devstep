@@ -13,6 +13,8 @@ import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 
 public class OfferInfoDAO extends JDBCDataAccessObject {
 
+	final static String DB_TABLE = "sub_product";
+	
 	OfferInfo offerInfo;
 	
 	public OfferInfoDAO(DataSource dataSource) {
@@ -27,8 +29,8 @@ public class OfferInfoDAO extends JDBCDataAccessObject {
 		
 		PreparedStatement statement = connection.prepareStatement(
 				"SELECT text, title "
-						+ "FROM sub_product "
-						+ "WHERE "	+ "language='" + language + "' "
+						+ "FROM "+ DB_TABLE  + " "
+						+ "WHERE " + "language='" + language + "' "
 						+ "AND sub_id='" + offerId + "'");
 		ResultSet resultSet = statement.executeQuery();
 

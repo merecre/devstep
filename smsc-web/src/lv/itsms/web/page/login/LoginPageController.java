@@ -27,6 +27,8 @@ import lv.itsms.web.session.Session;
 public class LoginPageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	final static String ATTRIBUTE_LOGININFO = "loginpageinfo";
+	
 	private LoginInfoDAO loginInfoDAO;
     /**
      * @see HttpServlet#HttpServlet()
@@ -50,7 +52,7 @@ public class LoginPageController extends HttpServlet {
 		String language = session.getSessionLanguage();
 		
 		LoginInfo loginPageInfo = getLoginInfoFromDB(language);
-		request.setAttribute("loginpageinfo", loginPageInfo);
+		request.setAttribute(ATTRIBUTE_LOGININFO, loginPageInfo);
 	}
 
 	/**

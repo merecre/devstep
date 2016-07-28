@@ -16,6 +16,20 @@ import transfer.domain.SmsGroup;
 
 public class Session {
 
+	final static String SESSION_LANGUAGE_PARAMETER = "language";
+	final static String SESSION_MAIN_MENU_PARAMETER = "id";
+	final static String SESSION_SUB_MENU_PARAMETER = "subid";
+	final static String SESSION_CUSTOMER_MENU_PARAMETER = "cusMenu";
+	public final static String SESSION_CUSTOMER_LOGIN_PARAMETER = "userid";
+	public final static String SESSION_CUSTOMER_ID_PARAMETER = "customerid";
+	public final static String SESSION_ERROR_PARAMETER = "error";
+	public final static String SESSION_PROFILE_PARAMETER = "profile";
+	public final static String SESSION_REGISTRATION_PARAMETER = "registrationinfo";
+	public final static String SESSION_CHARTLINE_PARAMETER = "chartLines";
+	public final static String SESSION_SMSGROUPS_PARAMETER = "smsgroups";
+	public final static String SESSION_SMSGROUPREC_PARAMETER = "smsgrouprec";
+	public final static String SESSION_PHONEGROUPS_PARAMETER = "phonegroups";
+	
 	HttpServletRequest request;
 	
 	HttpSession session;
@@ -33,7 +47,7 @@ public class Session {
 		userRequest.update(request);
 		String userRequestLanguage = userRequest.getParameter();
 		
-		Object sessionUserLanguage = session.getAttribute("language");
+		Object sessionUserLanguage = session.getAttribute(SESSION_LANGUAGE_PARAMETER);
 		
 		if (userRequestLanguage == null && sessionUserLanguage == null) {
 			userRequestLanguage = LanguageRequestParameter.DEFAULT_LANGUAGE;
@@ -41,12 +55,12 @@ public class Session {
 		
 		if ((sessionUserLanguage==null)||(!sessionUserLanguage.toString().equals(userRequestLanguage))) {
 			if (userRequestLanguage != null)
-				session.setAttribute("language", userRequestLanguage);
+				session.setAttribute(SESSION_LANGUAGE_PARAMETER, userRequestLanguage);
 		}
 	}
 	
 	public String getSessionLanguage() {
-		return session.getAttribute("language").toString();
+		return session.getAttribute(SESSION_LANGUAGE_PARAMETER).toString();
 	}
 	
 	public void updateSessionMenuId(UserPageRequest userRequest) {		
@@ -54,11 +68,11 @@ public class Session {
 		userRequest.update(request);
 		String userRequestMainMenuId = userRequest.getParameter();
 
-		session.setAttribute("id", userRequestMainMenuId);
+		session.setAttribute(SESSION_MAIN_MENU_PARAMETER, userRequestMainMenuId);
 	}
 	
 	public String getSessionMenuId() {
-		return session.getAttribute("id").toString();
+		return session.getAttribute(SESSION_MAIN_MENU_PARAMETER).toString();
 	}
 	
 	public void updateSessionSubMenuId(UserPageRequest userRequest) {
@@ -66,9 +80,9 @@ public class Session {
 		userRequest.update(request);
 		String userRequestSubMenuId = userRequest.getParameter();
 		
-		Object sessionMainMenuId = session.getAttribute("id");
+		Object sessionMainMenuId = session.getAttribute(SESSION_MAIN_MENU_PARAMETER);
 		
-		Object sessionSubMenuId = session.getAttribute("subid");
+		Object sessionSubMenuId = session.getAttribute(SESSION_SUB_MENU_PARAMETER);
 
 		if (userRequestSubMenuId==null) {
 			if (sessionSubMenuId==null) {
@@ -78,11 +92,11 @@ public class Session {
 			}
 		}
 
-		session.setAttribute("subid", userRequestSubMenuId);
+		session.setAttribute(SESSION_SUB_MENU_PARAMETER, userRequestSubMenuId);
 	}
 	
 	public String getSessionSubMenuId() {
-		return session.getAttribute("subid").toString();
+		return session.getAttribute(SESSION_SUB_MENU_PARAMETER).toString();
 	}
 	
 	public void updateSessionCustomerMenuId(UserPageRequest userRequest) {
@@ -90,23 +104,19 @@ public class Session {
 		userRequest.update(request);
 		String userRequestCustomerMenuId = userRequest.getParameter();
 		
-		session.setAttribute("cusMenu", userRequestCustomerMenuId);
+		session.setAttribute(SESSION_CUSTOMER_MENU_PARAMETER, userRequestCustomerMenuId);
 	}
 	
 	public String getSessionCustomerMenuId() {
-		return session.getAttribute("cusMenu").toString();
+		return session.getAttribute(SESSION_CUSTOMER_MENU_PARAMETER).toString();
 	}
 	
 	public void updateSessionAttribute(String attribute, Object value) {
 		session.setAttribute(attribute, value);
 	}
 	
-	public void updateSessionSmsGroupsNames (List<String> smsGroups ) {		
-		session.setAttribute("smsgroupnames", smsGroups);
-	}
-	
 	public String getSessionUserId() {
-		Object userid = session.getAttribute("userid");
+		Object userid = session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER);
 		String sessionUserId = "";
 		if (userid != null) {
 			sessionUserId = userid.toString();
@@ -115,11 +125,11 @@ public class Session {
 	}
 	
 	public boolean isUserLoggedIn() {
-		return (session.getAttribute("userid")!=null && (!session.getAttribute("userid").equals("")));
+		return (session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER)!=null && (!session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER).equals("")));
 	}
 	
 	public String getSessionCustomerId() {
-		Object userid = session.getAttribute("customerid");
+		Object userid = session.getAttribute(SESSION_CUSTOMER_ID_PARAMETER);
 		String sessionUserId = "";
 		if (userid != null) {
 			sessionUserId = userid.toString();

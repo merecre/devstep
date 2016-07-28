@@ -23,7 +23,7 @@ public class DoLoadProfilePageDataCommand implements PageRequestCommand {
 		
 		Customer customer = repository.getCustomerByLogin(sessionCustomerName);
 		if (customer!=null) {
-			session.updateSessionAttribute("profile", customer);
+			session.updateSessionAttribute(Session.SESSION_PROFILE_PARAMETER, customer);
 		}
 	}
 

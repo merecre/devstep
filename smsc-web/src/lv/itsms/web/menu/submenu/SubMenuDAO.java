@@ -11,6 +11,8 @@ import javax.sql.DataSource;
 
 public class SubMenuDAO {
 
+	final static String DB_TABLE = "submenu";
+	
 	private DataSource dataSource;
 	
 	public SubMenuDAO(DataSource dataSource) {
@@ -23,7 +25,7 @@ public class SubMenuDAO {
 		
 		try (
 	            Connection connection = dataSource.getConnection();
-	            PreparedStatement statement = connection.prepareStatement("SELECT * FROM submenu ORDER BY sort");
+	            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE + " ORDER BY sort");
 	            ResultSet resultSet = statement.executeQuery();
 	        ) {
 			while (resultSet.next()) {

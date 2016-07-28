@@ -12,6 +12,8 @@ import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 
 public class TitleDAO extends JDBCDataAccessObject {
 
+	final static String DB_TABLE = "title";
+	
 	List<Title> titles;
 	
 	public TitleDAO(DataSource dataSource) {
@@ -25,7 +27,7 @@ public class TitleDAO extends JDBCDataAccessObject {
 			establishConnection();
 		}
 		
-		PreparedStatement statement = connection.prepareStatement("SELECT * FROM title");
+		PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE);
 		ResultSet resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {

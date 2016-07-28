@@ -37,12 +37,12 @@ public class DoGetSmsGroupRecCommand implements PageRequestCommand {
 			SmsGroup smsGroup = repository.getSmsGroupById(groupId);
 		
 			if (smsGroup!=null) {
-				session.updateSessionAttribute("smsgrouprec", smsGroup);
+				session.updateSessionAttribute(Session.SESSION_SMSGROUPREC_PARAMETER, smsGroup);
 			}
 			
 			List<PhoneGroup> phoneGroups = repository.getPhonesInGroupByGroupId(groupId);
 			if (phoneGroups!=null && phoneGroups.size()>0) {
-				session.updateSessionAttribute("phonegroups", phoneGroups);
+				session.updateSessionAttribute(Session.SESSION_PHONEGROUPS_PARAMETER, phoneGroups);
 			}
 		}
 	}

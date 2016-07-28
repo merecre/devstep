@@ -8,7 +8,7 @@ public class LanguageRequestParameter extends UserPageRequest {
 	
 	public static String[] ALLOWED_LANGUAGES = {"lv", "ru", "en"};
 	
-	final static String LN_PARAMETER = "ln"; 
+	public final static String LN_PARAMETER = "ln"; 
 	
 	public LanguageRequestParameter() {
 		super(LN_PARAMETER);
