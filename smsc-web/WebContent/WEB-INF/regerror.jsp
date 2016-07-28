@@ -9,7 +9,7 @@
 </head>
 <body>
 	${error}
-	<a href="${pageContext.servletContext.contextPath}/profile.jsp">"Return
+	<a href="${pageContext.servletContext.contextPath}/login/reg.jsp">"Return
 		to back page"</a>
 </body>
 </html>

@@ -106,15 +106,25 @@ public class Session {
 	}
 	
 	public String getSessionUserId() {
-		return session.getAttribute("userid").toString();
+		Object userid = session.getAttribute("userid");
+		String sessionUserId = "";
+		if (userid != null) {
+			sessionUserId = userid.toString();
+		}
+		return sessionUserId;
 	}
 	
 	public boolean isUserLoggedIn() {
-		return (session.getAttribute("userid")!=null);
+		return (session.getAttribute("userid")!=null && (!session.getAttribute("userid").equals("")));
 	}
 	
 	public String getSessionCustomerId() {
-		return session.getAttribute("customerid").toString();
+		Object userid = session.getAttribute("customerid");
+		String sessionUserId = "";
+		if (userid != null) {
+			sessionUserId = userid.toString();
+		}
+		return sessionUserId;
 	}
 	
 	public void updateParameter(UserPageRequest userRequest) {

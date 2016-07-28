@@ -65,13 +65,12 @@ public class RegistrationRequestController extends HttpServlet {
 		try {
 			customer = validateUserInputtedRegistrationFormFieldsAndBuildCustomer(request);
 			doCustomerRegistration(customer);
+			returnToBackPage(request, response);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			updateSessionExceptionError(exception, request);
 			forwardToErrorPage(request, response);
 		}
-		
-		returnToBackPage(request, response);
 	}
 
 	/**
