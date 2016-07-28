@@ -1,8 +1,8 @@
-package lv.itsms.web.submenu;
+package lv.itsms.web.menu.submenu;
 
 import java.util.List;
 
-import lv.itsms.web.mainmenu.Menu;
+import lv.itsms.web.menu.mainmenu.Menu;
 
 public class SubMenu {
 

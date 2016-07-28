@@ -1,4 +1,4 @@
-package lv.itsms.web.custmenu;
+package lv.itsms.web.menu.custmenu;
 
 import java.util.ArrayList;
 import java.util.List;

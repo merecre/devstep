@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import lv.itsms.web.custmenu.CustomerMenu;
-import lv.itsms.web.custmenu.CustomerMenuContextBuilder;
-import lv.itsms.web.mainmenu.MainMenuContextBuilder;
-import lv.itsms.web.mainmenu.Menu;
+import lv.itsms.web.menu.custmenu.CustomerMenu;
+import lv.itsms.web.menu.custmenu.CustomerMenuContextBuilder;
+import lv.itsms.web.menu.mainmenu.MainMenuContextBuilder;
+import lv.itsms.web.menu.mainmenu.Menu;
+import lv.itsms.web.menu.submenu.SubMenu;
+import lv.itsms.web.menu.submenu.SubMenuContextBuilder;
+import lv.itsms.web.menu.submenu.SubMenuDAO;
 import lv.itsms.web.page.info.CustomerMenuDAO;
 import lv.itsms.web.page.info.MenuDAO;
 import lv.itsms.web.page.info.TitleDAO;
@@ -26,9 +29,6 @@ import lv.itsms.web.request.parameter.MainMenuRequestParameter;
 import lv.itsms.web.request.parameter.SubMenuRequestParameter;
 import lv.itsms.web.request.parameter.UserPageRequest;
 import lv.itsms.web.session.Session;
-import lv.itsms.web.submenu.SubMenu;
-import lv.itsms.web.submenu.SubMenuContextBuilder;
-import lv.itsms.web.submenu.SubMenuDAO;
 
 /**
  * Servlet implementation class MenuServlet

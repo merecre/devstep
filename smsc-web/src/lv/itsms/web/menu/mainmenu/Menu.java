@@ -1,4 +1,4 @@
-package lv.itsms.web.mainmenu;
+package lv.itsms.web.menu.mainmenu;
 
 public class Menu {
 

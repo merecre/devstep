@@ -1,4 +1,4 @@
-package lv.itsms.web.offermenu;
+package lv.itsms.web.menu.offermenu;
 
 import java.io.IOException;
 import java.sql.SQLException;

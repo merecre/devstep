@@ -1,6 +1,6 @@
-package lv.itsms.web.custmenu;
+package lv.itsms.web.menu.custmenu;
 
-import lv.itsms.web.mainmenu.Menu;
+import lv.itsms.web.menu.mainmenu.Menu;
 
 public class CustomerMenu {
 

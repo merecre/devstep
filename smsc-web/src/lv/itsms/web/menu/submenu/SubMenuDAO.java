@@ -1,4 +1,4 @@
-package lv.itsms.web.submenu;
+package lv.itsms.web.menu.submenu;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

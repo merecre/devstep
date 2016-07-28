@@ -23,7 +23,7 @@
   </servlet>
   <servlet>
     <servlet-name>OfferWebController</servlet-name>
-    <servlet-class>lv.itsms.web.offermenu.OfferMenuController</servlet-class>
+    <servlet-class>lv.itsms.web.menu.offermenu.OfferMenuController</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>SMSController</servlet-name>

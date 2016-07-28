@@ -1,16 +1,16 @@
-package lv.itsms.web.submenu;
+package lv.itsms.web.menu.submenu;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lv.itsms.web.mainmenu.Menu;
 import lv.itsms.web.menu.MenuContext;
 import lv.itsms.web.menu.MenuContextBuilder;
 import lv.itsms.web.menu.Title;
+import lv.itsms.web.menu.mainmenu.Menu;
+import lv.itsms.web.menu.submenu.SubMenu;
+import lv.itsms.web.menu.submenu.SubMenuDAO;
 import lv.itsms.web.page.info.TitleDAO;
-import lv.itsms.web.submenu.SubMenu;
-import lv.itsms.web.submenu.SubMenuDAO;
 
 public class SubMenuContextBuilder implements MenuContextBuilder {
 	

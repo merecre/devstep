@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import lv.itsms.web.mainmenu.Menu;
+
+import lv.itsms.web.menu.mainmenu.Menu;
 import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 
 public class MenuDAO extends JDBCDataAccessObject {
