@@ -10,11 +10,11 @@ import lv.itsms.web.session.Session;
 public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 
 	HttpServletRequest request;
-	
+
 	Repository repository;
-	
+
 	Session session;
-	
+
 	public DoRegistrationPageRequestCommand(HttpServletRequest request, Repository repository, Session session) {
 		this.request = request;
 		this.repository = repository;
@@ -25,10 +25,9 @@ public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 	public void execute() {
 		//Session session = new Session(request);
 		String language = session.getSessionLanguage();
-		
+
 		RegistrationInfo registrationInfo = repository.getRegistrationInfoByLanguage(language);
-	//System.out.println("registrationInfo"+registrationInfo+" ln="+language);	
+		//System.out.println("registrationInfo"+registrationInfo+" ln="+language);	
 		session.updateSessionAttribute(Session.SESSION_REGISTRATION_PARAMETER, registrationInfo);
 	}
-
 }

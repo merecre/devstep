@@ -14,19 +14,19 @@ import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 public class OfferInfoDAO extends JDBCDataAccessObject {
 
 	final static String DB_TABLE = "sub_product";
-	
+
 	OfferInfo offerInfo;
-	
+
 	public OfferInfoDAO(DataSource dataSource) {
 		super(dataSource);
 	}
-	
+
 	public OfferInfo selectByLanguageAndOfferId(String language, String offerId) throws SQLException {
 
 		if (connection.isClosed()) {
 			establishConnection();
 		}
-		
+
 		PreparedStatement statement = connection.prepareStatement(
 				"SELECT text, title "
 						+ "FROM "+ DB_TABLE  + " "
@@ -35,7 +35,7 @@ public class OfferInfoDAO extends JDBCDataAccessObject {
 		ResultSet resultSet = statement.executeQuery();
 
 		while (resultSet.next()) { 
-		    populateData(resultSet);
+			populateData(resultSet);
 		}
 
 		resultSet.close();
@@ -44,7 +44,7 @@ public class OfferInfoDAO extends JDBCDataAccessObject {
 
 		return offerInfo;
 	}
-	
+
 	private void populateData (ResultSet resultSet) throws SQLException {
 		offerInfo = new OfferInfo();
 		offerInfo.setText(resultSet.getString("text"));

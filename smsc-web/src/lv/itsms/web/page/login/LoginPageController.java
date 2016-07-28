@@ -26,31 +26,31 @@ import lv.itsms.web.session.Session;
 //@WebServlet("/LoginPageController")
 public class LoginPageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	final static String ATTRIBUTE_LOGININFO = "loginpageinfo";
-	
+
 	private LoginInfoDAO loginInfoDAO;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LoginPageController() {
-        super();
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public LoginPageController() {
+		super();
+	}
 
 	@Override
 	public void init() {
-		
+
 		DAOFactory factoryDAO = DAOFactory.getDAOFactory(DAOFactory.DB_DAO);
 		loginInfoDAO = factoryDAO.getLoginInfoDAO();
 	}
-    
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Session session = new Session(request);
 		String language = session.getSessionLanguage();
-		
+
 		LoginInfo loginPageInfo = getLoginInfoFromDB(language);
 		request.setAttribute(ATTRIBUTE_LOGININFO, loginPageInfo);
 	}

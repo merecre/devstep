@@ -15,17 +15,17 @@ import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 public class CustomerMenuDAO extends JDBCDataAccessObject {
 
 	final static String DB_TABLE = "customer_menu";
-	
+
 	public CustomerMenuDAO(DataSource dataSource) {
 		super(dataSource);
 	}
-		
+
 	public List<CustomerMenu> list() throws SQLException {
 
 		if (connection.isClosed()) {
 			establishConnection();
 		}
-		
+
 		List<CustomerMenu> menues = new ArrayList<>();
 
 		PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE );
@@ -38,7 +38,7 @@ public class CustomerMenuDAO extends JDBCDataAccessObject {
 			menu.setPageIndex(resultSet.getString("link_index"));
 			menues.add(menu);
 		}
-		
+
 		resultSet.close();
 		statement.close();
 		connection.close(); 

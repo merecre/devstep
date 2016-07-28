@@ -12,13 +12,13 @@ import lv.itsms.web.service.PhoneGroupDAO;
 import transfer.domain.PhoneGroup;
 
 public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
-	
+
 	private final static String DB_TABLE = "phone_group";
-	
+
 	private Connection connection;
-	
+
 	private DBDAOFactory factory;
-	
+
 	public JDBCPhoneGroupDAO(DBDAOFactory factory) {
 		this.factory = factory;
 	}
@@ -26,10 +26,10 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 	public boolean save (PhoneGroup phoneGroup) throws SQLException {
 		return insert(phoneGroup);
 	}
-	
+
 	public boolean insert(PhoneGroup phoneGroup) throws SQLException {
 		final String ERROR_INSERT = "Creating PhoneGroup failed, no rows affected.";
-		
+
 		connection = factory.createConnection();
 		PreparedStatement statement = connection.prepareStatement(
 				"INSERT INTO phone_group "
@@ -47,19 +47,19 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 
 		statement.close();
 		factory.closeConnection(connection);
-		
+
 		return updatedRows != 0;
 	}
-	
+
 	public List<PhoneGroup> getPhonesByGroupId(long groupId) throws SQLException {
-		
+
 		List<PhoneGroup> phoneGroups = new LinkedList<>();
-		
+
 		String sql = "SELECT * FROM " + DB_TABLE 
 				+ " WHERE group_id='" + groupId + "'";
-		
+
 		connection = factory.createConnection();
-		
+
 		PreparedStatement statement = connection.prepareStatement(sql, 
 				ResultSet.TYPE_FORWARD_ONLY,
 				ResultSet.CONCUR_UPDATABLE);
@@ -71,14 +71,14 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 			phoneGroup.setPhonenumber(resultSet.getString("phonenumber"));
 			phoneGroups.add(phoneGroup);
 		}
-		
+
 		resultSet.close();
 		statement.close();
 		factory.closeConnection(connection);
-		
+
 		return phoneGroups;
 	}
-	
+
 	public boolean deleteByGroupId(int groupId) throws SQLException {
 
 		connection = factory.createConnection();
@@ -87,10 +87,10 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 						+ "WHERE "	+ "group_id='" + groupId + "'");
 		System.out.println("Statement:"+ statement.toString());
 		statement.executeUpdate();
-		
+
 		statement.close();
 		factory.closeConnection(connection);
-		
+
 		return true;
 	}
 }

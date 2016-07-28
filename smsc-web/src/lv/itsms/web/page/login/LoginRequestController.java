@@ -30,17 +30,17 @@ import transfer.domain.Customer;
 //@WebServlet("/LoginRequestController")
 public class LoginRequestController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    	
+
 	Repository repository;
 	Session session;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LoginRequestController() {
-        super();
-    }
-  
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public LoginRequestController() {
+		super();
+	}
+
 	@Override
 	public void init() throws ServletException {
 		repository = new Repository();
@@ -51,7 +51,7 @@ public class LoginRequestController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		session.setRequest(request);
 		session.setSession(request.getSession());			
 		try {
@@ -72,38 +72,38 @@ public class LoginRequestController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 	private Customer validateUserInputtedLoginFormData(HttpServletRequest request) {
-		
+
 		LoginFormRequestParameterBuilder parameterBuilder = new LoginFormRequestParameterBuilder();
 		parameterBuilder.build(request);
-		
+
 		UserPageRequest loginNameParameter = parameterBuilder.getLoginName();
 		UserPageRequest userPasswordParameter = parameterBuilder.getPassword();
-		
+
 		String loginName = loginNameParameter.getParameter();
 		String userPassword = userPasswordParameter.getParameter();
-		
+
 		Customer customer = new Customer();
 		customer.setUserLogin(loginName);
 		customer.setPassword(userPassword);
-		
+
 		isCorrectCustomerLogin(customer);
-		
+
 		return customer;
 	}
-	
+
 	private boolean isCorrectCustomerLogin(Customer customer) {
 		Rule rule = new CustomerNotEmptyRule(customer);
 		rule = new CustomerLoginNotEmpty(customer.getUserLogin());
 		rule = new CustomerPasswordNotEmpty(customer.getPassword());
-		
+
 		LoginFieldFormValidator validator = new LoginFieldFormValidator();
 		validator.addRule(rule);
-		
+
 		return validator.validate();
 	}
-	
+
 	private void doLogging(String loginName, String userPassword, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Customer customer = repository.getCustomerByLoginAndPassword(loginName, userPassword);	
 		isCorrectCustomerLogin(customer);
@@ -111,20 +111,20 @@ public class LoginRequestController extends HttpServlet {
 		requestCommand.execute();
 		returnToBackPage(request, response);
 	}
-	
+
 	private void returnToBackPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String referer = request.getHeader("Referer");
 		response.sendRedirect(referer);
 	}
-	
+
 	private void forwardToLoginErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String language = session.getSessionLanguage();
-		
+
 		final String loginErrorJSP = "/login/loginerrpage.jsp";
 		try {
 			LoginInfo loginInfo = repository.getLoginInfoByLanguage(language);		
 			session.updateSessionAttribute("logininfo", loginInfo);
-			
+
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(loginErrorJSP);
 			dispatcher.forward(request,response);
 		} catch (Exception e){

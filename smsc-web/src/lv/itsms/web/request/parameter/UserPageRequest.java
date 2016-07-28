@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class UserPageRequest {
 
 	protected String parameterKey;
-	
+
 	protected String parameterValue;
 
 	protected String[] parameterValues;
-	
+
 	public abstract void update(HttpServletRequest request);
-	
+
 	public UserPageRequest(String parameterKey) {
 		this.parameterKey = parameterKey;
 	}
@@ -39,7 +39,7 @@ public abstract class UserPageRequest {
 	public void setParameterValues(String[] parameterValues) {
 		this.parameterValues = parameterValues;
 	}
-	
+
 	public boolean isRequested() {
 		return  parameterValue!= null || parameterValues != null;
 	}

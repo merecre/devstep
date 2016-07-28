@@ -34,33 +34,33 @@ import transfer.domain.Customer;
 //@WebServlet("/RegistrationRequestController")
 public class RegistrationRequestController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    	
+
 	Repository repository;
-	
+
 	Session session;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public RegistrationRequestController() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public RegistrationRequestController() {
+		super();
+	}
 
 	@Override
 	public void init() throws ServletException {
 		repository = new Repository();
-		
+
 		session = new Session();
 	}
-    
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		session.setRequest(request);
 		session.setSession(request.getSession());;
-		
+
 		Customer customer = null;		
 		try {
 			customer = validateUserInputtedRegistrationFormFieldsAndBuildCustomer(request);
@@ -79,21 +79,21 @@ public class RegistrationRequestController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 	private Customer validateUserInputtedRegistrationFormFieldsAndBuildCustomer(HttpServletRequest request) {
 		CustomerBuilder customerBuilder = new CustomerBuilder();
 		Customer customer = customerBuilder.build(request);
-			
+
 		List<Rule> rules = prepareCustomerRules(customer);
 		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
 		customerValidator.validate();
-		
+
 		return customer;
 	}
-	
+
 	private List<Rule> prepareCustomerRules(Customer customer) {
 		List<Rule> customerRules = new ArrayList<>();
-		
+
 		Rule customerRule = new CustomerNameNotEmpty(customer.getName()); 
 		customerRules.add(customerRule);		
 		customerRule = new CustomerNameNotEmpty(customer.getSurname()); 
@@ -108,14 +108,14 @@ public class RegistrationRequestController extends HttpServlet {
 		customerRules.add(customerRule);
 		return customerRules;
 	}
-	
+
 	private void doCustomerRegistration(Customer customer) {
 		PageRequestCommand pageRequestCommand = new DoRegistrationFormRequestCommand(customer, repository);
 		pageRequestCommand.execute();
-		
+
 	}
-	
-	 void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String errorJSP = "/WEB-INF/regerror.jsp";
 		//RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorJSP);
 		try {
@@ -128,12 +128,12 @@ public class RegistrationRequestController extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
 		String exceptionMessage = e.getMessage();
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}
-	
+
 	private void returnToBackPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String referer = request.getHeader("Referer");
 		response.sendRedirect(referer);
@@ -154,6 +154,4 @@ public class RegistrationRequestController extends HttpServlet {
 	public void setSession(Session session) {
 		this.session = session;
 	}	
-	
-	
 }

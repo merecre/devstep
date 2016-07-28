@@ -13,20 +13,20 @@ import lv.itsms.web.service.jdbc.JDBCDataAccessObject;
 public class TitleDAO extends JDBCDataAccessObject {
 
 	final static String DB_TABLE = "title";
-	
+
 	List<Title> titles;
-	
+
 	public TitleDAO(DataSource dataSource) {
 		super(dataSource);
 		this.titles = new ArrayList<Title>();
 	}
-	
+
 	public List<Title> list() throws SQLException {
 
 		if (connection.isClosed()) {
 			establishConnection();
 		}
-		
+
 		PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE);
 		ResultSet resultSet = statement.executeQuery();
 
@@ -38,15 +38,14 @@ public class TitleDAO extends JDBCDataAccessObject {
 			title.setTitle(resultSet.getString("title"));
 			titles.add(title);
 		}
-		
-		
+
 		resultSet.close();
 		statement.close();
 		connection.close();
-		
+
 		return titles;
 	}
-	
+
 	String getTitleByIDandLanguage(int menuID, String language) {
 		for (Title title : titles) {
 			if (title.getLanguage().equals(language) && (title.getMenuID()==menuID)) {
@@ -55,5 +54,4 @@ public class TitleDAO extends JDBCDataAccessObject {
 		}
 		return "";
 	}
-	
 }

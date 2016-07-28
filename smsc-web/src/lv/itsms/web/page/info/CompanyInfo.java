@@ -3,11 +3,11 @@ package lv.itsms.web.page.info;
 public class CompanyInfo {
 
 	String about;
-	
+
 	String title;
 
 	String language;
-	
+
 	public String getAbout() {
 		return about;
 	}

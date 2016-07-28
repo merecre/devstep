@@ -3,21 +3,21 @@ package lv.itsms.web.menu;
 public class MenuContext {
 
 	int mainMenuId;
-	
+
 	String elementClass;
-	
+
 	String pageStr;
-	
+
 	String pageIndex;
-	
+
 	String elementSubIndex;
-	
+
 	String title;
 
 	String href;
-	
+
 	String subElementSubIndex;
-	
+
 	public String getElementClass() {
 		return elementClass;
 	}
@@ -84,11 +84,9 @@ public class MenuContext {
 
 	@Override
 	public String toString() {
-		
+
 		return mainMenuId + ":" + elementClass + ":" + pageStr +
 				":" + pageIndex + ":" + elementSubIndex + ":" + 
 				":" + title + ":" + subElementSubIndex;
 	}
-	
-	
 }

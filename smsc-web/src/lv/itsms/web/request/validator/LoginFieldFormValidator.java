@@ -8,7 +8,7 @@ import lv.itsms.web.request.parameter.UserPageRequest;
 public class LoginFieldFormValidator implements UserRequestValidator {
 
 	List<Rule> rules;
-	
+
 	public LoginFieldFormValidator() {
 		this.rules = new ArrayList<Rule>();
 	}
@@ -16,7 +16,7 @@ public class LoginFieldFormValidator implements UserRequestValidator {
 	public void addRule(Rule rule) {
 		rules.add(rule);
 	}
-	
+
 	public LoginFieldFormValidator(List<Rule> rules) {
 		this.rules = rules;
 	}

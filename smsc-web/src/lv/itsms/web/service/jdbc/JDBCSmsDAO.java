@@ -18,25 +18,25 @@ import transfer.domain.Sms;
 public class JDBCSmsDAO implements SmsDAO {
 
 	private final static String DB_TABLE = "sms";
-	
+
 	private Connection connection;
-	
+
 	private DBDAOFactory factory;
-	
+
 	public JDBCSmsDAO(DBDAOFactory factory) {
 		this.factory = factory;
 	}
-	
+
 	private Sms sms;
-	
+
 	public boolean insert(Sms sms) throws Exception {
-		
+
 		//establishConnection();
-		
+
 		final String ERROR_INSERT = "Creating SMS failed, no rows affected.";
-		
+
 		connection = factory.createConnection();
-		
+
 		PreparedStatement statement = connection.prepareStatement(
 				"INSERT INTO sms "
 						+ "(phonenumber, message, customerId, sendtime)"
@@ -56,31 +56,31 @@ public class JDBCSmsDAO implements SmsDAO {
 		int updatedRows = statement.executeUpdate();
 		statement.close();		
 		factory.closeConnection(connection);
-		
+
 		if (updatedRows == 0) {
 			throw new SQLException(ERROR_INSERT);
 		}
 		this.sms = sms;
 		this.sms.setMSSID(getGeneratedGroupId(statement));
-		
+
 		return true;
 	}
-	
+
 	private int getGeneratedGroupId (PreparedStatement statement) throws SQLException {
 		final String ERROR_NO_ID = "Creating smsGroup failed, no ID obtained.";
-        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-            	return generatedKeys.getInt(1);
-            }
-        }
-        throw new SQLException(ERROR_NO_ID);
+		try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+			if (generatedKeys.next()) {
+				return generatedKeys.getInt(1);
+			}
+		}
+		throw new SQLException(ERROR_NO_ID);
 	}
 
 	@Override
 	public List<Sms> findSmsGroupsByDatePeriodAndUserId(long customerId, String startDate, String endDate) throws Exception {	
 		final String FATAL_ERROR_MESSAGE = "Error during loading sms by date period occured";
 		final String NO_SMS_MESSAGE = "No sms found";
-		
+
 		List<Sms> smsGroups = new ArrayList<>();
 
 		String sql = "SELECT * from " + DB_TABLE 
@@ -102,19 +102,19 @@ public class JDBCSmsDAO implements SmsDAO {
 		resultSet.close();
 		statement.close();
 		factory.closeConnection(connection);
-		
+
 		/*
 		if (smsGroups.size() == 0) {
 			throw new RuntimeException(NO_SMS_MESSAGE);
 		}
-*/
+		 */
 		return smsGroups;
 	}
-	
+
 	private Sms populateData (ResultSet resultSet) throws SQLException {
-		
+
 		Sms sms = new Sms();
-		
+
 		sms.setMSSID(resultSet.getInt("id"));
 		sms.setPhoneNumber(resultSet.getString("phonenumber"));
 		sms.setCustomerID(resultSet.getLong("customerId"));
@@ -126,7 +126,7 @@ public class JDBCSmsDAO implements SmsDAO {
 		sms.setUnicode(resultSet.getByte("unicode"));
 		sms.setLongSms(resultSet.getByte("long_sms"));
 		sms.setNetwork(resultSet.getString("network"));
-		
+
 		return sms;
 	}
 }

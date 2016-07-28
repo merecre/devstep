@@ -19,19 +19,19 @@ import lv.itsms.web.session.Session;
  */
 //@WebServlet("/ProfilePageController")
 public class ProfilePageController extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-    
+
 	Repository repository;
-	
+
 	Session session;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ProfilePageController() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ProfilePageController() {
+		super();
+	}
 
 	@Override
 	public void init() throws ServletException {
@@ -45,9 +45,9 @@ public class ProfilePageController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		session.setRequest(request);
 		session.setSession(request.getSession());
-		
+
 		PageRequestCommand requestCommand = new DoLoadProfilePageDataCommand(session, repository);
-		
+
 		try {
 			requestCommand.execute();			
 		} catch (Exception exception) {
@@ -63,7 +63,7 @@ public class ProfilePageController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 	private void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String errorJSP = "/WEB-INF/profileerror.jsp";
 		try {
@@ -76,11 +76,10 @@ public class ProfilePageController extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
-		
+
 		String exceptionMessage = e.getMessage();
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}	
-
 }

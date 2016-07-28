@@ -22,16 +22,16 @@ import lv.itsms.web.session.Session;
 //@WebServlet("/RegistrationPageController")
 public class RegistrationPageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    	
+
 	Repository repository;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public RegistrationPageController() {
-        super();
-    }   
-    
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public RegistrationPageController() {
+		super();
+	}   
+
 	@Override
 	public void init() throws ServletException {
 		repository = new Repository();
@@ -44,7 +44,7 @@ public class RegistrationPageController extends HttpServlet {
 
 		Session session = new Session(request);
 		PageRequestCommand requestCommand = new DoRegistrationPageRequestCommand(request, repository, session);
-		
+
 		try {
 			requestCommand.execute();
 		} catch (Exception e) {
@@ -58,11 +58,10 @@ public class RegistrationPageController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 	private void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String errorJSP = "/WEB-INF/regerror.jsp";
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorJSP);
 		dispatcher.forward(request,response);
 	}
-
 }

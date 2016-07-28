@@ -4,7 +4,7 @@ public class OfferInfo {
 
 	String text;
 	String title;	
-	
+
 	public String getText() {
 		return text;
 	}
@@ -17,6 +17,6 @@ public class OfferInfo {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-	
+
+
 }

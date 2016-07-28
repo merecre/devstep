@@ -5,15 +5,15 @@ import lv.itsms.web.menu.mainmenu.Menu;
 public class CustomerMenu {
 
 	private int menuId;
-	
+
 	private int titleId;
-	
+
 	private String page;
-	
+
 	private String pageIndex;
 
 	private String title;
-	
+
 	public int getMenuId() {
 		return menuId;
 	}
@@ -45,7 +45,7 @@ public class CustomerMenu {
 	public void setPageIndex(String pageIndex) {
 		this.pageIndex = pageIndex;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -62,16 +62,16 @@ public class CustomerMenu {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
-            return true;
-        }
+			return true;
+		}
 
-        if ((obj == null ) || (obj.getClass() != this.getClass())) {
-            return false;
-        }
-        
-        CustomerMenu menu = (CustomerMenu) obj;
-        return this.menuId == menu.menuId;
+		if ((obj == null ) || (obj.getClass() != this.getClass())) {
+			return false;
+		}
+
+		CustomerMenu menu = (CustomerMenu) obj;
+		return this.menuId == menu.menuId;
 	}
-	
-	
+
+
 }

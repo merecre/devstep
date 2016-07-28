@@ -7,7 +7,7 @@ import transfer.domain.Customer;
 public class TestCustomerDAO implements CustomerDAO {
 
 	public TestCustomerDAO(TestDAOFactory testDAOFactory) {
-		
+
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class TestCustomerDAO implements CustomerDAO {
 
 	@Override
 	public Customer getCustomerByLogin(String customerUserName) throws Exception {
-		
+
 		Customer customer = null;
 		if (customerUserName.equals("TestLogin")) {
 			customer = new Customer();
@@ -48,7 +48,7 @@ public class TestCustomerDAO implements CustomerDAO {
 		if (customer == null) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

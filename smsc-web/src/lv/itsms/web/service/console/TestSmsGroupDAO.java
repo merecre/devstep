@@ -58,7 +58,7 @@ public class TestSmsGroupDAO implements SmsGroupDAO {
 		} else {
 			throw new Exception("Group not found"+userId);  
 		}
-		
+
 		SmsGroup smsGroup = new SmsGroup();
 		smsGroup.setCustomerId(smsGroupId);
 		smsGroups.add(smsGroup);

@@ -12,8 +12,8 @@ public class RegistrationInfo {
 	String txtBtnReset;
 	String txtLoginHref;
 	String txtLoginDesr;
-	
-	
+
+
 	public String getTxtHeader() {
 		return txtHeader;
 	}
@@ -74,7 +74,7 @@ public class RegistrationInfo {
 	public void setTxtLoginDesr(String txtLoginDesr) {
 		this.txtLoginDesr = txtLoginDesr;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "RegistrationInfo [txtHeader=" + txtHeader + ", txtFirstname=" + txtFirstname + ", txtLastname="

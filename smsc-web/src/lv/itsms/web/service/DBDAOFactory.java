@@ -20,13 +20,13 @@ import lv.itsms.web.service.jdbc.ServerContextSingleton;
 public class DBDAOFactory extends DAOFactory {
 
 	public static final int NO_RECORDS = -1;
-	
+
 	private DataSource dataSource;
-	
+
 	Connection connection;
-	
+
 	public Connection createConnection() {
-		
+
 		Connection connection = null;
 		try {
 			ServerContextSingleton serverContext = ServerContextSingleton.getInstance();
@@ -35,12 +35,12 @@ public class DBDAOFactory extends DAOFactory {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return connection;
 	}
-	
+
 	public void closeConnection(Connection connection) {
-		
+
 		try {
 			if (connection!=null && !connection.isClosed())
 				connection.close();
@@ -48,7 +48,7 @@ public class DBDAOFactory extends DAOFactory {
 			e.printStackTrace();
 		}		
 	}
-	
+
 	@Override
 	public CustomerDAO getCustomerDAO() {
 		return new JDBCCustomerDAO(this);

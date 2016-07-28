@@ -7,7 +7,7 @@ public class CustomerNameIsNotUsed implements Rule {
 	Repository repository;
 
 	String customerUserName;
-			
+
 	public CustomerNameIsNotUsed(Repository repository, String customerUserName) {
 		this.repository = repository;
 		this.customerUserName = customerUserName;
@@ -22,9 +22,9 @@ public class CustomerNameIsNotUsed implements Rule {
 		if (isCustomer) {
 			throw new RuntimeException(ERROR_MESSAGE);
 		}
-			
+
 		return false;
 	}
-	
-	
+
+
 }

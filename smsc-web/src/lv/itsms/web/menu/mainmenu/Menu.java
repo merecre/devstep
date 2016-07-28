@@ -3,13 +3,13 @@ package lv.itsms.web.menu.mainmenu;
 public class Menu {
 
 	int menuId;
-    int titleId;
-    String page;
-    String pageIndex;
-    String classActive;
-    String classDefault;
-    String title;
-    
+	int titleId;
+	String page;
+	String pageIndex;
+	String classActive;
+	String classDefault;
+	String title;
+
 	public int getMenuId() {
 		return menuId;
 	}
@@ -52,26 +52,24 @@ public class Menu {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	@Override
 	public int hashCode() {		
 		return 31 * menuId + titleId;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		
-		if (this == obj) {
-            return true;
-        }
 
-        if ((obj == null ) || (obj.getClass() != this.getClass())) {
-            return false;
-        }
-        
-        Menu menu = (Menu) obj;
-        return this.menuId == menu.menuId;
+		if (this == obj) {
+			return true;
+		}
+
+		if ((obj == null ) || (obj.getClass() != this.getClass())) {
+			return false;
+		}
+
+		Menu menu = (Menu) obj;
+		return this.menuId == menu.menuId;
 	}
-	
-    
 }

@@ -14,9 +14,9 @@ public class SubMenu {
 	String subClassDefault;
 	String subPageSubIndex;
 	String title;
-	
+
 	private List<Menu> menues;
-	
+
 	public int getSubMenuId() {
 		return subMenuId;
 	}
@@ -26,7 +26,7 @@ public class SubMenu {
 	public int getSubTitleId() {
 		return subTitleId;
 	}
-	
+
 	public int getMainMenuId() {
 		return mainMenuId;
 	}
@@ -60,38 +60,38 @@ public class SubMenu {
 	public void setSubPageSubIndex(String subPageSubIndex) {
 		this.subPageSubIndex = subPageSubIndex;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public List<Menu> getMenues() {
 		return menues;
 	}
 	public void setMenues(List<Menu> menues) {
 		this.menues = menues;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		
+
 		return 31 * subMenuId + subTitleId;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if ((obj == null ) || (obj.getClass() != this.getClass())) {
-            return false;
-        }
-		
+			return false;
+		}
+
 		SubMenu menu = (SubMenu) obj;
 		return this.subMenuId == menu.getSubMenuId();
 	}

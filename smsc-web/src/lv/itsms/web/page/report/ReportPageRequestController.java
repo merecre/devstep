@@ -23,46 +23,46 @@ import lv.itsms.web.session.Session;
 //@WebServlet("/ReportPageRequestController")
 public class ReportPageRequestController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+
 	Repository repository;
-	
+
 	Session session;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ReportPageRequestController() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ReportPageRequestController() {
+		super();
+	}
 
 	@Override
 	public void init() throws ServletException {
 		repository = new Repository();
-		
+
 		session = new Session();
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		session.setRequest(request);
 		session.setSession(request.getSession());	
 
 		UserPageRequest reportStartDateUserParameter = new ReportEndDateRequestParameter();
 		reportStartDateUserParameter.update(request);
 		String reportStartDate = reportStartDateUserParameter.getParameter();
-		
+
 		UserPageRequest reportEndDateUserParameter = new ReportEndDateRequestParameter();
 		reportEndDateUserParameter.update(request);
 		String reportEndDate = reportEndDateUserParameter.getParameter();
-		
+
 		/* TODO
 		 * User inputed date validation
 		 */
-				
+
 		try {
 			PageRequestCommand requestCommand = new DoPrepareReportDiagramCommand(session, request, repository);
 			requestCommand.execute();
@@ -85,7 +85,7 @@ public class ReportPageRequestController extends HttpServlet {
 		String referer = request.getHeader("Referer");
 		response.sendRedirect(referer);
 	}
-	
+
 	private void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String errorJSP = "/WEB-INF/reporterror.jsp";
 		try {
@@ -98,9 +98,9 @@ public class ReportPageRequestController extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
-		
+
 		String exceptionMessage = e.getMessage();
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}

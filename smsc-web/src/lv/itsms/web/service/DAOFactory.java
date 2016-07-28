@@ -11,13 +11,13 @@ public abstract class DAOFactory {
 	public abstract SmsGroupDAO getSmsGroupDAO();
 	public abstract LoginInfoDAO getLoginInfoDAO();
 	public abstract RegistrationInfoDAO getRegistrationInfoDAO();
-	
+
 	public static DAOFactory getDAOFactory(int whichFactory) {
 		switch (whichFactory) {
 		case DB_DAO :
 			return new DBDAOFactory();
 		default           : 
-	          return new TestDAOFactory();
+			return new TestDAOFactory();
 		}
 	}
 }

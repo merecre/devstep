@@ -21,7 +21,7 @@ public class TestPhoneGroupDAO implements PhoneGroupDAO {
 			phoneGroup.setGroupId(groupId);
 			phoneGroup.setPhonenumber("371777777");
 			phoneGroups.add(phoneGroup);
-			
+
 			phoneGroup = new PhoneGroup();
 			phoneGroup.setGroupId(groupId);
 			phoneGroup.setPhonenumber("3718888888");

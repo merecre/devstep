@@ -19,15 +19,14 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 
 	@Override
 	public void execute() {
-		
+
 		SmsGroupBuilder smsGroupBuilder = new SmsGroupBuilder();
 		SmsGroup smsGroup = smsGroupBuilder.build(factory.getRequest());
-		
+
 		UserPageRequest phoneNumberUserRequest = factory.getUserPageRequest(SmsPhoneRequestParameter.PHONE_PARAMETER_KEY);
 		phoneNumberUserRequest.update(factory.getRequest());
 		String[] phoneNumbers = phoneNumberUserRequest.getParameterValues();
 		Repository repository = factory.getRepository();
 		repository.updateSmsGroup(smsGroup, phoneNumbers);
 	}
-
 }

@@ -12,37 +12,37 @@ import javax.sql.DataSource;
 public class SubMenuDAO {
 
 	final static String DB_TABLE = "submenu";
-	
+
 	private DataSource dataSource;
-	
+
 	public SubMenuDAO(DataSource dataSource) {
 		this.dataSource = dataSource;	
 	} 
-	
+
 	public List<SubMenu> list() throws SQLException {
-		
+
 		List<SubMenu> subMenues = new ArrayList<>();
-		
+
 		try (
-	            Connection connection = dataSource.getConnection();
-	            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE + " ORDER BY sort");
-	            ResultSet resultSet = statement.executeQuery();
-	        ) {
+				Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DB_TABLE + " ORDER BY sort");
+				ResultSet resultSet = statement.executeQuery();
+				) {
 			while (resultSet.next()) {
 				SubMenu menu = new SubMenu();
 				menu.setSubMenuId(resultSet.getInt("idsubmenu"));
 				menu.setMainMenuId(resultSet.getInt("idmainmenu"));
-	    		menu.setSubTitleId(resultSet.getInt("description_id"));
-	    		menu.setSubPageStr(resultSet.getString("page"));
-	    		menu.setSubClassActive(resultSet.getString("class_active"));
-	    		menu.setSubClassDefault(resultSet.getString("class_inactive"));
-	    		menu.setSubPageSubIndex(resultSet.getString("page_sub_index"));
+				menu.setSubTitleId(resultSet.getInt("description_id"));
+				menu.setSubPageStr(resultSet.getString("page"));
+				menu.setSubClassActive(resultSet.getString("class_active"));
+				menu.setSubClassDefault(resultSet.getString("class_inactive"));
+				menu.setSubPageSubIndex(resultSet.getString("page_sub_index"));
 				subMenues.add(menu);
 			}
 			connection.close();
 			statement.close();
 		} 
-		
+
 		return subMenues;
 	}
 }

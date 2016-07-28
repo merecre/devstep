@@ -14,7 +14,7 @@ import transfer.domain.SmsGroup;
 public class DoGetSmsGroupNameCommand implements PageRequestCommand {
 
 	CustomerPanelCommandFactory factory;
-	
+
 	public DoGetSmsGroupNameCommand(CustomerPanelCommandFactory factory) {
 		this.factory = factory;
 	}
@@ -26,9 +26,9 @@ public class DoGetSmsGroupNameCommand implements PageRequestCommand {
 		Repository repository = factory.getRepository();
 		List<SmsGroup> smsGroups = repository.getSmsGroupByUserId(userId);
 		updateSession(smsGroups);
-		
+
 	}
-	
+
 	private void updateSession(List<SmsGroup> smsGroups) {
 		Session session = factory.getSession();
 		session.updateSessionAttribute(Session.SESSION_SMSGROUPS_PARAMETER, smsGroups);

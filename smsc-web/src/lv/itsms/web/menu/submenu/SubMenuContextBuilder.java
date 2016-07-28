@@ -13,23 +13,23 @@ import lv.itsms.web.menu.submenu.SubMenuDAO;
 import lv.itsms.web.page.info.TitleDAO;
 
 public class SubMenuContextBuilder implements MenuContextBuilder {
-	
+
 	private List<SubMenu> subMenues;
-	
+
 	private List<Title> titles;
-	
+
 	public SubMenuContextBuilder(List<SubMenu> subMenues, List<Title> titles) {
 		this.subMenues = subMenues;
 		this.titles = titles;
 	}
-	
+
 	@Override
 	public List<MenuContext> buildMenuByLanguage(String menuId, String language) {
-		
+
 		setMenuTitleByLanguage(language);
-		
+
 		List<MenuContext> menuContext = buildMenuPageContext(menuId);
-		
+
 		return menuContext;
 	}
 
@@ -44,7 +44,7 @@ public class SubMenuContextBuilder implements MenuContextBuilder {
 			}
 		}
 	}
-	
+
 	private List<MenuContext> buildMenuPageContext(String menuId) {
 		List<MenuContext> subMenuContextContainer = new ArrayList<MenuContext>();
 		for (SubMenu subMenu : subMenues) {			
@@ -53,7 +53,7 @@ public class SubMenuContextBuilder implements MenuContextBuilder {
 			menuContext.setPageStr(subMenu.getSubPageStr());
 			menuContext.setSubElementSubIndex(subMenu.getSubPageSubIndex());
 			menuContext.setTitle(subMenu.getTitle());
-		
+
 			subMenuContextContainer.add(menuContext);
 		}
 		return subMenuContextContainer;

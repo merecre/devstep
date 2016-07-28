@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ReportEndDateRequestParameter extends UserPageRequest {
 
 	final static String URL_PARAMETER = "enddate";
-	
+
 	public ReportEndDateRequestParameter() {
 		super(URL_PARAMETER);
 	}

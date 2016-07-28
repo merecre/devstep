@@ -16,21 +16,21 @@ import lv.itsms.web.service.RegistrationInfoDAO;
 public class JDBCRegistrationInfoDAO implements RegistrationInfoDAO {
 
 	private final static String DB_TABLE = "web_content.content_reg_form";
-	
+
 	private Connection connection;
-	
+
 	private DBDAOFactory factory;
-	
+
 	public JDBCRegistrationInfoDAO(DBDAOFactory factory) {
 		this.factory = factory;
 	}
-	
+
 	public RegistrationInfo getInfoByLanguage(String language) throws SQLException, RuntimeException {		
-		
+
 		RegistrationInfo registrationInfo = null;
-		
+
 		connection = factory.createConnection();
-		
+
 		PreparedStatement statement = connection.prepareStatement(
 				"SELECT * "
 						+ "FROM " + DB_TABLE 
@@ -44,10 +44,10 @@ public class JDBCRegistrationInfoDAO implements RegistrationInfoDAO {
 		resultSet.close();
 		statement.close();
 		factory.closeConnection(connection);
-		
+
 		return registrationInfo;
 	}
-	
+
 	private RegistrationInfo populateData (ResultSet resultSet) throws SQLException {
 
 		RegistrationInfo registrationInfo = new RegistrationInfo();
@@ -61,7 +61,7 @@ public class JDBCRegistrationInfoDAO implements RegistrationInfoDAO {
 		registrationInfo.setTxtLoginDesr(resultSet.getString("txt_login_desr"));
 		registrationInfo.setTxtLoginHref(resultSet.getString("txt_login_href"));
 		registrationInfo.setTxtPassword(resultSet.getString("txt_password"));
-		
+
 		return registrationInfo;
 	}
 }

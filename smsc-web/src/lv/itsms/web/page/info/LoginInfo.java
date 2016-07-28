@@ -11,7 +11,7 @@ public class LoginInfo {
 	String txtLogOut;
 	String txtInvalidPassword;
 	String txtRepeat;
-	
+
 	public String getTxtHeader() {
 		return txtHeader;
 	}

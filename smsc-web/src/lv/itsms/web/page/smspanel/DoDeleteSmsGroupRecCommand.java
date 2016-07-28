@@ -14,10 +14,10 @@ import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
 import transfer.domain.SmsGroup;
 
 public class DoDeleteSmsGroupRecCommand implements PageRequestCommand {
-	
-	
+
+
 	CustomerPanelCommandFactory factory;
-	
+
 	public DoDeleteSmsGroupRecCommand(CustomerPanelCommandFactory factory) {
 		this.factory = factory;
 	}
@@ -31,10 +31,10 @@ public class DoDeleteSmsGroupRecCommand implements PageRequestCommand {
 			repository.deleteSmsGroupByGroupId(groupId);
 		}
 	}
-	
+
 	private String[] getSmsGroups () {
 		UserPageRequest userRequest = factory.getPageRequest();
 		return userRequest.getParameterValues();
 	}
-	
+
 }

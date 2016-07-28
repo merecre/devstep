@@ -13,10 +13,10 @@ public class UserRequestValidatorImpl implements UserRequestValidator {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public void addRule(Rule rule) {
 		rules.add(rule);
 	}

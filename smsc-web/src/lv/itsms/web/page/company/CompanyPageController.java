@@ -21,20 +21,20 @@ import lv.itsms.web.session.Session;
 //@WebServlet("/WebController")
 public class CompanyPageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+
 	final static String ATTRIBUTE_COMPANYINFO = "companyinfo";
-	
+
 	@Resource(name = "jdbc/ITSMSDBWeb") 
-    private DataSource dataSource;
-	
+	private DataSource dataSource;
+
 	CompanyInfoDAO companyInfoDAO;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CompanyPageController() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public CompanyPageController() {
+		super();
+	}
 
 	@Override
 	public void init() {
@@ -45,10 +45,10 @@ public class CompanyPageController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		Session session = new Session(request);
 		String language = session.getSessionLanguage();
-		
+
 		CompanyInfo companyPageInfo = getCompanyInfoFromDB(language);
 		request.setAttribute(ATTRIBUTE_COMPANYINFO, companyPageInfo);
 	}
@@ -67,7 +67,7 @@ public class CompanyPageController extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return companyPageInfo;
 	}
 }

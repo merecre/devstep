@@ -18,11 +18,11 @@ import transfer.domain.Sms;
 public class DoPrepareReportDiagramCommand implements PageRequestCommand {
 
 	Session session;
-	
+
 	HttpServletRequest request;
-	
+
 	Repository repository;
-		
+
 	public DoPrepareReportDiagramCommand(Session session, HttpServletRequest request, Repository repository) {
 		this.session = session;
 		this.request = request;
@@ -35,17 +35,17 @@ public class DoPrepareReportDiagramCommand implements PageRequestCommand {
 		UserPageRequest reportStartDateUserParameter = new ReportEndDateRequestParameter();
 		reportStartDateUserParameter.update(request);
 		String reportStartDate = reportStartDateUserParameter.getParameter();
-		
+
 		UserPageRequest reportEndDateUserParameter = new ReportEndDateRequestParameter();
 		reportEndDateUserParameter.update(request);
 		String reportEndDate = reportEndDateUserParameter.getParameter();
-		
+
 		String chartLines = "";
 		String sessionUserId = session.getSessionCustomerId();	
 		if (sessionUserId !=null ) {
 			long userId = Integer.parseInt(sessionUserId);
 			List<Sms> smsGroup = repository.findSmsGroupsByDatePeriod(userId, reportStartDate, reportEndDate);
-		
+
 			if (smsGroup != null && smsGroup.size() > 0) {
 				List<String> smsRecordList = formatSMSendDate(smsGroup);
 				chartLines = prepareChartDiagram(smsRecordList);
@@ -58,25 +58,25 @@ public class DoPrepareReportDiagramCommand implements PageRequestCommand {
 		List<String> smsRecordList = new ArrayList<String>();
 
 		java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy,MM,dd");
-	
+
 		for (Sms sms : smsGroup) {
 			smsRecordList.add(df.format(sms.getSendTime()));
 		}
-		
+
 		return smsRecordList;
 	}
-	
+
 	private String prepareChartDiagram (List<String> smsRecordList) {
 		String chartLines = "";
-		
+
 		Set<String> smsRecordsCountSet = new HashSet<String>(smsRecordList);
 		for(String s: smsRecordsCountSet){
 			if (!chartLines.equals("")) chartLines += ","; 
 			chartLines += "[new Date("+s+"), "+Collections.frequency(smsRecordList,s)+"]";
 		}
-		
+
 		chartLines = "["+ chartLines +"]";
-		
+
 		return chartLines;
 	}
 }

@@ -13,11 +13,11 @@ import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
 
 public class DoLoginFormRequestCommand implements PageRequestCommand {
-		
+
 	Customer customer;
-	
+
 	Session session;
-	
+
 	public DoLoginFormRequestCommand(Customer customer, Session session) {
 		this.customer = customer;
 		this.session = session;
@@ -26,6 +26,6 @@ public class DoLoginFormRequestCommand implements PageRequestCommand {
 	@Override
 	public void execute() throws RuntimeException {
 		session.updateSessionAttribute(Session.SESSION_CUSTOMER_LOGIN_PARAMETER, customer.getUserLogin());
-        session.updateSessionAttribute(Session.SESSION_CUSTOMER_ID_PARAMETER, customer.getId());
+		session.updateSessionAttribute(Session.SESSION_CUSTOMER_ID_PARAMETER, customer.getId());
 	}
 }

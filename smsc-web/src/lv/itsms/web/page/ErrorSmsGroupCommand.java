@@ -8,5 +8,4 @@ public class ErrorSmsGroupCommand implements PageRequestCommand {
 	public void execute() {
 		System.err.println(ERROR_COMMAND);
 	}
-
 }

@@ -10,29 +10,29 @@ import javax.sql.DataSource;
 public abstract class JDBCDataAccessObject {
 
 	public static final int NO_RECORDS = -1;
-	
+
 	protected DataSource dataSource;
 
 	protected Connection connection;
-	
+
 	public JDBCDataAccessObject(Connection connection) {
 		this.connection = connection;
 	}
-	
+
 	public JDBCDataAccessObject(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.connection = establishConnection();
 	}
-	
+
 	protected Connection establishConnection() {
 		try {
 			if (connection == null || connection.isClosed()) {
-			    connection = dataSource.getConnection();
+				connection = dataSource.getConnection();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return connection;
 	}
 

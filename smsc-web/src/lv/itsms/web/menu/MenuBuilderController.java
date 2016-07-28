@@ -34,64 +34,64 @@ import lv.itsms.web.session.Session;
  * Servlet implementation class MenuServlet
  */
 public class MenuBuilderController extends HttpServlet {
-    
+
 	final static String ATTRIBUTE_MENUS = "menues";
 	final static String ATTRIBUTE_SUB_MENUS = "submenues";
 	final static String ATTRIBUTE_CUSTOMER_MENUS = "customermenues";
-	
+
 	@Resource(name = "jdbc/ITSMSDBMenu") 
-    private DataSource dataSource;
-	
+	private DataSource dataSource;
+
 	private MenuDAO menuDAO;
-	
+
 	private SubMenuDAO subMenuDAO;
-	
+
 	private CustomerMenuDAO customerMenuDAO;
-	
+
 	private TitleDAO titleDAO;
-	
+
 	private MenuContextBuilder menuBuilder;
-	
-    private List<Menu> menues;
-	
-    private List<SubMenu> subMenues;
-    
-    private List<CustomerMenu> customerMenues;
-    
+
+	private List<Menu> menues;
+
+	private List<SubMenu> subMenues;
+
+	private List<CustomerMenu> customerMenues;
+
 	private List<Title> titles;
-	
+
 	Session session;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public MenuBuilderController() {
-        super();
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public MenuBuilderController() {
+		super();
+	}
 
-    @Override
-    public void init() {
-        menuDAO = new MenuDAO(dataSource);
-        subMenuDAO = new SubMenuDAO(dataSource);
-        titleDAO =  new TitleDAO(dataSource);
-        customerMenuDAO = new CustomerMenuDAO(dataSource);
-        
+	@Override
+	public void init() {
+		menuDAO = new MenuDAO(dataSource);
+		subMenuDAO = new SubMenuDAO(dataSource);
+		titleDAO =  new TitleDAO(dataSource);
+		customerMenuDAO = new CustomerMenuDAO(dataSource);
+
 		menues = getMenuFromDB();
 		titles = getTitleFromDB();
 		subMenues = getSubMenuFromDB();
 		customerMenues = getCustomerMenuFromDB();
-    }
-    
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		session = new Session(request);	
 		updateSessionParameters();
-		
+
 		prepareDataToBuildPageMenu(request);
-	
+
 	}
 
 	/**
@@ -101,48 +101,48 @@ public class MenuBuilderController extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
+
 	private void updateSessionParameters() {
-		
+
 		UserPageRequest mainMenuUserRequest = new MainMenuRequestParameter();
 		session.updateSessionMenuId(mainMenuUserRequest);
-		
+
 		UserPageRequest subMenuUserRequest = new SubMenuRequestParameter();
 		session.updateSessionSubMenuId(subMenuUserRequest);
-		
+
 		UserPageRequest languageUserRequest = new LanguageRequestParameter();
 		session.updateSessionLanguage(languageUserRequest);
-		
-		 if (session.isUserLoggedIn()) {
-			 UserPageRequest customerMenuUserRequest = new CustomerMenuRequestParameter();
-	         session.updateSessionCustomerMenuId(customerMenuUserRequest);			 
-		 }
+
+		if (session.isUserLoggedIn()) {
+			UserPageRequest customerMenuUserRequest = new CustomerMenuRequestParameter();
+			session.updateSessionCustomerMenuId(customerMenuUserRequest);			 
+		}
 	}
-	
+
 	private void prepareDataToBuildPageMenu (HttpServletRequest request) {
 		String language = session.getSessionLanguage(); 
 
 		menuBuilder = new MainMenuContextBuilder(menues, titles);
 		String menuId = session.getSessionMenuId();
 		List<MenuContext> menues = menuBuilder.buildMenuByLanguage(menuId, language);
-		
-        request.setAttribute(ATTRIBUTE_MENUS, menues);
-		
-        menuBuilder = new SubMenuContextBuilder(subMenues, titles);
-        List<MenuContext> subMenues = menuBuilder.buildMenuByLanguage(menuId, language);
-        request.setAttribute(ATTRIBUTE_SUB_MENUS, subMenues);
-        
-        if (session.isUserLoggedIn()) {
-           menuBuilder = new CustomerMenuContextBuilder(customerMenues, titles);
-           String customerMenuId = session.getSessionCustomerMenuId();
-           List<MenuContext> customerMenues = menuBuilder.buildMenuByLanguage(customerMenuId, language);
-           request.setAttribute(ATTRIBUTE_CUSTOMER_MENUS , customerMenues);
-        }
+
+		request.setAttribute(ATTRIBUTE_MENUS, menues);
+
+		menuBuilder = new SubMenuContextBuilder(subMenues, titles);
+		List<MenuContext> subMenues = menuBuilder.buildMenuByLanguage(menuId, language);
+		request.setAttribute(ATTRIBUTE_SUB_MENUS, subMenues);
+
+		if (session.isUserLoggedIn()) {
+			menuBuilder = new CustomerMenuContextBuilder(customerMenues, titles);
+			String customerMenuId = session.getSessionCustomerMenuId();
+			List<MenuContext> customerMenues = menuBuilder.buildMenuByLanguage(customerMenuId, language);
+			request.setAttribute(ATTRIBUTE_CUSTOMER_MENUS , customerMenues);
+		}
 	}
-	
+
 	private List<Menu> getMenuFromDB() {
 		List<Menu> menuesDB = null;
-		
+
 		try {
 			menuesDB = menuDAO.list();
 		} catch (SQLException e) {
@@ -150,10 +150,10 @@ public class MenuBuilderController extends HttpServlet {
 		}
 		return menuesDB;
 	}
-	
+
 	private List<SubMenu> getSubMenuFromDB() {
 		List<SubMenu> subMenuesDB = null;
-		
+
 		try {
 			subMenuesDB = subMenuDAO.list();
 		} catch (SQLException e) {
@@ -161,10 +161,10 @@ public class MenuBuilderController extends HttpServlet {
 		}
 		return subMenuesDB;
 	}
-	
+
 	private List<CustomerMenu> getCustomerMenuFromDB() {
 		List<CustomerMenu> customerMenuesDB = null;
-		
+
 		try {
 			customerMenuesDB = customerMenuDAO.list();
 		} catch (SQLException e) {
@@ -172,7 +172,7 @@ public class MenuBuilderController extends HttpServlet {
 		}
 		return customerMenuesDB;
 	}
-	
+
 	private List<Title> getTitleFromDB() {
 		List<Title> titleDB = null;
 		try {

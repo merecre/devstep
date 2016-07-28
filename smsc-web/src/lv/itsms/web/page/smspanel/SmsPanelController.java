@@ -33,30 +33,30 @@ import lv.itsms.web.session.Session;
 
 public class SmsPanelController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    	
+
 	Repository repository;
-	
+
 	Map<String, UserPageRequest> urlParameters;
-	
+
 	CustomerPanelCommandFactory customerPanelFactory;
-    
+
 	Session session;
 	/**
-     * @see HttpServlet#HttpServlet()
-     */
-    
+	 * @see HttpServlet#HttpServlet()
+	 */
+
 	public SmsPanelController() {
-        super();
-    }
+		super();
+	}
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		
+
 		session = new Session();
-		
+
 		repository = new Repository();
-		
+
 		List<UserPageRequest> urlParameterList = new ArrayList<>();		
 		urlParameterList.add(new CustomerMenuRequestParameter());
 		urlParameterList.add(new DeleteSmsGroupPostRequestParameter());
@@ -64,13 +64,13 @@ public class SmsPanelController extends HttpServlet {
 		urlParameterList.add(new SaveSmsNewGroupRequestParameter());
 		urlParameterList.add(new SmsPhoneRequestParameter());
 		urlParameterList.add(new SmsGroupIdGetRequestParameter());
-		
+
 		urlParameters = new HashMap<>();
-		
+
 		for (UserPageRequest userRequest : urlParameterList) {
 			urlParameters.put(userRequest.getParameterKey(), userRequest);
 		}
-		
+
 		customerPanelFactory = new CustomerPanelCommandFactory (repository, urlParameters);	
 	}
 
@@ -78,13 +78,13 @@ public class SmsPanelController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		session.setRequest(request);
 		session.setSession(request.getSession());
-		
+
 		customerPanelFactory.setSession(session);
 		customerPanelFactory.setRequest(request);
-		
+
 		PageRequestCommand requestCommand = customerPanelFactory.make();
 		requestCommand.execute();	
 	}
@@ -94,10 +94,10 @@ public class SmsPanelController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		doGet(request, response);
-		
+
 		returnToBackPage(request, response);
 	}
-	
+
 	private void  returnToBackPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String referer = request.getHeader("Referer");
 		response.sendRedirect(referer);

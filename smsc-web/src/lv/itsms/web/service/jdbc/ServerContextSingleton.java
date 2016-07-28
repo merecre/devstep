@@ -9,21 +9,21 @@ public class ServerContextSingleton {
 
 	private static final String CONTEXT_ENV = "java:/comp/env/";
 	private static final String DB_SOURCE = "jdbc/ITSMSDBWeb";
-	
+
 	private static ServerContextSingleton instance = new ServerContextSingleton();
-	
+
 	DataSource dataSource;
 
 	public static ServerContextSingleton getInstance() {
 		return instance; 
 	}
-	
+
 	public DataSource getDataSource () {
-	
+
 		if (dataSource!=null) {
 			return dataSource;
 		}
-		
+
 		try {
 			Context init = new InitialContext();
 			Context env = (Context) init.lookup(CONTEXT_ENV);
@@ -33,5 +33,5 @@ public class ServerContextSingleton {
 		}
 		return dataSource;
 	}
-	
+
 }

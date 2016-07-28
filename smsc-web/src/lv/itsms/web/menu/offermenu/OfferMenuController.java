@@ -23,26 +23,26 @@ import lv.itsms.web.session.Session;
 //@WebServlet("/OfferPageController")
 public class OfferMenuController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
+
 	final static String ATTRIBUTE_OFFER = "offerpageinfo";
-	
+
 	@Resource(name = "jdbc/ITSMSDBWebInfo") 
-    private DataSource dataSource;
-	
+	private DataSource dataSource;
+
 	private OfferInfoDAO offerInfoDAO;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public OfferMenuController() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public OfferMenuController() {
+		super();
+	}
 
 	@Override
 	public void init() {
 		offerInfoDAO = new OfferInfoDAO(dataSource);
 	}
-    
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -50,7 +50,7 @@ public class OfferMenuController extends HttpServlet {
 		Session session = new Session(request);
 		String language = session.getSessionLanguage();
 		String pageOfferId = session.getSessionSubMenuId();
-		
+
 		OfferInfo offerPageInfo = getOfferInfoFromDB(language, pageOfferId);
 		request.setAttribute(ATTRIBUTE_OFFER, offerPageInfo);
 	}
@@ -71,5 +71,4 @@ public class OfferMenuController extends HttpServlet {
 		}
 		return offerPageInfo;
 	}
-	
 }

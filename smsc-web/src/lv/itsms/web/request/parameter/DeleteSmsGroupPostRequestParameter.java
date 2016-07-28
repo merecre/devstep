@@ -6,19 +6,19 @@ import lv.itsms.web.service.Repository;
 
 public class DeleteSmsGroupPostRequestParameter extends UserPageRequest {
 
-		public final static String DELETE_COMMAND_PARAMETER = "delete";
-			
-		//SmsGroupCommand deleteSmsGroup;
-		Repository repository;
-		
-		public DeleteSmsGroupPostRequestParameter() {
-			super(DELETE_COMMAND_PARAMETER);
-		}
+	public final static String DELETE_COMMAND_PARAMETER = "delete";
 
-		@Override
-		public void update(HttpServletRequest request) {
-			
-			parameterValue = request.getParameter(parameterKey);
-			
-		}
+	//SmsGroupCommand deleteSmsGroup;
+	Repository repository;
+
+	public DeleteSmsGroupPostRequestParameter() {
+		super(DELETE_COMMAND_PARAMETER);
+	}
+
+	@Override
+	public void update(HttpServletRequest request) {
+
+		parameterValue = request.getParameter(parameterKey);
+
+	}
 }

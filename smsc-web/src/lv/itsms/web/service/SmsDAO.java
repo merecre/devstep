@@ -8,6 +8,6 @@ import transfer.domain.Sms;
 
 public interface SmsDAO {
 	boolean insert(Sms sms) throws Exception;
-	
+
 	List<Sms> findSmsGroupsByDatePeriodAndUserId (long customerId, String startDate, String endDate) throws Exception;
 }
