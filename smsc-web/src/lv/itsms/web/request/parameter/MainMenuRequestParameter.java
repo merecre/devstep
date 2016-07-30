@@ -2,14 +2,14 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class MainMenuRequestParameter extends UserPageRequest {
+public class MainMenuRequestParameter extends UserPageRequestParameter {
 
-	final static String MENU_PARAMETER = "id";
+	final static String MENU_URL_PARAMETER = "id";
 
-	final static String DEFAULT_MENU_PARAMETER = "Home";
+	final static String DEFAULT_MENU_PARAMETER_VALUE = "Home";
 
 	public MainMenuRequestParameter() {
-		super(MENU_PARAMETER);
+		super(MENU_URL_PARAMETER);
 	}
 
 	@Override
@@ -18,7 +18,7 @@ public class MainMenuRequestParameter extends UserPageRequest {
 		String menuId = request.getParameter(parameterKey);
 
 		if ((menuId==null) || menuId.equals("")) {
-			menuId = (parameterValue == null) ? DEFAULT_MENU_PARAMETER :  parameterValue ;
+			menuId = (parameterValue == null) ? DEFAULT_MENU_PARAMETER_VALUE :  parameterValue ;
 		}
 
 		parameterValue = menuId;

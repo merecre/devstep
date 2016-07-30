@@ -26,7 +26,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
@@ -41,7 +41,7 @@ public class RegistrationRequestControllerTest {
 	HttpServletResponse response; 
 	Session session;
 	Repository repository;
-	Map<String, UserPageRequest> urlParameters;
+	Map<String, UserPageRequestParameter> urlParameters;
 	Map<String, Object> attributes;
 
 	@Before

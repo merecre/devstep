@@ -27,7 +27,7 @@ import lv.itsms.web.request.parameter.CustomerMenuRequestParameter;
 import lv.itsms.web.request.parameter.LanguageRequestParameter;
 import lv.itsms.web.request.parameter.MainMenuRequestParameter;
 import lv.itsms.web.request.parameter.SubMenuRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.session.Session;
 
 /**
@@ -104,17 +104,17 @@ public class MenuBuilderController extends HttpServlet {
 
 	private void updateSessionParameters() {
 
-		UserPageRequest mainMenuUserRequest = new MainMenuRequestParameter();
+		UserPageRequestParameter mainMenuUserRequest = new MainMenuRequestParameter();
 		session.updateSessionMenuId(mainMenuUserRequest);
 
-		UserPageRequest subMenuUserRequest = new SubMenuRequestParameter();
+		UserPageRequestParameter subMenuUserRequest = new SubMenuRequestParameter();
 		session.updateSessionSubMenuId(subMenuUserRequest);
 
-		UserPageRequest languageUserRequest = new LanguageRequestParameter();
+		UserPageRequestParameter languageUserRequest = new LanguageRequestParameter();
 		session.updateSessionLanguage(languageUserRequest);
 
 		if (session.isUserLoggedIn()) {
-			UserPageRequest customerMenuUserRequest = new CustomerMenuRequestParameter();
+			UserPageRequestParameter customerMenuUserRequest = new CustomerMenuRequestParameter();
 			session.updateSessionCustomerMenuId(customerMenuUserRequest);			 
 		}
 	}

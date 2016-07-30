@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.request.parameter.LoginFormRequestParameterBuilder;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.validator.CustomerNotEmptyRule;
 import lv.itsms.web.request.validator.LoginFieldFormValidator;
 import lv.itsms.web.request.validator.Rule;

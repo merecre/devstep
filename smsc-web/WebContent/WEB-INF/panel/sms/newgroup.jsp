@@ -114,6 +114,17 @@ $(function(){
 			<th>Phone</th>
 		</tr>
 		<c:set var="counter" value="0" scope="page" />
+		<c:if test="${empty phonegroups}">
+							<tr>
+						<td><input type="text" name="phone" value="${phonenumber1}" /></td>
+						<td><input type="button" id="more_fields"
+							onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');"
+							value="Add row" /></td>
+						<td><input type="button" id="delete"
+							onclick="deleteLastRow('phone_group');" value="Delete row" /></td>
+					</tr>
+		
+		</c:if>
 		<c:forEach items="${phonegroups}" var="phonegroup">
 			<c:set var="counter" value="${counter + 1}" scope="page" />
 			<c:choose>

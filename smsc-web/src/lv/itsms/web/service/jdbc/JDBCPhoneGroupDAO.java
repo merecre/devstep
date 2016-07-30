@@ -56,7 +56,8 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 		List<PhoneGroup> phoneGroups = new LinkedList<>();
 
 		String sql = "SELECT * FROM " + DB_TABLE 
-				+ " WHERE group_id='" + groupId + "'";
+				+ " WHERE group_id='" + groupId + "'"
+				+ " ORDER BY id";
 
 		connection = factory.createConnection();
 

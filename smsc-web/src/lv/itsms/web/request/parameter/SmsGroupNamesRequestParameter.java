@@ -2,7 +2,7 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SmsGroupNamesRequestParameter extends UserPageRequest{
+public class SmsGroupNamesRequestParameter extends UserPageRequestParameter{
 
 	final static String GROUP_NAMES_PARAMETER = "group_name";
 

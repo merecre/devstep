@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lv.itsms.web.service.SmsGroupDAO;
-import lv.itsms.web.service.TestDAOFactory;
 import transfer.domain.SmsGroup;
 
 public class TestSmsGroupDAO implements SmsGroupDAO {

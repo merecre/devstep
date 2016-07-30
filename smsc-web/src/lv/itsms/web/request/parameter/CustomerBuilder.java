@@ -10,7 +10,7 @@ public class CustomerBuilder {
 
 		Customer customer = new Customer();
 
-		UserPageRequest userRequest = new CustomerFirstnameRequest();
+		UserPageRequestParameter userRequest = new CustomerFirstnameRequest();
 		userRequest.update(request);
 		customer.setName(userRequest.getParameter());
 
@@ -33,7 +33,7 @@ public class CustomerBuilder {
 		return customer;
 	}
 
-	private class CustomerFirstnameRequest extends UserPageRequest {
+	private class CustomerFirstnameRequest extends UserPageRequestParameter {
 		private final static String FIRST_NAME_PAREMETER = "fname";
 		public CustomerFirstnameRequest() {
 			super(FIRST_NAME_PAREMETER);
@@ -45,7 +45,7 @@ public class CustomerBuilder {
 		}		
 	}
 
-	private class CustomerLastnameRequest extends UserPageRequest {
+	private class CustomerLastnameRequest extends UserPageRequestParameter {
 		private final static String LAST_NAME_PAREMETER = "lname";
 		public CustomerLastnameRequest() {
 			super(LAST_NAME_PAREMETER);
@@ -57,7 +57,7 @@ public class CustomerBuilder {
 		}		
 	}
 
-	private class CustomerEmailRequest extends UserPageRequest {
+	private class CustomerEmailRequest extends UserPageRequestParameter {
 		private final static String EMAIL_PAREMETER = "email";
 		public CustomerEmailRequest() {
 			super(EMAIL_PAREMETER);
@@ -69,7 +69,7 @@ public class CustomerBuilder {
 		}	
 	}
 
-	private class CustomerLoginRequest extends UserPageRequest {
+	private class CustomerLoginRequest extends UserPageRequestParameter {
 		private final static String LOGIN_PAREMETER = "uname";
 		public CustomerLoginRequest() {
 			super(LOGIN_PAREMETER);
@@ -81,7 +81,7 @@ public class CustomerBuilder {
 		}	
 	}
 
-	private class CustomerPasswordRequest extends UserPageRequest {
+	private class CustomerPasswordRequest extends UserPageRequestParameter {
 		private final static String PASSWORD_PAREMETER = "pass";
 		public CustomerPasswordRequest() {
 			super(PASSWORD_PAREMETER);

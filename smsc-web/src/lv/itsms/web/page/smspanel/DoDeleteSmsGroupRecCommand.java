@@ -1,17 +1,9 @@
 package lv.itsms.web.page.smspanel;
 
-import java.sql.SQLException;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
-
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.request.parameter.SmsGroupIdPostRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.Repository;
-import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
-import transfer.domain.SmsGroup;
 
 public class DoDeleteSmsGroupRecCommand implements PageRequestCommand {
 
@@ -33,7 +25,8 @@ public class DoDeleteSmsGroupRecCommand implements PageRequestCommand {
 	}
 
 	private String[] getSmsGroups () {
-		UserPageRequest userRequest = factory.getPageRequest();
+		UserPageRequestParameter userRequest = factory.getUserPageRequest(SmsGroupIdPostRequestParameter.GROUP_ID_POST_PARAMETER);
+		userRequest.update(factory.getRequest());
 		return userRequest.getParameterValues();
 	}
 

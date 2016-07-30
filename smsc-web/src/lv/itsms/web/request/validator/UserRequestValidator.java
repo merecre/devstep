@@ -2,7 +2,7 @@ package lv.itsms.web.request.validator;
 
 import java.util.List;
 
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public interface UserRequestValidator {
 

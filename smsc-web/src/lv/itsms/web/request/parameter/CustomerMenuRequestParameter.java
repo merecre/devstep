@@ -4,12 +4,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.page.PageRequestCommand;
 
-public class CustomerMenuRequestParameter extends UserPageRequest {
+public class CustomerMenuRequestParameter extends UserPageRequestParameter {
 
-	public final static String MENU_PARAMETER = "cusMenu";
+	public final static String MENU_URL_PARAMETER = "cusMenu";
 
+	public final static String SMS_REPORT_GROUP_LIST_URL_VALUE = "smsPanel";
+	
 	public CustomerMenuRequestParameter() {
-		super(MENU_PARAMETER);
+		super(MENU_URL_PARAMETER);
 	}
 
 	@Override

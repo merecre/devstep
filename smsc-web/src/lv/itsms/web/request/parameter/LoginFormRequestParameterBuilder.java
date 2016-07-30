@@ -4,9 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public class LoginFormRequestParameterBuilder {
 
-	UserPageRequest loginName;
+	UserPageRequestParameter loginName;
 
-	UserPageRequest password;
+	UserPageRequestParameter password;
 
 	public void build(HttpServletRequest request) {
 
@@ -17,7 +17,7 @@ public class LoginFormRequestParameterBuilder {
 		password.update(request);	
 	}
 
-	class LoginNameRequestParameter extends UserPageRequest {		
+	class LoginNameRequestParameter extends UserPageRequestParameter {		
 		final static String LOGIN_NAME_PARAMETER = "uname";
 
 		public LoginNameRequestParameter() {
@@ -30,7 +30,7 @@ public class LoginFormRequestParameterBuilder {
 		}
 	}
 
-	class LoginPasswordRequestParameter extends UserPageRequest {
+	class LoginPasswordRequestParameter extends UserPageRequestParameter {
 		final static String LOGIN_PASSWORD_PARAMETER = "pass";
 
 		public LoginPasswordRequestParameter() {
@@ -43,11 +43,11 @@ public class LoginFormRequestParameterBuilder {
 		}
 	}
 
-	public UserPageRequest getLoginName() {
+	public UserPageRequestParameter getLoginName() {
 		return loginName;
 	}
 
-	public UserPageRequest getPassword() {
+	public UserPageRequestParameter getPassword() {
 		return password;
 	}
 }

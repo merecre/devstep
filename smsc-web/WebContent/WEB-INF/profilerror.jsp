@@ -9,7 +9,6 @@
 </head>
 <body>
 	${error}
-	<a href="${pageContext.servletContext.contextPath}/chart.jsp">"Return
-		to back page"</a>
+	<a href="${pageContext.servletContext.contextPath}/profile.jsp">${profileinfo.txtErrorReturn}</a>
 </body>
 </html>

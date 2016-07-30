@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +64,7 @@ public class ProfilePageController extends HttpServlet {
 	}
 
 	private void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		final String errorJSP = "/WEB-INF/profileerror.jsp";
+		final String errorJSP = "/WEB-INF/profilerror.jsp";
 		try {
 			ServletContext context = getServletContext();
 			if (context != null) {
@@ -78,7 +77,6 @@ public class ProfilePageController extends HttpServlet {
 	}
 
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
-
 		String exceptionMessage = e.getMessage();
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}	

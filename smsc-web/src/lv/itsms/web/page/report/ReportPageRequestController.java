@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.request.parameter.ReportEndDateRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 
@@ -51,11 +51,11 @@ public class ReportPageRequestController extends HttpServlet {
 		session.setRequest(request);
 		session.setSession(request.getSession());	
 
-		UserPageRequest reportStartDateUserParameter = new ReportEndDateRequestParameter();
+		UserPageRequestParameter reportStartDateUserParameter = new ReportEndDateRequestParameter();
 		reportStartDateUserParameter.update(request);
 		String reportStartDate = reportStartDateUserParameter.getParameter();
 
-		UserPageRequest reportEndDateUserParameter = new ReportEndDateRequestParameter();
+		UserPageRequestParameter reportEndDateUserParameter = new ReportEndDateRequestParameter();
 		reportEndDateUserParameter.update(request);
 		String reportEndDate = reportEndDateUserParameter.getParameter();
 

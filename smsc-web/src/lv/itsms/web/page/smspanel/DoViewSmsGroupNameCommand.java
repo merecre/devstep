@@ -1,21 +1,17 @@
 package lv.itsms.web.page.smspanel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import lv.itsms.web.page.PageRequestCommand;
-import lv.itsms.web.request.parameter.UserPageRequest;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.SmsGroup;
 
-public class DoGetSmsGroupNameCommand implements PageRequestCommand {
+public class DoViewSmsGroupNameCommand implements PageRequestCommand {
 
 	CustomerPanelCommandFactory factory;
 
-	public DoGetSmsGroupNameCommand(CustomerPanelCommandFactory factory) {
+	public DoViewSmsGroupNameCommand(CustomerPanelCommandFactory factory) {
 		this.factory = factory;
 	}
 
@@ -26,7 +22,6 @@ public class DoGetSmsGroupNameCommand implements PageRequestCommand {
 		Repository repository = factory.getRepository();
 		List<SmsGroup> smsGroups = repository.getSmsGroupByUserId(userId);
 		updateSession(smsGroups);
-
 	}
 
 	private void updateSession(List<SmsGroup> smsGroups) {

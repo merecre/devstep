@@ -16,22 +16,22 @@
 
 	<table align="center">
 	<tr>
-		<th>Customer</th>
+		<th>${profileinfo.txtHeader}</th>
 	</tr>
 	<tr>
-		<td>Name:</td>
+		<td>${profileinfo.txtName}:</td>
 		<td>${profile.name}</td>
 	</tr>
 	<tr>
-		<td>Surname:</td>
+		<td>${profileinfo.txtSurname}:</td>
 		<td>${profile.surname}</td>
 	</tr>
 	<tr>
-		<td>Login:</td>
+		<td>${profileinfo.txtLogin}:</td>
 		<td>${profile.userLogin}</td>
 	</tr>
 	<tr>
-		<td>Email:</td>
+		<td>${profileinfo.txtEmail}:</td>
 		<td>${profile.email}</td>
 	</tr>	
 	</table>

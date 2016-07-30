@@ -2,14 +2,14 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
-public class SaveSmsNewGroupRequestParameter extends UserPageRequest {
+public class SaveSmsNewGroupRequestParameter extends UserPageRequestParameter {
 
-	public final static String SAVE_COMMAND_PARAMETER = "save";
+	public final static String SAVE_COMMAND_URL_PARAMETER = "save";
 
 	public SaveSmsNewGroupRequestParameter() {
-		super(SAVE_COMMAND_PARAMETER);
+		super(SAVE_COMMAND_URL_PARAMETER);
 	}
 
 	@Override

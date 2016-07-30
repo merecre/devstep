@@ -2,7 +2,7 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SmsGroupIdGetRequestParameter extends UserPageRequest {
+public class SmsGroupIdGetRequestParameter extends UserPageRequestParameter {
 	public final static String GROUP_ID_GET_PARAMETER = "groupID"; 
 
 	public SmsGroupIdGetRequestParameter() {

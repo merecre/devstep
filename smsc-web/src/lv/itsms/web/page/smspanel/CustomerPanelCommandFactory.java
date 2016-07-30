@@ -11,20 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.page.ErrorSmsGroupCommand;
 import lv.itsms.web.page.PageRequestCommand;
-import lv.itsms.web.request.parameter.CustomerMenuRequestParameter;
-import lv.itsms.web.request.parameter.DeleteSmsGroupPostRequestParameter;
-import lv.itsms.web.request.parameter.SaveSmsNewGroupRequestParameter;
-import lv.itsms.web.request.parameter.SmsGroupIdPostRequestParameter;
-import lv.itsms.web.request.parameter.SmsGroupNamesRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 
+/**
+ * 
+ * @author DMC
+ *
+ * Returns commands which will processes user request.
+ */
+
 public class CustomerPanelCommandFactory {
-
-	public final static String SMS_REPORT_GROUP_LIST = "smsPanel";
-
-	public final static String SMS_REPORT_GROUP_VIEW_FULL = "groupList";
 
 	Repository repository;
 
@@ -32,42 +30,32 @@ public class CustomerPanelCommandFactory {
 
 	Session session;
 
-	UserPageRequest pageRequest;
+	UserPageRequestParameter pageRequest;
 
-	Map<String, UserPageRequest> urlParameters;
+	Map<String, UserPageRequestParameter> urlParameters;
 
-	public CustomerPanelCommandFactory(Repository repository, Map<String, UserPageRequest> urlParameters) {
+	public CustomerPanelCommandFactory(Repository repository, Map<String, UserPageRequestParameter> urlParameters) {
 		this.repository = repository;
 		this.urlParameters = urlParameters;
 	}
 
-	public PageRequestCommand make() {
+	public PageRequestCommand make(CommandType commandRequestID) {
 
-		pageRequest = getUserPageRequest(CustomerMenuRequestParameter.MENU_PARAMETER);
-		pageRequest.update(request);
-
-		if (pageRequest.isRequested()) {
-			String userRequestParameter = pageRequest.getParameter();
-			String userRequestValue = pageRequest.getParameter();
-			if (userRequestParameter.equals(SMS_REPORT_GROUP_LIST)) {
-				return new DoGetSmsGroupNameCommand(this);
-			} else if (userRequestValue.equals(SMS_REPORT_GROUP_VIEW_FULL)) {
-				return new DoGetSmsGroupRecCommand(this); 
-			}
-		}
-
-		UserPageRequest postRequestParameter = getUserPageRequest(DeleteSmsGroupPostRequestParameter.DELETE_COMMAND_PARAMETER);
-		postRequestParameter.update(request);	
-		if (postRequestParameter.isRequested()) {
-			pageRequest = getUserPageRequest(SmsGroupIdPostRequestParameter.GROUP_ID_POST_PARAMETER);
-			pageRequest.update(request);
+		switch (commandRequestID) {
+		case CMD_LOAD_SMS_GROUP_REC: 
+			return new DoViewSmsGroupRecCommand(this);
+		case CMD_OPEN_NEW_SMS_REC:
+			return new DoOpenNewSmsGroupRecCommand(this);
+		case CMD_LOAD_SMS_GROUP_NAMES:
+			return new DoViewSmsGroupNameCommand(this);
+		case CMD_DELETE_SMS_GROUP_REC:
 			return new DoDeleteSmsGroupRecCommand(this);
-		}
-
-		pageRequest = getUserPageRequest(SaveSmsNewGroupRequestParameter.SAVE_COMMAND_PARAMETER);
-		pageRequest.update(request);		
-		if (pageRequest.isRequested()) {
+		case CMD_SAVE_SMS_GROUP_REC:
 			return new DoSaveSmsGroupRecCommand(this);
+		case NO_COMMAND:
+			return new ErrorSmsGroupCommand();
+		default:
+			break;
 		}
 
 		return new ErrorSmsGroupCommand();
@@ -77,7 +65,7 @@ public class CustomerPanelCommandFactory {
 		this.session = session;
 	}
 
-	public void setUserPageRequest(	UserPageRequest pageRequest) {
+	public void setUserPageRequest(	UserPageRequestParameter pageRequest) {
 		this.pageRequest = pageRequest;
 	}
 
@@ -97,11 +85,11 @@ public class CustomerPanelCommandFactory {
 		this.repository = repository;
 	}
 
-	public UserPageRequest getPageRequest() {
+	public UserPageRequestParameter getPageRequest() {
 		return pageRequest;
 	}
 
-	public void setPageRequest(UserPageRequest pageRequest) {
+	public void setPageRequest(UserPageRequestParameter pageRequest) {
 		this.pageRequest = pageRequest;
 	}
 
@@ -109,7 +97,7 @@ public class CustomerPanelCommandFactory {
 		return session;
 	}
 
-	public UserPageRequest getUserPageRequest(String parametrKey) {
+	public UserPageRequestParameter getUserPageRequest(String parametrKey) {
 		return urlParameters.get(parametrKey);
 	}
 }

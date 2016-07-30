@@ -2,12 +2,12 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SubMenuRequestParameter extends UserPageRequest {
+public class SubMenuRequestParameter extends UserPageRequestParameter {
 
-	final static String MENU_PARAMETER = "subid";
+	final static String MENU_URL_PARAMETER = "subid";
 
 	public SubMenuRequestParameter() {
-		super(MENU_PARAMETER);
+		super(MENU_URL_PARAMETER);
 	}
 
 	@Override

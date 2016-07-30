@@ -2,7 +2,7 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ReportStartDateRequestParameter extends UserPageRequest {
+public class ReportStartDateRequestParameter extends UserPageRequestParameter {
 
 	final static String URL_PARAMETER = "startdate";
 

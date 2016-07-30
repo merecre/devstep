@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.request.parameter.ReportEndDateRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.Sms;
@@ -32,11 +32,11 @@ public class DoPrepareReportDiagramCommand implements PageRequestCommand {
 	@Override
 	public void execute() {
 
-		UserPageRequest reportStartDateUserParameter = new ReportEndDateRequestParameter();
+		UserPageRequestParameter reportStartDateUserParameter = new ReportEndDateRequestParameter();
 		reportStartDateUserParameter.update(request);
 		String reportStartDate = reportStartDateUserParameter.getParameter();
 
-		UserPageRequest reportEndDateUserParameter = new ReportEndDateRequestParameter();
+		UserPageRequestParameter reportEndDateUserParameter = new ReportEndDateRequestParameter();
 		reportEndDateUserParameter.update(request);
 		String reportEndDate = reportEndDateUserParameter.getParameter();
 

@@ -7,13 +7,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import lv.itsms.web.page.smspanel.SmsPanelController;
+import lv.itsms.web.page.smspanel.request.UserRequestCommandLookup;
+import lv.itsms.web.page.smspanel.request.UserRequestCommandLookupFactory;
 import lv.itsms.web.request.parameter.CustomerMenuRequestParameter;
 import lv.itsms.web.request.parameter.DeleteSmsGroupPostRequestParameter;
+import lv.itsms.web.request.parameter.OpenNewSmsGroupRecRequestParameter;
 import lv.itsms.web.request.parameter.SaveSmsNewGroupRequestParameter;
 import lv.itsms.web.request.parameter.SmsGroupIdGetRequestParameter;
 import lv.itsms.web.request.parameter.SmsGroupIdPostRequestParameter;
 import lv.itsms.web.request.parameter.SmsPhoneRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
+import lv.itsms.web.request.parameter.ViewSmsGroupRecRequestParameter;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
@@ -37,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +56,9 @@ public class SmsControllerTest {
 	HttpServletResponse response; 
 	Session session;
 	Repository repository;
-	CustomerPanelCommandFactory customerPanelFactory;
-	Map<String, UserPageRequest> urlParameters;
+	CustomerPanelCommandFactory userRequestCommandFactory;
+	CustomerPanelPageManager pageManager;
+	Map<String, UserPageRequestParameter> urlParameters;
 	Map<String, Object> attributes;
 
 	@Before
@@ -69,9 +75,13 @@ public class SmsControllerTest {
 		repository = new Repository(DAOFactory.TEST_DAO);
 		attributes = new HashMap<>();
 
-		prepareUrlParameters();
-		customerPanelFactory = new CustomerPanelCommandFactory (repository, urlParameters);
+		urlParameters = prepareURLParameters();
+		userRequestCommandFactory = new CustomerPanelCommandFactory (repository, urlParameters);
 
+		UserRequestCommandLookupFactory userRequestCommandLookupFactory = new UserRequestCommandLookupFactory(urlParameters);		
+		Map<CommandType, UserRequestCommandLookup> userRequestCommandLookups = prepareUserRequestCommandLookups(userRequestCommandLookupFactory);
+		
+		pageManager = new CustomerPanelPageManager(userRequestCommandFactory, userRequestCommandLookups);
 		Mockito.doAnswer(new Answer<Object>(){
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -110,8 +120,8 @@ public class SmsControllerTest {
 
 		smsServlet.setSession(session);
 		smsServlet.setRepository(repository);
-		smsServlet.setCustomerPanelFactory(customerPanelFactory);
-
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
 		smsServlet.doPost(request, response);       
 
 		List<SmsGroup> smsGroups = (List<SmsGroup>) attributes.get("smsgroups");
@@ -139,7 +149,8 @@ public class SmsControllerTest {
 
 		smsServlet.setSession(session);
 		smsServlet.setRepository(repository);
-		smsServlet.setCustomerPanelFactory(customerPanelFactory);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
 
 		exception.expect(Exception.class);
 		exception.expectMessage("Group not found2");
@@ -176,7 +187,8 @@ public class SmsControllerTest {
 
 		smsServlet.setSession(session);
 		smsServlet.setRepository(repository);
-		smsServlet.setCustomerPanelFactory(customerPanelFactory);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
 		smsServlet.doPost(request, response);  
 
 		assertEquals("SmsGroup saved: 20Insert 371777777Insert 37177778", outContent.toString());
@@ -208,7 +220,8 @@ public class SmsControllerTest {
 
 		smsServlet.setSession(session);
 		smsServlet.setRepository(repository);
-		smsServlet.setCustomerPanelFactory(customerPanelFactory);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
 		smsServlet.doPost(request, response);  
 
 		assertEquals("SmsGroup deleted by Id:20Phone Group deleted 20", outContent.toString());
@@ -217,21 +230,48 @@ public class SmsControllerTest {
 		System.setErr(System.err);
 	}
 
-	private void prepareUrlParameters() {
-		List<UserPageRequest> urlParameterList = new ArrayList<>();		
-		urlParameterList.add(new CustomerMenuRequestParameter());
-		urlParameterList.add(new DeleteSmsGroupPostRequestParameter());
-		urlParameterList.add(new SmsGroupIdPostRequestParameter());
-		urlParameterList.add(new SaveSmsNewGroupRequestParameter());
-		urlParameterList.add(new SmsPhoneRequestParameter());
-		urlParameterList.add(new SmsGroupIdGetRequestParameter());
+		private Map<String, UserPageRequestParameter>  prepareURLParameters() {
 
-		urlParameters = new HashMap<>();
+			List<UserPageRequestParameter> urlParameterList = new ArrayList<>();		
 
-		for (UserPageRequest userRequest : urlParameterList) {
-			urlParameters.put(userRequest.getParameterKey(), userRequest);
-		}
+			urlParameterList.add(new CustomerMenuRequestParameter());
+			urlParameterList.add(new DeleteSmsGroupPostRequestParameter());
+			urlParameterList.add(new SmsGroupIdPostRequestParameter());
+			urlParameterList.add(new SaveSmsNewGroupRequestParameter());
+			urlParameterList.add(new SmsPhoneRequestParameter());
+			urlParameterList.add(new SmsGroupIdGetRequestParameter());
+			urlParameterList.add(new OpenNewSmsGroupRecRequestParameter());
+			urlParameterList.add(new ViewSmsGroupRecRequestParameter());
+
+			Map<String, UserPageRequestParameter>  urlParameters = new HashMap<>();
+			for (UserPageRequestParameter userRequest : urlParameterList) {
+				urlParameters.put(userRequest.getParameterKey(), userRequest);
+			}	
+
+			return urlParameters;
 	}
+
+	private Map<CommandType, UserRequestCommandLookup> prepareUserRequestCommandLookups(UserRequestCommandLookupFactory commandLookupFactory) {
+
+			Map<CommandType, UserRequestCommandLookup> commandLookups = new EnumMap<>(CommandType.class);	
+
+			UserRequestCommandLookup commandLookup = commandLookupFactory.make(SaveSmsNewGroupRequestParameter.SAVE_COMMAND_URL_PARAMETER);
+			commandLookups.put(CommandType.CMD_SAVE_SMS_GROUP_REC, commandLookup);		
+
+			commandLookup = commandLookupFactory.make(DeleteSmsGroupPostRequestParameter.DELETE_COMMAND_URL_PARAMETER);
+			commandLookups.put(CommandType.CMD_DELETE_SMS_GROUP_REC, commandLookup);
+
+			commandLookup = commandLookupFactory.make(OpenNewSmsGroupRecRequestParameter.OPEN_NEW_SMS_GROUP_URL_PARAMETER);
+			commandLookups.put(CommandType.CMD_OPEN_NEW_SMS_REC, commandLookup);
+
+			commandLookup = commandLookupFactory.make(ViewSmsGroupRecRequestParameter.VIEW_SMS_GROUP_REV_URL);
+			commandLookups.put(CommandType.CMD_LOAD_SMS_GROUP_REC, commandLookup);
+
+			commandLookup = commandLookupFactory.make(CustomerMenuRequestParameter.MENU_URL_PARAMETER);
+			commandLookups.put(CommandType.CMD_LOAD_SMS_GROUP_NAMES, commandLookup);
+
+			return commandLookups;
+		}
 
 	@After
 	public void cleanUpStreams() {

@@ -1,5 +1,7 @@
 package lv.itsms.web.service;
 
+import lv.itsms.web.service.console.TestDAOFactory;
+
 public abstract class DAOFactory {
 
 	public static final int DB_DAO = 1;
@@ -11,6 +13,7 @@ public abstract class DAOFactory {
 	public abstract SmsGroupDAO getSmsGroupDAO();
 	public abstract LoginInfoDAO getLoginInfoDAO();
 	public abstract RegistrationInfoDAO getRegistrationInfoDAO();
+	public abstract ProfileInfoDAO getProfileInfoDAO(); 
 
 	public static DAOFactory getDAOFactory(int whichFactory) {
 		switch (whichFactory) {

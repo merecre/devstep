@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.request.parameter.LoginFormRequestParameterBuilder;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.validator.CustomerLoginNotEmpty;
 import lv.itsms.web.request.validator.CustomerNotEmptyRule;
 import lv.itsms.web.request.validator.CustomerPasswordNotEmpty;
@@ -78,8 +78,8 @@ public class LoginRequestController extends HttpServlet {
 		LoginFormRequestParameterBuilder parameterBuilder = new LoginFormRequestParameterBuilder();
 		parameterBuilder.build(request);
 
-		UserPageRequest loginNameParameter = parameterBuilder.getLoginName();
-		UserPageRequest userPasswordParameter = parameterBuilder.getPassword();
+		UserPageRequestParameter loginNameParameter = parameterBuilder.getLoginName();
+		UserPageRequestParameter userPasswordParameter = parameterBuilder.getPassword();
 
 		String loginName = loginNameParameter.getParameter();
 		String userPassword = userPasswordParameter.getParameter();

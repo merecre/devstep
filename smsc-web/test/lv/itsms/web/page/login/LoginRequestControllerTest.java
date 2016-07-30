@@ -27,7 +27,7 @@ import org.mockito.stubbing.Answer;
 
 import lv.itsms.web.page.smspanel.CustomerPanelCommandFactory;
 import lv.itsms.web.page.smspanel.SmsPanelController;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
@@ -43,7 +43,7 @@ public class LoginRequestControllerTest {
 	HttpServletResponse response; 
 	Session session;
 	Repository repository;
-	Map<String, UserPageRequest> urlParameters;
+	Map<String, UserPageRequestParameter> urlParameters;
 	Map<String, Object> attributes;
 
 	@Before

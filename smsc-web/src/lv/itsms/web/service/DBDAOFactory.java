@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import lv.itsms.web.service.jdbc.JDBCCustomerDAO;
 import lv.itsms.web.service.jdbc.JDBCLoginInfoDAO;
 import lv.itsms.web.service.jdbc.JDBCPhoneGroupDAO;
+import lv.itsms.web.service.jdbc.JDBCProfileInfoDAO;
 import lv.itsms.web.service.jdbc.JDBCRegistrationInfoDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
@@ -77,5 +78,10 @@ public class DBDAOFactory extends DAOFactory {
 	@Override
 	public RegistrationInfoDAO getRegistrationInfoDAO() {
 		return new JDBCRegistrationInfoDAO(this);
+	}
+
+	@Override
+	public ProfileInfoDAO getProfileInfoDAO() {		
+		return new JDBCProfileInfoDAO(this);
 	}
 }

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import lv.itsms.web.request.parameter.LanguageRequestParameter;
-import lv.itsms.web.request.parameter.UserPageRequest;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import transfer.domain.SmsGroup;
 
 /*
@@ -29,7 +29,8 @@ public class Session {
 	public final static String SESSION_SMSGROUPS_PARAMETER = "smsgroups";
 	public final static String SESSION_SMSGROUPREC_PARAMETER = "smsgrouprec";
 	public final static String SESSION_PHONEGROUPS_PARAMETER = "phonegroups";
-
+	public final static String SESSION_PROFILEINFO_PARAMETER = "profileinfo";
+	
 	HttpServletRequest request;
 
 	HttpSession session;
@@ -42,7 +43,7 @@ public class Session {
 	public Session() {
 	}
 
-	public void updateSessionLanguage(UserPageRequest userRequest) {
+	public void updateSessionLanguage(UserPageRequestParameter userRequest) {
 
 		userRequest.update(request);
 		String userRequestLanguage = userRequest.getParameter();
@@ -63,7 +64,7 @@ public class Session {
 		return session.getAttribute(SESSION_LANGUAGE_PARAMETER).toString();
 	}
 
-	public void updateSessionMenuId(UserPageRequest userRequest) {		
+	public void updateSessionMenuId(UserPageRequestParameter userRequest) {		
 
 		userRequest.update(request);
 		String userRequestMainMenuId = userRequest.getParameter();
@@ -75,7 +76,7 @@ public class Session {
 		return session.getAttribute(SESSION_MAIN_MENU_PARAMETER).toString();
 	}
 
-	public void updateSessionSubMenuId(UserPageRequest userRequest) {
+	public void updateSessionSubMenuId(UserPageRequestParameter userRequest) {
 
 		userRequest.update(request);
 		String userRequestSubMenuId = userRequest.getParameter();
@@ -99,7 +100,7 @@ public class Session {
 		return session.getAttribute(SESSION_SUB_MENU_PARAMETER).toString();
 	}
 
-	public void updateSessionCustomerMenuId(UserPageRequest userRequest) {
+	public void updateSessionCustomerMenuId(UserPageRequestParameter userRequest) {
 
 		userRequest.update(request);
 		String userRequestCustomerMenuId = userRequest.getParameter();
@@ -137,11 +138,11 @@ public class Session {
 		return sessionUserId;
 	}
 
-	public void updateParameter(UserPageRequest userRequest) {
+	public void updateParameter(UserPageRequestParameter userRequest) {
 		userRequest.update(request);
 	}
 
-	public boolean isParameter(UserPageRequest userRequest) {
+	public boolean isParameter(UserPageRequestParameter userRequest) {
 		return (session.getAttribute(userRequest.getParameter()) != null);
 	}
 

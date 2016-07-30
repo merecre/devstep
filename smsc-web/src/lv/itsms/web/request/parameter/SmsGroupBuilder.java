@@ -18,7 +18,7 @@ public class SmsGroupBuilder {
 
 		SmsGroup smsGroup = new SmsGroup();
 
-		UserPageRequest smsGroupUserRequest = new SmsGroupNameUserRequest();
+		UserPageRequestParameter smsGroupUserRequest = new SmsGroupNameUserRequest();
 		smsGroupUserRequest.update(request);
 		smsGroup.setSmsGroupName(smsGroupUserRequest.getParameter());
 
@@ -48,7 +48,7 @@ public class SmsGroupBuilder {
 		return smsGroup;
 	}
 
-	private class SmsGroupNameUserRequest extends UserPageRequest {
+	private class SmsGroupNameUserRequest extends UserPageRequestParameter {
 		private final static String GROUP_NAME_KEY = "g_common_name";
 		public SmsGroupNameUserRequest() {
 			super(GROUP_NAME_KEY);
@@ -61,7 +61,7 @@ public class SmsGroupBuilder {
 
 	}
 
-	private class SmsGroupMessageUserRequest extends UserPageRequest {
+	private class SmsGroupMessageUserRequest extends UserPageRequestParameter {
 		private final static String GROUP_MESSAGE_KEY = "g_common_message";
 		public SmsGroupMessageUserRequest() {
 			super(GROUP_MESSAGE_KEY);
@@ -74,7 +74,7 @@ public class SmsGroupBuilder {
 
 	}
 
-	private class SmsGroupSendDateUserRequest extends UserPageRequest {
+	private class SmsGroupSendDateUserRequest extends UserPageRequestParameter {
 		private final static String GROUP_DATE_KEY = "grp_send_date";
 		public SmsGroupSendDateUserRequest() {
 			super(GROUP_DATE_KEY );
@@ -87,7 +87,7 @@ public class SmsGroupBuilder {
 
 	}
 
-	private class SmsGroupSendHourUserRequest extends UserPageRequest {
+	private class SmsGroupSendHourUserRequest extends UserPageRequestParameter {
 		private final static String GROUP_HOUR_KEY = "grp_send_time_hour";
 		public SmsGroupSendHourUserRequest() {
 			super(GROUP_HOUR_KEY );
@@ -100,7 +100,7 @@ public class SmsGroupBuilder {
 
 	}
 
-	private class SmsGroupSendMinutesUserRequest extends UserPageRequest {
+	private class SmsGroupSendMinutesUserRequest extends UserPageRequestParameter {
 		private final static String GROUP_MINUTES_KEY = "grp_send_time_min";
 		public SmsGroupSendMinutesUserRequest() {
 			super(GROUP_MINUTES_KEY );
@@ -114,7 +114,7 @@ public class SmsGroupBuilder {
 	}
 
 	private int getSmsOwnerId (HttpServletRequest request) {
-		UserPageRequest loginUserRequest = new CustomerIdRequestParameter();
+		UserPageRequestParameter loginUserRequest = new CustomerIdRequestParameter();
 		loginUserRequest.update(request);
 		return Integer.parseInt(loginUserRequest.getParameter());
 	}

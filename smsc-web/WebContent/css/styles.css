@@ -261,6 +261,14 @@ table.t td {
 	
 }
 
+td.grey {
+	color: #AAAAAA;
+}
+
+input.grey {
+    background-color: lightgrey;
+}
+
 table.sub {
 	background: #0fa1e0;
 }

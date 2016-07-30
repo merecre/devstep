@@ -8,6 +8,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import lv.itsms.web.page.info.LoginInfo;
+import lv.itsms.web.page.info.ProfileInfo;
 import lv.itsms.web.page.info.RegistrationInfo;
 import lv.itsms.web.service.jdbc.JDBCCustomerDAO;
 import lv.itsms.web.service.jdbc.JDBCLoginInfoDAO;
@@ -27,6 +28,7 @@ public class Repository {
 	LoginInfoDAO loginInfoDAO;
 	RegistrationInfoDAO registrationInfoDAO;
 	SmsDAO smsDAO;
+	ProfileInfoDAO profileInfoDAO;
 
 	public Repository() {	
 		this(DAOFactory.DB_DAO);
@@ -41,6 +43,7 @@ public class Repository {
 		this.loginInfoDAO = factoryDAO.getLoginInfoDAO();	
 		this.registrationInfoDAO = factoryDAO.getRegistrationInfoDAO();	
 		this.smsDAO = factoryDAO.getSmsDAO();
+		this.profileInfoDAO = factoryDAO.getProfileInfoDAO();
 	}	
 
 	public void deleteSmsGroupByUserIdAndGroupName(int userId, String smsGroupName) {
@@ -207,6 +210,20 @@ public class Repository {
 		} 
 
 		return smsGroup;
+	}
+
+	public ProfileInfo getProfileInfoByLanguage(String language) {	
+		final String ERROR_MESSAGE = "Error during profile info loading occurred.";
+
+		ProfileInfo profileInfo = null;
+		try {
+			profileInfo = profileInfoDAO.getProfileInfoByLanguage(language);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(ERROR_MESSAGE);
+		}
+
+		return profileInfo;
 	}
 
 	private void saveSmsGroup(SmsGroup smsGroup) throws Exception {

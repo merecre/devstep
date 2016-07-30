@@ -2,7 +2,7 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SmsPhoneRequestParameter extends UserPageRequest {
+public class SmsPhoneRequestParameter extends UserPageRequestParameter {
 
 	public final static String PHONE_PARAMETER_KEY = "phone";
 

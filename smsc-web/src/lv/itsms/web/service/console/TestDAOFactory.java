@@ -1,8 +1,13 @@
-package lv.itsms.web.service;
+package lv.itsms.web.service.console;
 
-import lv.itsms.web.service.console.TestCustomerDAO;
-import lv.itsms.web.service.console.TestPhoneGroupDAO;
-import lv.itsms.web.service.console.TestSmsGroupDAO;
+import lv.itsms.web.service.CustomerDAO;
+import lv.itsms.web.service.DAOFactory;
+import lv.itsms.web.service.LoginInfoDAO;
+import lv.itsms.web.service.PhoneGroupDAO;
+import lv.itsms.web.service.ProfileInfoDAO;
+import lv.itsms.web.service.RegistrationInfoDAO;
+import lv.itsms.web.service.SmsDAO;
+import lv.itsms.web.service.SmsGroupDAO;
 
 public class TestDAOFactory extends DAOFactory {
 
@@ -37,6 +42,11 @@ public class TestDAOFactory extends DAOFactory {
 	public RegistrationInfoDAO getRegistrationInfoDAO() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ProfileInfoDAO getProfileInfoDAO() {
+		return new TestProfileInfoDAO(this);
 	}
 
 }

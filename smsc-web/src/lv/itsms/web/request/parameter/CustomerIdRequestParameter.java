@@ -3,7 +3,7 @@ package lv.itsms.web.request.parameter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class CustomerIdRequestParameter extends UserPageRequest {
+public class CustomerIdRequestParameter extends UserPageRequestParameter {
 
 	final static String USER_ID_PARAMETER = "customerid";
 

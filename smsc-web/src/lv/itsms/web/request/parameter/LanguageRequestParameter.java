@@ -2,16 +2,16 @@ package lv.itsms.web.request.parameter;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class LanguageRequestParameter extends UserPageRequest {
+public class LanguageRequestParameter extends UserPageRequestParameter {
 
 	public static String DEFAULT_LANGUAGE = "lv";
 
 	public static String[] ALLOWED_LANGUAGES = {"lv", "ru", "en"};
 
-	public final static String LN_PARAMETER = "ln"; 
+	public final static String LN_URL_PARAMETER = "ln"; 
 
 	public LanguageRequestParameter() {
-		super(LN_PARAMETER);
+		super(LN_URL_PARAMETER);
 	}
 
 	public void update(HttpServletRequest request) {

@@ -30,11 +30,11 @@ public class CustomerMenuContextBuilder implements MenuContextBuilder {
 	private void setMenuTitleByLanguage(String language) {
 		for (CustomerMenu menu : menues) {
 			for (Title title : titles) {;
-			if (menu.getTitleId() == title.getMenuID()) {
-				if (title.getLanguage().equals(language)) {
-					menu.setTitle(title.getTitle());
+				if (menu.getTitleId() == title.getMenuID()) {
+					if (title.getLanguage().equals(language)) {
+						menu.setTitle(title.getTitle());
+					}
 				}
-			}
 			}
 		}
 	}

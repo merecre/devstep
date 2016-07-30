@@ -4,15 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.service.Repository;
 
-public class DeleteSmsGroupPostRequestParameter extends UserPageRequest {
+public class DeleteSmsGroupPostRequestParameter extends UserPageRequestParameter {
 
-	public final static String DELETE_COMMAND_PARAMETER = "delete";
+	public final static String DELETE_COMMAND_URL_PARAMETER = "delete";
 
 	//SmsGroupCommand deleteSmsGroup;
 	Repository repository;
 
 	public DeleteSmsGroupPostRequestParameter() {
-		super(DELETE_COMMAND_PARAMETER);
+		super(DELETE_COMMAND_URL_PARAMETER);
 	}
 
 	@Override
