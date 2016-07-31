@@ -1,8 +1,9 @@
-package lv.itsms.web.request.parameter;
+package lv.itsms.web.request.parameter.smspanel;
 
 import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class OpenNewSmsGroupRecRequestParameter extends UserPageRequestParameter {
 	
@@ -22,6 +23,11 @@ public class OpenNewSmsGroupRecRequestParameter extends UserPageRequestParameter
 		}
 
 		parameterValue = customerMenuId;
+	}
+
+	@Override
+	public boolean isRequested() {
+		return this.parameterValue.equals("true");
 	}
 
 }

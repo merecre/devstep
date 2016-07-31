@@ -1,7 +1,9 @@
-package lv.itsms.web.request.parameter;
+package lv.itsms.web.request.parameter.menu;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class CustomerIdRequestParameter extends UserPageRequestParameter {
 

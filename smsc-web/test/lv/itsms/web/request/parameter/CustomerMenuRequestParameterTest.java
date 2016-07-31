@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import lv.itsms.web.request.parameter.menu.CustomerMenuRequestParameter;
+
 
 public class CustomerMenuRequestParameterTest {
 

@@ -2,8 +2,8 @@ package lv.itsms.web.page.smspanel;
 
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.request.parameter.SmsGroupBuilder;
-import lv.itsms.web.request.parameter.SmsPhoneRequestParameter;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
 import lv.itsms.web.service.Repository;
 import transfer.domain.SmsGroup;
 

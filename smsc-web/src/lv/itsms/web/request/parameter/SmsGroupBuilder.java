@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lv.itsms.web.request.parameter.menu.CustomerIdRequestParameter;
 import transfer.domain.SmsGroup;
 
 public class SmsGroupBuilder {

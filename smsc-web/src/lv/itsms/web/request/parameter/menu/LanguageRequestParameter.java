@@ -1,6 +1,8 @@
-package lv.itsms.web.request.parameter;
+package lv.itsms.web.request.parameter.menu;
 
 import javax.servlet.http.HttpServletRequest;
+
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class LanguageRequestParameter extends UserPageRequestParameter {
 

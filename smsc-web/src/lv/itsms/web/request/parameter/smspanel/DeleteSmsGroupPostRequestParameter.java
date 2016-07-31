@@ -1,7 +1,8 @@
-package lv.itsms.web.request.parameter;
+package lv.itsms.web.request.parameter.smspanel;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.service.Repository;
 
 public class DeleteSmsGroupPostRequestParameter extends UserPageRequestParameter {

@@ -1,7 +1,5 @@
 package lv.itsms.web.page.smspanel;
 
-import java.util.Map;
-
 /*
  * Parses URL user requests and
  * returns correspondent request processing command. 
@@ -9,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lt.isms.web.CommandTypeParameter;
 import lv.itsms.web.page.ErrorSmsGroupCommand;
 import lv.itsms.web.page.PageRequestCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
@@ -32,14 +31,11 @@ public class CustomerPanelCommandFactory {
 
 	UserPageRequestParameter pageRequest;
 
-	Map<String, UserPageRequestParameter> urlParameters;
-
-	public CustomerPanelCommandFactory(Repository repository, Map<String, UserPageRequestParameter> urlParameters) {
+	public CustomerPanelCommandFactory(Repository repository) {
 		this.repository = repository;
-		this.urlParameters = urlParameters;
 	}
 
-	public PageRequestCommand make(CommandType commandRequestID) {
+	public PageRequestCommand make(CommandTypeParameter commandRequestID) {
 
 		switch (commandRequestID) {
 		case CMD_LOAD_SMS_GROUP_REC: 
@@ -98,6 +94,6 @@ public class CustomerPanelCommandFactory {
 	}
 
 	public UserPageRequestParameter getUserPageRequest(String parametrKey) {
-		return urlParameters.get(parametrKey);
+		return CommandTypeParameter.getUserRequestParameters().get(parametrKey);
 	}
 }

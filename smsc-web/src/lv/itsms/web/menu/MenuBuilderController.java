@@ -23,11 +23,11 @@ import lv.itsms.web.menu.submenu.SubMenuDAO;
 import lv.itsms.web.page.info.CustomerMenuDAO;
 import lv.itsms.web.page.info.MenuDAO;
 import lv.itsms.web.page.info.TitleDAO;
-import lv.itsms.web.request.parameter.CustomerMenuRequestParameter;
-import lv.itsms.web.request.parameter.LanguageRequestParameter;
-import lv.itsms.web.request.parameter.MainMenuRequestParameter;
-import lv.itsms.web.request.parameter.SubMenuRequestParameter;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
+import lv.itsms.web.request.parameter.menu.CustomerMenuRequestParameter;
+import lv.itsms.web.request.parameter.menu.LanguageRequestParameter;
+import lv.itsms.web.request.parameter.menu.MainMenuRequestParameter;
+import lv.itsms.web.request.parameter.menu.SubMenuRequestParameter;
 import lv.itsms.web.session.Session;
 
 /**

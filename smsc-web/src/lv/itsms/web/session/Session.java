@@ -5,8 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import lv.itsms.web.request.parameter.LanguageRequestParameter;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
+import lv.itsms.web.request.parameter.menu.LanguageRequestParameter;
 import transfer.domain.SmsGroup;
 
 /*

@@ -1,6 +1,8 @@
-package lv.itsms.web.request.parameter;
+package lv.itsms.web.request.parameter.smspanel;
 
 import javax.servlet.http.HttpServletRequest;
+
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class SmsGroupIdGetRequestParameter extends UserPageRequestParameter {
 	public final static String GROUP_ID_GET_PARAMETER = "groupID"; 

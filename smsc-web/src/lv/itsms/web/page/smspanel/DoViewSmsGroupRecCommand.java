@@ -3,8 +3,8 @@ package lv.itsms.web.page.smspanel;
 import java.util.List;
 
 import lv.itsms.web.page.PageRequestCommand;
-import lv.itsms.web.request.parameter.SmsGroupIdGetRequestParameter;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsGroupIdGetRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import lv.itsms.web.utils.Utils;

@@ -7,17 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import lv.itsms.web.page.smspanel.SmsPanelController;
-import lv.itsms.web.page.smspanel.request.UserRequestCommandLookup;
-import lv.itsms.web.page.smspanel.request.UserRequestCommandLookupFactory;
-import lv.itsms.web.request.parameter.CustomerMenuRequestParameter;
-import lv.itsms.web.request.parameter.DeleteSmsGroupPostRequestParameter;
-import lv.itsms.web.request.parameter.OpenNewSmsGroupRecRequestParameter;
-import lv.itsms.web.request.parameter.SaveSmsNewGroupRequestParameter;
-import lv.itsms.web.request.parameter.SmsGroupIdGetRequestParameter;
-import lv.itsms.web.request.parameter.SmsGroupIdPostRequestParameter;
-import lv.itsms.web.request.parameter.SmsPhoneRequestParameter;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
-import lv.itsms.web.request.parameter.ViewSmsGroupRecRequestParameter;
+import lv.itsms.web.request.parameter.menu.CustomerMenuRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.DeleteSmsGroupPostRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.OpenNewSmsGroupRecRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SaveSmsNewGroupRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsGroupIdGetRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsGroupIdPostRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
@@ -58,7 +55,7 @@ public class SmsControllerTest {
 	Repository repository;
 	CustomerPanelCommandFactory userRequestCommandFactory;
 	CustomerPanelPageManager pageManager;
-	Map<String, UserPageRequestParameter> urlParameters;
+	//Map<String, UserPageRequestParameter> urlParameters;
 	Map<String, Object> attributes;
 
 	@Before
@@ -75,13 +72,13 @@ public class SmsControllerTest {
 		repository = new Repository(DAOFactory.TEST_DAO);
 		attributes = new HashMap<>();
 
-		urlParameters = prepareURLParameters();
-		userRequestCommandFactory = new CustomerPanelCommandFactory (repository, urlParameters);
+		//urlParameters = prepareURLParameters();
+		userRequestCommandFactory = new CustomerPanelCommandFactory (repository);
 
-		UserRequestCommandLookupFactory userRequestCommandLookupFactory = new UserRequestCommandLookupFactory(urlParameters);		
-		Map<CommandType, UserRequestCommandLookup> userRequestCommandLookups = prepareUserRequestCommandLookups(userRequestCommandLookupFactory);
+		//UserRequestCommandLookupFactory userRequestCommandLookupFactory = new UserRequestCommandLookupFactory(urlParameters);		
+		//Map<CommandType, UserRequestCommandLookup> userRequestCommandLookups = prepareUserRequestCommandLookups(userRequestCommandLookupFactory);
 		
-		pageManager = new CustomerPanelPageManager(userRequestCommandFactory, userRequestCommandLookups);
+		pageManager = new CustomerPanelPageManager(userRequestCommandFactory);
 		Mockito.doAnswer(new Answer<Object>(){
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -229,7 +226,7 @@ public class SmsControllerTest {
 		System.setOut(System.out);
 		System.setErr(System.err);
 	}
-
+/*
 		private Map<String, UserPageRequestParameter>  prepareURLParameters() {
 
 			List<UserPageRequestParameter> urlParameterList = new ArrayList<>();		
@@ -250,28 +247,7 @@ public class SmsControllerTest {
 
 			return urlParameters;
 	}
-
-	private Map<CommandType, UserRequestCommandLookup> prepareUserRequestCommandLookups(UserRequestCommandLookupFactory commandLookupFactory) {
-
-			Map<CommandType, UserRequestCommandLookup> commandLookups = new EnumMap<>(CommandType.class);	
-
-			UserRequestCommandLookup commandLookup = commandLookupFactory.make(SaveSmsNewGroupRequestParameter.SAVE_COMMAND_URL_PARAMETER);
-			commandLookups.put(CommandType.CMD_SAVE_SMS_GROUP_REC, commandLookup);		
-
-			commandLookup = commandLookupFactory.make(DeleteSmsGroupPostRequestParameter.DELETE_COMMAND_URL_PARAMETER);
-			commandLookups.put(CommandType.CMD_DELETE_SMS_GROUP_REC, commandLookup);
-
-			commandLookup = commandLookupFactory.make(OpenNewSmsGroupRecRequestParameter.OPEN_NEW_SMS_GROUP_URL_PARAMETER);
-			commandLookups.put(CommandType.CMD_OPEN_NEW_SMS_REC, commandLookup);
-
-			commandLookup = commandLookupFactory.make(ViewSmsGroupRecRequestParameter.VIEW_SMS_GROUP_REV_URL);
-			commandLookups.put(CommandType.CMD_LOAD_SMS_GROUP_REC, commandLookup);
-
-			commandLookup = commandLookupFactory.make(CustomerMenuRequestParameter.MENU_URL_PARAMETER);
-			commandLookups.put(CommandType.CMD_LOAD_SMS_GROUP_NAMES, commandLookup);
-
-			return commandLookups;
-		}
+*/
 
 	@After
 	public void cleanUpStreams() {

@@ -6,8 +6,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lt.isms.web.CommandTypeParameter;
 import lv.itsms.web.page.PageRequestCommand;
-import lv.itsms.web.page.smspanel.request.UserRequestCommandLookup;
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 /**
  * 
@@ -20,32 +21,46 @@ import lv.itsms.web.page.smspanel.request.UserRequestCommandLookup;
 
 public class CustomerPanelPageManager {
 
-	CustomerPanelCommandFactory factory;
+	CustomerPanelCommandFactory commandFactory;
 
 	private List<PageRequestCommand> commandExecutionSequence;
 
-	Map<CommandType, UserRequestCommandLookup> userRequestCommandLookups;
+	public CustomerPanelPageManager(CustomerPanelCommandFactory factory) {		
 
-	public CustomerPanelPageManager(CustomerPanelCommandFactory factory, 
-			Map<CommandType, UserRequestCommandLookup> commandLookups) {		
-		
-		this.factory = factory;
-		this.userRequestCommandLookups = commandLookups;
+		this.commandFactory = factory;
 		this.commandExecutionSequence = new LinkedList<>();
 	}
 
-	public List<PageRequestCommand> selectUserRequestCommand(HttpServletRequest request) {		
+	public List<PageRequestCommand> selectUserRequestedCommand(HttpServletRequest request) {		
 
-		CommandType commandRequestID = parseUserRequestAndReturnCommandIdToExecute(request);		
+		CommandTypeParameter commandRequestID = parseUserRequestAndReturnCommandIdToExecute(request);		
 		populateCommandsToExecute(commandRequestID);	
 		return commandExecutionSequence;
 	}
 
-	private void populateCommandsToExecute(CommandType commandRequestID) {
+	private CommandTypeParameter parseUserRequestAndReturnCommandIdToExecute(HttpServletRequest request) {
+
+		Map<CommandTypeParameter, String> userRequestCommandLookups = CommandTypeParameter.getUserRequestCommandLookups();
+		Map<String, UserPageRequestParameter> urlParameters = CommandTypeParameter.getUserRequestParameters();
+
+		for (CommandTypeParameter commandToLookupID : userRequestCommandLookups.keySet()) {
+
+			String userRequestParameterKey = userRequestCommandLookups.get(commandToLookupID);
+			UserPageRequestParameter userRequest = urlParameters.get(userRequestParameterKey);
+			userRequest.update(request);
+			if (userRequest.isRequested()) {
+				return commandToLookupID;
+			}
+		}
+
+		return CommandTypeParameter.NO_COMMAND;
+	}
+	
+	private void populateCommandsToExecute(CommandTypeParameter commandRequestID) {
 
 		commandExecutionSequence.clear();		
 		while (true) {
-			PageRequestCommand command = factory.make(commandRequestID);			
+			PageRequestCommand command = commandFactory.make(commandRequestID);			
 			commandExecutionSequence.add(command);			
 			commandRequestID = getNextSequencedCommand(commandRequestID);		
 			if (!isMoreCommand(commandRequestID)) {
@@ -54,30 +69,17 @@ public class CustomerPanelPageManager {
 		}
 	}
 
-	private boolean isMoreCommand(CommandType commandRequest) {
-		return commandRequest != CommandType.NO_COMMAND;
+	private boolean isMoreCommand(CommandTypeParameter commandRequest) {
+		return commandRequest != CommandTypeParameter.NO_COMMAND;
 	}
 
-	private CommandType parseUserRequestAndReturnCommandIdToExecute(HttpServletRequest request) {
+	private CommandTypeParameter getNextSequencedCommand (CommandTypeParameter currentCommandID) {
 
-		for (CommandType commandToLookupID : userRequestCommandLookups.keySet()) {
-			UserRequestCommandLookup commandLookup = userRequestCommandLookups.get(commandToLookupID); 
-			CommandType commandToExecute = commandLookup.parse(request);
-			if (commandLookup.isRequested()) {
-				return commandToExecute;
-			}
-		}
-
-		return CommandType.NO_COMMAND;
-	}
-
-	private CommandType getNextSequencedCommand (CommandType currentCommandID) {
-
-		CommandType nextSequencedCommandID = CommandType.NO_COMMAND;
-		if (currentCommandID == CommandType.CMD_DELETE_SMS_GROUP_REC) {
-			nextSequencedCommandID = CommandType.CMD_LOAD_SMS_GROUP_NAMES;
-		} else if (currentCommandID == CommandType.CMD_OPEN_NEW_SMS_REC) {
-			nextSequencedCommandID = CommandType.CMD_LOAD_SMS_GROUP_NAMES;
+		CommandTypeParameter nextSequencedCommandID = CommandTypeParameter.NO_COMMAND;
+		if (currentCommandID == CommandTypeParameter.CMD_DELETE_SMS_GROUP_REC) {
+			nextSequencedCommandID = CommandTypeParameter.CMD_LOAD_SMS_GROUP_NAMES;
+		} else if (currentCommandID == CommandTypeParameter.CMD_OPEN_NEW_SMS_REC) {
+			nextSequencedCommandID = CommandTypeParameter.CMD_LOAD_SMS_GROUP_NAMES;
 		} 
 		return nextSequencedCommandID;
 	}
