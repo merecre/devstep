@@ -45,11 +45,11 @@ public class Session {
 
 	public void updateSessionLanguage(UserPageRequestParameter userRequest) {
 
-		userRequest.update(request);
-		String userRequestLanguage = userRequest.getParameter();
-
 		final Object lock = request.getSession().getId().intern();
 		synchronized(lock) {
+			userRequest.update(request);
+			String userRequestLanguage = userRequest.getParameter();
+
 			Object sessionUserLanguage = session.getAttribute(SESSION_LANGUAGE_PARAMETER);
 
 			if (userRequestLanguage == null && sessionUserLanguage == null) {
