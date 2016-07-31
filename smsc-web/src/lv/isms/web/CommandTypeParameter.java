@@ -1,4 +1,4 @@
-package lt.isms.web;
+package lv.isms.web;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
