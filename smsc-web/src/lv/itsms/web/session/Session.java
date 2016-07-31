@@ -50,7 +50,7 @@ public class Session {
 			userRequest.update(request);
 			String userRequestLanguage = userRequest.getParameter();
 
-			Object sessionUserLanguage = session.getAttribute(SESSION_LANGUAGE_PARAMETER);
+			Object sessionUserLanguage = request.getSession().getAttribute(SESSION_LANGUAGE_PARAMETER);
 
 			if (userRequestLanguage == null && sessionUserLanguage == null) {
 				userRequestLanguage = LanguageRequestParameter.DEFAULT_LANGUAGE;
@@ -58,14 +58,13 @@ public class Session {
 
 			if ((sessionUserLanguage==null)||(!sessionUserLanguage.toString().equals(userRequestLanguage))) {
 				if (userRequestLanguage != null)
-
-					session.setAttribute(SESSION_LANGUAGE_PARAMETER, userRequestLanguage);
+					request.getSession().setAttribute(SESSION_LANGUAGE_PARAMETER, userRequestLanguage);
 			}
 		}
 	}
 
 	public String getSessionLanguage() {
-		return session.getAttribute(SESSION_LANGUAGE_PARAMETER).toString();
+		return request.getSession().getAttribute(SESSION_LANGUAGE_PARAMETER).toString();
 	}
 
 	public void updateSessionMenuId(UserPageRequestParameter userRequest) {		
@@ -74,7 +73,7 @@ public class Session {
 		synchronized(lock) {
 			userRequest.update(request);
 			String userRequestMainMenuId = userRequest.getParameter();
-			session.setAttribute(SESSION_MAIN_MENU_PARAMETER, userRequestMainMenuId);
+			request.getSession().setAttribute(SESSION_MAIN_MENU_PARAMETER, userRequestMainMenuId);
 		}
 	}
 
