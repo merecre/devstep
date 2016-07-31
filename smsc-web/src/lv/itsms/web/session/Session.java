@@ -30,7 +30,7 @@ public class Session {
 	public final static String SESSION_SMSGROUPREC_PARAMETER = "smsgrouprec";
 	public final static String SESSION_PHONEGROUPS_PARAMETER = "phonegroups";
 	public final static String SESSION_PROFILEINFO_PARAMETER = "profileinfo";
-	
+
 	HttpServletRequest request;
 
 	HttpSession session;
@@ -48,15 +48,19 @@ public class Session {
 		userRequest.update(request);
 		String userRequestLanguage = userRequest.getParameter();
 
-		Object sessionUserLanguage = session.getAttribute(SESSION_LANGUAGE_PARAMETER);
+		final Object lock = request.getSession().getId().intern();
+		synchronized(lock) {
+			Object sessionUserLanguage = session.getAttribute(SESSION_LANGUAGE_PARAMETER);
 
-		if (userRequestLanguage == null && sessionUserLanguage == null) {
-			userRequestLanguage = LanguageRequestParameter.DEFAULT_LANGUAGE;
-		}
+			if (userRequestLanguage == null && sessionUserLanguage == null) {
+				userRequestLanguage = LanguageRequestParameter.DEFAULT_LANGUAGE;
+			}
 
-		if ((sessionUserLanguage==null)||(!sessionUserLanguage.toString().equals(userRequestLanguage))) {
-			if (userRequestLanguage != null)
-				session.setAttribute(SESSION_LANGUAGE_PARAMETER, userRequestLanguage);
+			if ((sessionUserLanguage==null)||(!sessionUserLanguage.toString().equals(userRequestLanguage))) {
+				if (userRequestLanguage != null)
+
+					session.setAttribute(SESSION_LANGUAGE_PARAMETER, userRequestLanguage);
+			}
 		}
 	}
 
@@ -66,72 +70,85 @@ public class Session {
 
 	public void updateSessionMenuId(UserPageRequestParameter userRequest) {		
 
-		userRequest.update(request);
-		String userRequestMainMenuId = userRequest.getParameter();
-
-		session.setAttribute(SESSION_MAIN_MENU_PARAMETER, userRequestMainMenuId);
+		final Object lock = request.getSession().getId().intern();
+		synchronized(lock) {
+			userRequest.update(request);
+			String userRequestMainMenuId = userRequest.getParameter();
+			session.setAttribute(SESSION_MAIN_MENU_PARAMETER, userRequestMainMenuId);
+		}
 	}
 
 	public String getSessionMenuId() {
-		return session.getAttribute(SESSION_MAIN_MENU_PARAMETER).toString();
+		return request.getSession().getAttribute(SESSION_MAIN_MENU_PARAMETER).toString();
 	}
 
 	public void updateSessionSubMenuId(UserPageRequestParameter userRequest) {
 
-		userRequest.update(request);
-		String userRequestSubMenuId = userRequest.getParameter();
+		final Object lock = request.getSession().getId().intern();
+		synchronized(lock) {
+			userRequest.update(request);
+			String userRequestSubMenuId = userRequest.getParameter();
 
-		Object sessionMainMenuId = session.getAttribute(SESSION_MAIN_MENU_PARAMETER);
+			Object sessionMainMenuId = request.getSession().getAttribute(SESSION_MAIN_MENU_PARAMETER);
 
-		Object sessionSubMenuId = session.getAttribute(SESSION_SUB_MENU_PARAMETER);
+			Object sessionSubMenuId = request.getSession().getAttribute(SESSION_SUB_MENU_PARAMETER);
 
-		if (userRequestSubMenuId==null) {
-			if (sessionSubMenuId==null) {
-				userRequestSubMenuId = "";
-			} else {
-				userRequestSubMenuId = sessionMainMenuId.toString();
-			}
+			if (userRequestSubMenuId==null) {
+				if (sessionSubMenuId==null) {
+					userRequestSubMenuId = "";
+				} else {
+					userRequestSubMenuId = sessionMainMenuId.toString();
+				}
+			}		
+			request.getSession().setAttribute(SESSION_SUB_MENU_PARAMETER, userRequestSubMenuId);
 		}
-
-		session.setAttribute(SESSION_SUB_MENU_PARAMETER, userRequestSubMenuId);
 	}
 
 	public String getSessionSubMenuId() {
-		return session.getAttribute(SESSION_SUB_MENU_PARAMETER).toString();
+		return request.getSession().getAttribute(SESSION_SUB_MENU_PARAMETER).toString();
 	}
 
 	public void updateSessionCustomerMenuId(UserPageRequestParameter userRequest) {
 
-		userRequest.update(request);
-		String userRequestCustomerMenuId = userRequest.getParameter();
-
-		session.setAttribute(SESSION_CUSTOMER_MENU_PARAMETER, userRequestCustomerMenuId);
+		final Object lock = request.getSession().getId().intern();
+		synchronized(lock) {
+			userRequest.update(request);
+			String userRequestCustomerMenuId = userRequest.getParameter();
+			request.getSession().setAttribute(SESSION_CUSTOMER_MENU_PARAMETER, userRequestCustomerMenuId);
+		}
 	}
 
 	public String getSessionCustomerMenuId() {
-		return session.getAttribute(SESSION_CUSTOMER_MENU_PARAMETER).toString();
+		return request.getSession().getAttribute(SESSION_CUSTOMER_MENU_PARAMETER).toString();
 	}
 
 	public void updateSessionAttribute(String attribute, Object value) {
-		session.setAttribute(attribute, value);
+		final Object lock = request.getSession().getId().intern();
+		synchronized(lock) {
+			request.getSession().setAttribute(attribute, value);
+		}
 	}
 
 	public String getSessionUserId() {
-		Object userid = session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER);
-		String sessionUserId = "";
-		if (userid != null) {
-			sessionUserId = userid.toString();
+		String sessionUserId = "";		
+		final Object lock = request.getSession().getId().intern();
+		synchronized(lock) {
+			Object userid = request.getSession().getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER);
+			if (userid != null) {
+				sessionUserId = userid.toString();
+			}
 		}
 		return sessionUserId;
 	}
 
 	public boolean isUserLoggedIn() {
-		return (session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER)!=null && (!session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER).equals("")));
+		return (request.getSession().getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER)!=null && (!session.getAttribute(SESSION_CUSTOMER_LOGIN_PARAMETER).equals("")));
 	}
 
 	public String getSessionCustomerId() {
-		Object userid = session.getAttribute(SESSION_CUSTOMER_ID_PARAMETER);
 		String sessionUserId = "";
+
+		Object userid = request.getSession().getAttribute(SESSION_CUSTOMER_ID_PARAMETER);
 		if (userid != null) {
 			sessionUserId = userid.toString();
 		}
@@ -143,7 +160,7 @@ public class Session {
 	}
 
 	public boolean isParameter(UserPageRequestParameter userRequest) {
-		return (session.getAttribute(userRequest.getParameter()) != null);
+		return (request.getSession().getAttribute(userRequest.getParameter()) != null);
 	}
 
 	public HttpServletRequest getRequest() {
