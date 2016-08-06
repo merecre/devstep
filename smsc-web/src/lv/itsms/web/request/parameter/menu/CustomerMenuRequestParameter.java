@@ -2,7 +2,7 @@ package lv.itsms.web.request.parameter.menu;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class CustomerMenuRequestParameter extends UserPageRequestParameter {

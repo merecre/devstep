@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 

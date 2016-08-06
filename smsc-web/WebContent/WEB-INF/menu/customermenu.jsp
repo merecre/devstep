@@ -5,7 +5,7 @@
 		<td>
 			<table align="center">
 				<tr>
-					<c:forEach items="${customermenues}" var="menu">
+					<c:forEach items="${customermenus}" var="menu">
 						<c:choose>
 							<c:when test="${menu.pageIndex == sessionScope.cusMenu}">
 								<c:set var="hrefClass" scope="session" value="active sub" />

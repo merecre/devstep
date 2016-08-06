@@ -16,6 +16,8 @@
 	<form method="post"
 		action="<%= request.getContextPath() %>/login/registration.jsp">
 		<center>
+		<font color="red">${error}</font>
+		<c:remove var="error" scope="session" />
 			<table border="0" width="30%" cellpadding="5">
 				<thead>
 					<tr>

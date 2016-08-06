@@ -121,14 +121,15 @@ public class SmsGroupBuilder {
 	}
 
 	private Date formatSendTime(String sendtime) {
-
+		final String ERROR_DATE = "Incorrect Date";
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 		java.sql.Date date = null;
 		try {
 			java.util.Date innerFormatDate = format.parse(sendtime);
 			date = new java.sql.Date(innerFormatDate.getTime());
 		} catch (ParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			throw new RuntimeException(ERROR_DATE);
 		}
 		return date;
 	}

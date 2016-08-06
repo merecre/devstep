@@ -2,9 +2,10 @@ package lv.itsms.web.page.smspanel;
 
 import java.util.List;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
+import lv.itsms.web.utils.Utils;
 import transfer.domain.SmsGroup;
 
 public class DoViewSmsGroupNameCommand implements PageRequestCommand {
@@ -18,10 +19,13 @@ public class DoViewSmsGroupNameCommand implements PageRequestCommand {
 	@Override
 	public void execute() {
 		Session session = factory.getSession();
-		int userId = Integer.parseInt(session.getSessionCustomerId());
-		Repository repository = factory.getRepository();
-		List<SmsGroup> smsGroups = repository.getSmsGroupByUserId(userId);
-		updateSession(smsGroups);
+		String sessionCustomerId = session.getSessionCustomerId();
+		if (Utils.isNumeric(sessionCustomerId)) {
+			int userId = Integer.parseInt(session.getSessionCustomerId());
+			Repository repository = factory.getRepository();
+			List<SmsGroup> smsGroups = repository.getSmsGroupByUserId(userId);
+			updateSession(smsGroups);
+		}
 	}
 
 	private void updateSession(List<SmsGroup> smsGroups) {

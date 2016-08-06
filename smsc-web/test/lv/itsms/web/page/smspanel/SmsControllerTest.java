@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.page.smspanel.SmsPanelController;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.menu.CustomerMenuRequestParameter;
@@ -54,16 +55,11 @@ public class SmsControllerTest {
 	Session session;
 	Repository repository;
 	CustomerPanelCommandFactory userRequestCommandFactory;
-	CustomerPanelPageManager pageManager;
-	//Map<String, UserPageRequestParameter> urlParameters;
+	UserRequestCommandManager pageManager;
 	Map<String, Object> attributes;
 
 	@Before
 	public void init() {
-
-		//System.setOut(new PrintStream(outContent));
-		//System.setErr(new PrintStream(errContent));
-
 
 		httpSession = Mockito.mock(HttpSession.class);
 		request = Mockito.mock(HttpServletRequest.class);       
@@ -72,13 +68,9 @@ public class SmsControllerTest {
 		repository = new Repository(DAOFactory.TEST_DAO);
 		attributes = new HashMap<>();
 
-		//urlParameters = prepareURLParameters();
 		userRequestCommandFactory = new CustomerPanelCommandFactory (repository);
-
-		//UserRequestCommandLookupFactory userRequestCommandLookupFactory = new UserRequestCommandLookupFactory(urlParameters);		
-		//Map<CommandType, UserRequestCommandLookup> userRequestCommandLookups = prepareUserRequestCommandLookups(userRequestCommandLookupFactory);
 		
-		pageManager = new CustomerPanelPageManager(userRequestCommandFactory);
+		pageManager = new UserRequestCommandManager(userRequestCommandFactory);
 		Mockito.doAnswer(new Answer<Object>(){
 			@Override
 			public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -88,17 +80,6 @@ public class SmsControllerTest {
 				return null;
 			}
 		}).when(session).updateSessionAttribute(anyString(), any());
-		/*
-        Mockito.doAnswer(new Answer<Object>(){
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-            	 String key = (String) invocation.getArguments()[0];
-                 Object value = attributes.get(key);
-                 //System.out.println("get attribute value for key="+key+" : "+value);
-                 return value;
-            }
-        }).when(httpSession).getAttribute(anyString());
-		 */
 	}
 
 	@Test
@@ -127,35 +108,8 @@ public class SmsControllerTest {
 		assertEquals(1, smsGroup.getCustomerId());
 	}
 
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
-
-	@Test
-	public void throwExceptionIfSmsGroupNotFound() throws Exception {
-
-		String menuIdURL = "cusMenu";
-		String customerSMSPanelMenuURL = "smsPanel";
-
-		when(request.getParameter(menuIdURL)).thenReturn(customerSMSPanelMenuURL);
-
-		String invalidCustomerId = "2";
-		when(session.getSessionCustomerId()).thenReturn(invalidCustomerId);
-		when(httpSession.getAttribute("customerid")).thenReturn(invalidCustomerId);       
-
-		SmsPanelController smsServlet = new SmsPanelController();
-
-		smsServlet.setSession(session);
-		smsServlet.setRepository(repository);
-		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
-		smsServlet.setPageManager(pageManager);
-
-		exception.expect(Exception.class);
-		exception.expectMessage("Group not found2");
-		smsServlet.doPost(request, response);
-	}
-
 	@Test 
-	public void saveNewSmsGroup () throws ServletException, IOException {
+	public void saveNewSmsGroup() throws ServletException, IOException {
 
 		System.setOut(new PrintStream(outContent));
 		System.setErr(new PrintStream(errContent));
@@ -167,9 +121,8 @@ public class SmsControllerTest {
 
 		when(request.getParameter("g_common_name")).thenReturn("SMS group name");
 		when(request.getParameter("g_common_message")).thenReturn("Live is good");
-		when(request.getParameter("grp_send_date")).thenReturn("2016-07-27");
-		when(request.getParameter("grp_send_time_hour")).thenReturn("12");
-		when(request.getParameter("grp_send_time_hour")).thenReturn("12");
+		when(request.getParameter("grp_send_date")).thenReturn("2017-08-06");
+		when(request.getParameter("grp_send_time_hour")).thenReturn("17");
 		when(request.getParameter("grp_send_time_min")).thenReturn("00");
 
 		String[] phoneNumbers = { "371777777", "37177778"};
@@ -194,6 +147,116 @@ public class SmsControllerTest {
 		System.setErr(System.err);     
 	}
 
+	@Test 
+	public void saveNewSmsGroupButMessageDescriptionNotSpecified() throws ServletException, IOException {
+
+		//System.setOut(new PrintStream(outContent));
+		//System.setErr(new PrintStream(errContent));
+
+		String saveSmsGroupPostRequest = "save"; 
+		String phoneNumbersToSave = "phone"; 
+
+		when(request.getParameter(saveSmsGroupPostRequest)).thenReturn(saveSmsGroupPostRequest);
+
+		when(request.getParameter("g_common_name")).thenReturn("");
+		when(request.getParameter("g_common_message")).thenReturn("Live is good");
+		when(request.getParameter("grp_send_date")).thenReturn("2017-08-06");
+		when(request.getParameter("grp_send_time_hour")).thenReturn("17");
+		when(request.getParameter("grp_send_time_min")).thenReturn("00");
+
+		String[] phoneNumbers = { "371777777", "37177778"};
+		when(request.getParameterValues(phoneNumbersToSave)).thenReturn(phoneNumbers);
+
+		String validCustomerId = "1";
+		when(session.getSessionCustomerId()).thenReturn(validCustomerId);
+		when(request.getSession(false)).thenReturn(httpSession);
+		when(httpSession.getAttribute("customerid")).thenReturn(validCustomerId); 
+
+		SmsPanelController smsServlet = new SmsPanelController();
+
+		smsServlet.setSession(session);
+		smsServlet.setRepository(repository);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
+		smsServlet.doPost(request, response);  
+
+		String errorMessage =  (String) attributes.get("error");
+
+		String errorTestResult = "Description is mandatory";
+		assertEquals(errorTestResult, errorMessage);    
+	}
+	@Test 
+	public void saveNewSmsGroupButPhoneNumbersNotSpecified () throws ServletException, IOException {
+
+		String saveSmsGroupPostRequest = "save"; 
+		String phoneNumbersToSave = "phone"; 
+
+		when(request.getParameter(saveSmsGroupPostRequest)).thenReturn(saveSmsGroupPostRequest);
+
+		when(request.getParameter("g_common_name")).thenReturn("SMS group name");
+		when(request.getParameter("g_common_message")).thenReturn("Live is good");
+		when(request.getParameter("grp_send_date")).thenReturn("2017-07-27");
+		when(request.getParameter("grp_send_time_hour")).thenReturn("12");
+		when(request.getParameter("grp_send_time_min")).thenReturn("00");
+
+		String[] phoneNumbers = { "", ""};
+		when(request.getParameterValues(phoneNumbersToSave)).thenReturn(phoneNumbers);
+
+		String validCustomerId = "1";
+		when(session.getSessionCustomerId()).thenReturn(validCustomerId);
+		when(request.getSession(false)).thenReturn(httpSession);
+		when(httpSession.getAttribute("customerid")).thenReturn(validCustomerId); 
+
+		SmsPanelController smsServlet = new SmsPanelController();
+
+		smsServlet.setSession(session);
+		smsServlet.setRepository(repository);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
+		smsServlet.doPost(request, response);  
+
+		String errorMessage =  (String) attributes.get("error");
+
+		String errorTestResult = "Phone number is mandatory";
+		assertEquals(errorTestResult, errorMessage);
+	}
+	
+	@Test 
+	public void saveNewSmsGroupButDateIsNotSpecified () throws ServletException, IOException {
+
+		String saveSmsGroupPostRequest = "save"; 
+		String phoneNumbersToSave = "phone"; 
+
+		when(request.getParameter(saveSmsGroupPostRequest)).thenReturn(saveSmsGroupPostRequest);
+
+		when(request.getParameter("g_common_name")).thenReturn("SMS group name");
+		when(request.getParameter("g_common_message")).thenReturn("Live is good");
+		when(request.getParameter("grp_send_date")).thenReturn("");
+		when(request.getParameter("grp_send_time_hour")).thenReturn("12");
+		when(request.getParameter("grp_send_time_min")).thenReturn("00");
+
+		String[] phoneNumbers = { "455334422"};
+		when(request.getParameterValues(phoneNumbersToSave)).thenReturn(phoneNumbers);
+
+		String validCustomerId = "1";
+		when(session.getSessionCustomerId()).thenReturn(validCustomerId);
+		when(request.getSession(false)).thenReturn(httpSession);
+		when(httpSession.getAttribute("customerid")).thenReturn(validCustomerId); 
+
+		SmsPanelController smsServlet = new SmsPanelController();
+
+		smsServlet.setSession(session);
+		smsServlet.setRepository(repository);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
+		smsServlet.doPost(request, response);  
+
+		String errorMessage =  (String) attributes.get("error");
+
+		String errorTestResult = "Incorrect Date";
+		assertEquals(errorTestResult, errorMessage);
+	}
+	
 	@Test
 	public void deleteSmsGroup () throws ServletException, IOException {
 
@@ -226,29 +289,33 @@ public class SmsControllerTest {
 		System.setOut(System.out);
 		System.setErr(System.err);
 	}
-/*
-		private Map<String, UserPageRequestParameter>  prepareURLParameters() {
 
-			List<UserPageRequestParameter> urlParameterList = new ArrayList<>();		
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
-			urlParameterList.add(new CustomerMenuRequestParameter());
-			urlParameterList.add(new DeleteSmsGroupPostRequestParameter());
-			urlParameterList.add(new SmsGroupIdPostRequestParameter());
-			urlParameterList.add(new SaveSmsNewGroupRequestParameter());
-			urlParameterList.add(new SmsPhoneRequestParameter());
-			urlParameterList.add(new SmsGroupIdGetRequestParameter());
-			urlParameterList.add(new OpenNewSmsGroupRecRequestParameter());
-			urlParameterList.add(new ViewSmsGroupRecRequestParameter());
+	@Test
+	public void throwExceptionIfSmsGroupNotFound() throws Exception {
 
-			Map<String, UserPageRequestParameter>  urlParameters = new HashMap<>();
-			for (UserPageRequestParameter userRequest : urlParameterList) {
-				urlParameters.put(userRequest.getParameterKey(), userRequest);
-			}	
+		String menuIdURL = "cusMenu";
+		String customerSMSPanelMenuURL = "smsPanel";
 
-			return urlParameters;
+		when(request.getParameter(menuIdURL)).thenReturn(customerSMSPanelMenuURL);
+
+		String invalidCustomerId = "2";
+		when(session.getSessionCustomerId()).thenReturn(invalidCustomerId);
+		when(httpSession.getAttribute("customerid")).thenReturn(invalidCustomerId);       
+
+		SmsPanelController smsServlet = new SmsPanelController();
+
+		smsServlet.setSession(session);
+		smsServlet.setRepository(repository);
+		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
+		smsServlet.setPageManager(pageManager);
+
+		exception.expect(Exception.class);
+		exception.expectMessage("Group not found2");
+		smsServlet.doPost(request, response);
 	}
-*/
-
 	@After
 	public void cleanUpStreams() {
 		//System.setOut(null);

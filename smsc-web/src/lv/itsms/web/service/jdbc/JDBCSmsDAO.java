@@ -31,8 +31,6 @@ public class JDBCSmsDAO implements SmsDAO {
 
 	public boolean insert(Sms sms) throws Exception {
 
-		//establishConnection();
-
 		final String ERROR_INSERT = "Creating SMS failed, no rows affected.";
 
 		connection = factory.createConnection();
@@ -103,11 +101,6 @@ public class JDBCSmsDAO implements SmsDAO {
 		statement.close();
 		factory.closeConnection(connection);
 
-		/*
-		if (smsGroups.size() == 0) {
-			throw new RuntimeException(NO_SMS_MESSAGE);
-		}
-		 */
 		return smsGroups;
 	}
 

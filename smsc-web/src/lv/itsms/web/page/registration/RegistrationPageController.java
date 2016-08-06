@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.page.login.DoLoginFormRequestCommand;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;

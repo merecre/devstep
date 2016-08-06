@@ -40,8 +40,6 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 	public boolean deleteByUserIdAndGroupName(int userId, String groupName) throws SQLException {
 
-		//establishConnection();
-
 		connection = factory.createConnection();
 
 		PreparedStatement statement = connection.prepareStatement(
@@ -50,8 +48,7 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 						+ "AND group_name='" + groupName + "'");
 		System.out.println("Statement:"+ statement.toString());
 		statement.executeUpdate();
-		//connection.commit();
-
+		
 		statement.close();
 		factory.closeConnection(connection);
 
@@ -60,8 +57,6 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 	public boolean deleteByGroupId(int groupId) throws SQLException {
 
-		//establishConnection();
-
 		connection = factory.createConnection();
 
 		PreparedStatement statement = connection.prepareStatement(
@@ -69,7 +64,6 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 						+ "WHERE "	+ "id='" + groupId + "'");
 		System.out.println("Statement:"+ statement.toString());
 		statement.executeUpdate();
-		//connection.commit();
 		statement.close();
 		factory.closeConnection(connection);
 
@@ -79,9 +73,6 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 	public boolean insert(SmsGroup smsGroup) throws SQLException {
 		final String ERROR_INSERT = "Creating smsGroup failed, no rows affected.";
 
-		//establishConnection();
-
-		//this.smsGroup = smsGroup;
 		connection = factory.createConnection();
 		PreparedStatement statement = connection.prepareStatement(
 				"INSERT INTO " + DB_TABLE + " "
@@ -104,12 +95,9 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 		int updatedRows = statement.executeUpdate();
 		smsGroup.setSmsGroupId(getUpdatedGroupId(statement));
 
-		//connection.setAutoCommit(false);
-		//connection.commit();
 		statement.close();
 		factory.closeConnection(connection);
 		System.out.println("Connection in SMS groupDAO" + connection);
-		//connection.close();
 
 		return updatedRows != 0;
 	}
@@ -128,9 +116,6 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 		final String ERROR_UPDATE = "Creating smsGroup failed, no rows affected.";
 
-		//establishConnection();
-
-		//this.smsGroup = smsGroup;
 		connection = factory.createConnection();
 		String sql = "UPDATE " + DB_TABLE + " SET" 
 				+ " group_message = '"+smsGroup.getGroupMessage() + "',"
@@ -144,18 +129,13 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 		System.out.println("Statement:"+statement.toString());
 		int updatedRows = statement.executeUpdate();
 
-		//connection.setAutoCommit(false);
-		//connection.commit();
 		statement.close();
 		factory.closeConnection(connection);
 		System.out.println("Connection in SMS groupDAO" + connection);
-		//connection.close();
 		return (updatedRows != 0);
 	}
 
 	public int getIdByUserIdAndGroupName(SmsGroup smsGroup) throws SQLException {
-
-		//establishConnection();
 
 		int groupId = DBDAOFactory.NO_RECORDS;
 
@@ -176,9 +156,6 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 		resultSet.close();
 		statement.close();
 		factory.closeConnection(connection);
-
-		//System.out.println("Select "+statement.toString());
-		//System.out.println("Select "+groupId+" "+groupId);
 
 		return groupId;
 	}

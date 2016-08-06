@@ -1,10 +1,12 @@
-package lv.itsms.web.request.parameter;
+package lv.itsms.web.page.report;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lv.itsms.web.request.parameter.UserPageRequestParameter;
+
 public class ReportStartDateRequestParameter extends UserPageRequestParameter {
 
-	final static String URL_PARAMETER = "startdate";
+	public  static String URL_PARAMETER = "startdate";
 
 	public ReportStartDateRequestParameter() {
 		super(URL_PARAMETER);

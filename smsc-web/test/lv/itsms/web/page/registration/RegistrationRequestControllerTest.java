@@ -95,7 +95,7 @@ public class RegistrationRequestControllerTest {
 		when(request.getParameter("fname")).thenReturn("FirstName");
 		when(request.getParameter("lname")).thenReturn("LastName");
 		when(request.getParameter("email")).thenReturn("Test@email.com");
-		when(request.getParameter("uname")).thenReturn("TestLogin");
+		when(request.getParameter("uname")).thenReturn("Test2");
 		when(request.getParameter("pass")).thenReturn("");
 
 		RegistrationRequestController registrationController = new RegistrationRequestController();
@@ -126,8 +126,48 @@ public class RegistrationRequestControllerTest {
 
 		String errorMessage =  (String) attributes.get("error");
 
-		System.out.println("Error message " + errorMessage);
+		//System.out.println("Error message " + errorMessage);
 		String errorTestResult = "Login name " + usedLoginName + " is in use";
+		assertEquals(errorTestResult, errorMessage);
+	}
+	
+	@Test
+	public void userDoRegistrationWithIncorrectEmailFormat() throws ServletException, IOException {
+
+		when(request.getParameter("fname")).thenReturn("FirstName");
+		when(request.getParameter("lname")).thenReturn("LastName");
+		when(request.getParameter("email")).thenReturn("Tesemail.com");
+		when(request.getParameter("uname")).thenReturn("Test");
+		when(request.getParameter("pass")).thenReturn("Test");
+
+		RegistrationRequestController registrationController = new RegistrationRequestController();
+
+		registrationController.setSession(session);
+		registrationController.setRepository(repository);
+		registrationController.doPost(request, response);
+
+		String errorMessage =  (String) attributes.get("error");		
+		String errorTestResult = "Email format is not valid";
+		assertEquals(errorTestResult, errorMessage);
+	}
+	
+	@Test
+	public void userDoRegistrationWithLoginLengthExceedMax15() throws ServletException, IOException {
+
+		when(request.getParameter("fname")).thenReturn("FirstName");
+		when(request.getParameter("lname")).thenReturn("LastName");
+		when(request.getParameter("email")).thenReturn("Test@email.com");
+		when(request.getParameter("uname")).thenReturn("Testexceedleng16");
+		when(request.getParameter("pass")).thenReturn("Test");
+
+		RegistrationRequestController registrationController = new RegistrationRequestController();
+
+		registrationController.setSession(session);
+		registrationController.setRepository(repository);
+		registrationController.doPost(request, response);
+
+		String errorMessage =  (String) attributes.get("error");		
+		String errorTestResult = "Login name maximum length exceeded";
 		assertEquals(errorTestResult, errorMessage);
 	}
 

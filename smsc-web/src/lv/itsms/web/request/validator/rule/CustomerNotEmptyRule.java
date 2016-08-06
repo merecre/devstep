@@ -1,4 +1,4 @@
-package lv.itsms.web.request.validator;
+package lv.itsms.web.request.validator.rule;
 import transfer.domain.Customer;
 
 public class CustomerNotEmptyRule implements Rule {
@@ -9,13 +9,18 @@ public class CustomerNotEmptyRule implements Rule {
 		this.customer = customer;
 	}
 
+	public CustomerNotEmptyRule() {
+
+	}
+
 	@Override
-	public boolean doRule() throws RuntimeException {
+	public boolean doRule(Object object) {
+		Customer customer = (Customer)object;
+
 		if ((customer==null) || (customer.getId()==0)) {
 			throw new RuntimeException("Incorrect Login or Password");
 		}	
 
 		return true;
 	}
-
 }

@@ -1,5 +1,7 @@
 package lv.itsms.web.page.smspanel;
 
+
+
 /*
  * Parses URL user requests and
  * returns correspondent request processing command. 
@@ -7,10 +9,11 @@ package lv.itsms.web.page.smspanel;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lt.isms.web.CommandTypeParameter;
-import lv.itsms.web.page.ErrorSmsGroupCommand;
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.CommandFactory;
+import lv.itsms.web.command.CommandTypeSingleton;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
+import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
+import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 
@@ -18,10 +21,11 @@ import lv.itsms.web.session.Session;
  * 
  * @author DMC
  *
- * Returns commands which will processes user request.
+ * Returns commands which will processed user request.
  */
 
-public class CustomerPanelCommandFactory {
+
+public class CustomerPanelCommandFactory extends CommandFactory {
 
 	Repository repository;
 
@@ -31,30 +35,12 @@ public class CustomerPanelCommandFactory {
 
 	UserPageRequestParameter pageRequest;
 
+	SmsGroupFieldsValidator smsGroupValidator;
+	
+	PhoneNumberValidator phoneNumberValidator;
+	
 	public CustomerPanelCommandFactory(Repository repository) {
 		this.repository = repository;
-	}
-
-	public PageRequestCommand make(CommandTypeParameter commandRequestID) {
-
-		switch (commandRequestID) {
-		case CMD_LOAD_SMS_GROUP_REC: 
-			return new DoViewSmsGroupRecCommand(this);
-		case CMD_OPEN_NEW_SMS_REC:
-			return new DoOpenNewSmsGroupRecCommand(this);
-		case CMD_LOAD_SMS_GROUP_NAMES:
-			return new DoViewSmsGroupNameCommand(this);
-		case CMD_DELETE_SMS_GROUP_REC:
-			return new DoDeleteSmsGroupRecCommand(this);
-		case CMD_SAVE_SMS_GROUP_REC:
-			return new DoSaveSmsGroupRecCommand(this);
-		case NO_COMMAND:
-			return new ErrorSmsGroupCommand();
-		default:
-			break;
-		}
-
-		return new ErrorSmsGroupCommand();
 	}
 
 	public void setSession(Session session) {
@@ -94,6 +80,27 @@ public class CustomerPanelCommandFactory {
 	}
 
 	public UserPageRequestParameter getUserPageRequest(String parametrKey) {
-		return CommandTypeParameter.getUserRequestParameters().get(parametrKey);
+		return CommandTypeSingleton.getInstance().getUserRequestParameters().get(parametrKey);
+	}
+	
+	public SmsGroupFieldsValidator getFieldsValidator() {
+		return smsGroupValidator;
+	}
+
+	public void setSmsGroupValidator(SmsGroupFieldsValidator fieldsValidator) {
+		this.smsGroupValidator = fieldsValidator;
+	}
+	
+	public PhoneNumberValidator getPhoneNumberValidator() {
+		return phoneNumberValidator;
+	}
+
+	public void setPhoneNumberValidator(PhoneNumberValidator phoneNumberValidator) {
+		this.phoneNumberValidator = phoneNumberValidator;
+	}
+
+	@Override
+	protected Class<? extends CommandFactory> getGlazz() {
+		return this.getClass();
 	}
 }

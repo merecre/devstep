@@ -8,7 +8,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.request.validator.*;
+import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
+import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
+import lv.itsms.web.command.PageRequestCommand;
+import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.request.parameter.menu.CustomerMenuRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
@@ -25,15 +29,15 @@ public class SmsPanelController extends HttpServlet {
 			+ "=" +
 			CustomerMenuRequestParameter.SMS_REPORT_GROUP_LIST_URL_VALUE;
 
-	final static String errorPageURL = "/WEB-INF/smspanelerror.jsp";
+	final static String errorPageURL = "/WEB-INF/panel/sms/smspanelerror.jsp";
 
 	Repository repository;
 
+	Session session;
+	
 	CustomerPanelCommandFactory userRequestCommandFactory;
 
-	Session session;
-
-	CustomerPanelPageManager pageManager;
+	UserRequestCommandManager pageCommandManager;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -53,27 +57,34 @@ public class SmsPanelController extends HttpServlet {
 
 		userRequestCommandFactory = new CustomerPanelCommandFactory (repository);	
 
-		pageManager = new CustomerPanelPageManager(userRequestCommandFactory);
+		pageCommandManager = new UserRequestCommandManager(userRequestCommandFactory);
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		session.setRequest(request);
 		session.setSession(request.getSession());
 
 		userRequestCommandFactory.setSession(session);
 		userRequestCommandFactory.setRequest(request);
 
+		SmsGroupFieldsValidator requestValidator = new SmsGroupFieldsValidator();		
+		userRequestCommandFactory.setSmsGroupValidator(requestValidator);
+		
+		PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
+		userRequestCommandFactory.setPhoneNumberValidator(phoneNumberValidator);
+		
 		try {		
-			List<PageRequestCommand> commandsToBeExecuted = pageManager.selectUserRequestedCommand(request);
+			List<PageRequestCommand> commandsToBeExecuted = pageCommandManager.selectUserRequestedCommand(request);
 			executeUserRequestCommand(commandsToBeExecuted);
-			redirectToPage(request, response);
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			forwardToPage(request, response);
+		} catch (RuntimeException exception) {
+			updateSessionExceptionError(exception, request);
+		} catch (Exception e) {
+			e.printStackTrace();			
+		} finally {
+			redirectToPage(request, response);			
 		}
 	}
 
@@ -84,12 +95,12 @@ public class SmsPanelController extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private void  executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) {
+	private void executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) {
 		for (PageRequestCommand command : commandExecutionSequence) {
 			command.execute();
 		}		
 	}
-
+	
 	private void redirectToPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		String referer = request.getHeader("Referer");
 		response.sendRedirect(referer);
@@ -109,6 +120,11 @@ public class SmsPanelController extends HttpServlet {
 		}
 	}
 
+	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
+		String exceptionMessage = e.getMessage();
+		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
+	}
+	
 	public Repository getRepository() {
 		return repository;
 	}
@@ -133,13 +149,11 @@ public class SmsPanelController extends HttpServlet {
 		this.session = session;
 	}
 
-	public CustomerPanelPageManager getPageManager() {
-		return pageManager;
+	public UserRequestCommandManager getPageManager() {
+		return pageCommandManager;
 	}
 
-	public void setPageManager(CustomerPanelPageManager pageManager) {
-		this.pageManager = pageManager;
+	public void setPageManager(UserRequestCommandManager pageManager) {
+		this.pageCommandManager = pageManager;
 	}
-
-
 }

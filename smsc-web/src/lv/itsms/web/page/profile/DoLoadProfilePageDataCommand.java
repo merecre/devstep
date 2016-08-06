@@ -1,6 +1,6 @@
 package lv.itsms.web.page.profile;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.page.info.ProfileInfo;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
@@ -31,6 +31,6 @@ public class DoLoadProfilePageDataCommand implements PageRequestCommand {
 			session.updateSessionAttribute(Session.SESSION_PROFILEINFO_PARAMETER, profileInfo);
 		}
 
-		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, profileInfo);
+		//session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, profileInfo);
 	}
 }

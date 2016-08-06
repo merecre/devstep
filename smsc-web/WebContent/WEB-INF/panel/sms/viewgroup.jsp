@@ -7,7 +7,7 @@
 	<tr>
 		<td>Group description:</td>
 		<td><input class="grey" type="text" name="g_common_name"
-			value="${smsgrouprec.smsGroupName}" readonly>
+			value="${viewsmsgrouprec.smsGroupName}" readonly>
 		</td>
 	</tr>
 </table>
@@ -19,7 +19,7 @@
 	<tr>
 		<td>Message:</td>
 		<td><input class="grey" type="text" name="g_common_message"
-			value="${smsgrouprec.groupMessage}" size="60" readonly></td>
+			value="${viewsmsgrouprec.groupMessage}" size="60" readonly></td>
 	</tr>
 </table>
 
@@ -29,7 +29,7 @@
 		<td>
 			<p>Send date:</p>
 		</td>
-		<td><c:set var="datetime" value="${smsgrouprec.sendTime}"
+		<td><c:set var="datetime" value="${viewsmsgrouprec.sendTime}"
 				scope="page" /> <fmt:formatDate var="date" value="${datetime}"
 				pattern="yyyy-MM-dd" /> <fmt:formatDate var="hour"
 				value="${datetime}" pattern="HH" /> <fmt:formatDate var="minutes"

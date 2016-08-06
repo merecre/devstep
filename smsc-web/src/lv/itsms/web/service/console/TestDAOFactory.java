@@ -35,7 +35,7 @@ public class TestDAOFactory extends DAOFactory {
 	@Override
 	public LoginInfoDAO getLoginInfoDAO() {
 		// TODO Auto-generated method stub
-		return null;
+		return new TestLoginInfoDAO();
 	}
 
 	@Override

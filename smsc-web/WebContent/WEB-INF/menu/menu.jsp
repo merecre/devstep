@@ -3,11 +3,11 @@
 
 <div id='cssmenu'>
 	<ul>
-		<c:forEach items="${menues}" var="menu">
+		<c:forEach items="${menus}" var="menu">
 			<li ${menu.elementClass}><a
 				href="${pageContext.servletContext.contextPath}/${menu.pageStr}?id=${menu.pageIndex}${menu.elementSubIndex}"><span>${menu.title}</span></a>
 				<ul>
-					<c:forEach items="${submenues}" var="submenu">
+					<c:forEach items="${submenus}" var="submenu">
 						<c:choose>
 							<c:when test="${not empty submenu.subElementSubIndex}">
 								<c:set var="menulink" scope="session"

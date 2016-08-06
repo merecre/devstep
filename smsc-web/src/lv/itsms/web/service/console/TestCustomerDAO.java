@@ -11,12 +11,15 @@ public class TestCustomerDAO implements CustomerDAO {
 
 	@Override
 	public Customer getCustomerByLoginAndPassword(String login, String password) throws Exception {
-		System.out.print("Login " + login + " " + password);
+		System.out.println(login+" "+" "+password);
 		if (login.equals("Test")&&(password.equals("Test"))) {
 			Customer customer = new Customer();
 			customer.setCustomerId(1);
 			customer.setName("Test");
 			customer.setPassword("Test");
+			customer.setUserLogin("Test");
+			customer.setEmail("emial@email");
+			customer.setSurname("Surname");
 			return customer;
 		}
 		return null;

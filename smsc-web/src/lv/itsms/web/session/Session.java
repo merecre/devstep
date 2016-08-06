@@ -28,6 +28,7 @@ public class Session {
 	public final static String SESSION_CHARTLINE_PARAMETER = "chartLines";
 	public final static String SESSION_SMSGROUPS_PARAMETER = "smsgroups";
 	public final static String SESSION_SMSGROUPREC_PARAMETER = "smsgrouprec";
+	public final static String SESSION_VIEW_SMSGROUPREC_PARAMETER = "viewsmsgrouprec";
 	public final static String SESSION_PHONEGROUPS_PARAMETER = "phonegroups";
 	public final static String SESSION_PROFILEINFO_PARAMETER = "profileinfo";
 

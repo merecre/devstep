@@ -45,7 +45,7 @@
     				$("#enddate").ionDatePicker();
 					});
 					</script></td>
-				<td><input type="submit" value="view" name="view"></td>
+				<td><input type="submit" value="Report" name="report"></td>
 			</tr>
 		</table>
 	</form>

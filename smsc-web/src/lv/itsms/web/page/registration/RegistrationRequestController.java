@@ -14,16 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.CustomerBuilder;
-import lv.itsms.web.request.validator.CustomerEmailNotEmpty;
-import lv.itsms.web.request.validator.CustomerLoginNotEmpty;
-import lv.itsms.web.request.validator.CustomerNameIsNotUsed;
-import lv.itsms.web.request.validator.CustomerNameNotEmpty;
-import lv.itsms.web.request.validator.CustomerPasswordNotEmpty;
-import lv.itsms.web.request.validator.CustomerFieldFormValidator;
-import lv.itsms.web.request.validator.Rule;
 import lv.itsms.web.request.validator.UserRequestValidator;
+import lv.itsms.web.request.validator.customer.CustomerRegistrationFieldsValidator;
+import lv.itsms.web.request.validator.rule.CustomerNameIsNotUsed;
+import lv.itsms.web.request.validator.rule.CustomerNotEmptyRule;
+import lv.itsms.web.request.validator.rule.Rule;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
@@ -65,11 +62,12 @@ public class RegistrationRequestController extends HttpServlet {
 		try {
 			customer = validateUserInputtedRegistrationFormFieldsAndBuildCustomer(request);
 			doCustomerRegistration(customer);
-			returnToBackPage(request, response);
-		} catch (Exception exception) {
-			exception.printStackTrace();
+		} catch (RuntimeException exception) {
 			updateSessionExceptionError(exception, request);
-			forwardToErrorPage(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			returnToBackPage(request, response);			
 		}
 	}
 
@@ -84,29 +82,11 @@ public class RegistrationRequestController extends HttpServlet {
 		CustomerBuilder customerBuilder = new CustomerBuilder();
 		Customer customer = customerBuilder.build(request);
 
-		List<Rule> rules = prepareCustomerRules(customer);
-		UserRequestValidator customerValidator = new CustomerFieldFormValidator(rules, customer);
-		customerValidator.validate();
+		UserRequestValidator customerValidator = new CustomerRegistrationFieldsValidator(repository);
+		customerValidator.prepareRules();
+		customerValidator.validate(customer);
 
 		return customer;
-	}
-
-	private List<Rule> prepareCustomerRules(Customer customer) {
-		List<Rule> customerRules = new ArrayList<>();
-
-		Rule customerRule = new CustomerNameNotEmpty(customer.getName()); 
-		customerRules.add(customerRule);		
-		customerRule = new CustomerNameNotEmpty(customer.getSurname()); 
-		customerRules.add(customerRule);
-		customerRule = new CustomerEmailNotEmpty(customer.getEmail());
-		customerRules.add(customerRule);
-		customerRule = new CustomerPasswordNotEmpty(customer.getPassword());
-		customerRules.add(customerRule);
-		customerRule = new CustomerLoginNotEmpty(customer.getUserLogin());
-		customerRules.add(customerRule);
-		customerRule = new CustomerNameIsNotUsed (repository, customer.getUserLogin());
-		customerRules.add(customerRule);
-		return customerRules;
 	}
 
 	private void doCustomerRegistration(Customer customer) {
@@ -117,7 +97,6 @@ public class RegistrationRequestController extends HttpServlet {
 
 	void forwardToErrorPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String errorJSP = "/WEB-INF/regerror.jsp";
-		//RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(errorJSP);
 		try {
 			ServletContext context = getServletContext();
 			if (context != null) {

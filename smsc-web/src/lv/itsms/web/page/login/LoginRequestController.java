@@ -1,9 +1,11 @@
 package lv.itsms.web.page.login;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,15 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
+import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.page.info.LoginInfo;
-import lv.itsms.web.request.parameter.LoginFormRequestParameterBuilder;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
-import lv.itsms.web.request.validator.CustomerLoginNotEmpty;
-import lv.itsms.web.request.validator.CustomerNotEmptyRule;
-import lv.itsms.web.request.validator.CustomerPasswordNotEmpty;
-import lv.itsms.web.request.validator.LoginFieldFormValidator;
-import lv.itsms.web.request.validator.Rule;
+import lv.itsms.web.request.validator.LoginFieldsValidator;
+import lv.itsms.web.request.validator.rule.CustomerNotEmptyRule;
+import lv.itsms.web.request.validator.rule.Rule;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
@@ -33,6 +33,10 @@ public class LoginRequestController extends HttpServlet {
 
 	Repository repository;
 	Session session;
+	
+	LoginPageFactory loginPageFactory;
+	
+	UserRequestCommandManager pageCommandManager;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -45,6 +49,10 @@ public class LoginRequestController extends HttpServlet {
 	public void init() throws ServletException {
 		repository = new Repository();
 		session = new Session();
+		
+		loginPageFactory = new LoginPageFactory();
+		
+		pageCommandManager = new UserRequestCommandManager(loginPageFactory);
 	}
 
 	/**
@@ -59,10 +67,14 @@ public class LoginRequestController extends HttpServlet {
 			String loginName = customer.getUserLogin();
 			String userPassword = customer.getPassword();
 			doLogging(loginName, userPassword, request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-			session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, e.getMessage());
+			returnToBackPage(request, response);
+		} catch (RuntimeException exception) {
+			updateSessionExceptionError(exception, request);
 			forwardToLoginErrorPage(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();			
+		} finally {
+			
 		}
 	}
 
@@ -94,24 +106,29 @@ public class LoginRequestController extends HttpServlet {
 	}
 
 	private boolean isCorrectCustomerLogin(Customer customer) {
-		Rule rule = new CustomerNotEmptyRule(customer);
-		rule = new CustomerLoginNotEmpty(customer.getUserLogin());
-		rule = new CustomerPasswordNotEmpty(customer.getPassword());
-
-		LoginFieldFormValidator validator = new LoginFieldFormValidator();
-		validator.addRule(rule);
-
-		return validator.validate();
+		LoginFieldsValidator validator = new LoginFieldsValidator();
+		validator.prepareRules();
+		return validator.validate(customer);
 	}
 
 	private void doLogging(String loginName, String userPassword, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		Customer customer = repository.getCustomerByLoginAndPassword(loginName, userPassword);	
 		isCorrectCustomerLogin(customer);
-		PageRequestCommand requestCommand = new DoLoginFormRequestCommand(customer, session);
-		requestCommand.execute();
-		returnToBackPage(request, response);
+		
+		loginPageFactory.setCustomer(customer);
+		loginPageFactory.setSession(session);
+		
+		List<PageRequestCommand> commandsToBeExecuted = pageCommandManager.selectUserRequestedCommand(request);
+		executeUserRequestCommand(commandsToBeExecuted);
 	}
 
+	private void executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) {
+		for (PageRequestCommand command : commandExecutionSequence) {
+			command.execute();
+		}		
+	}
+	
 	private void returnToBackPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String referer = request.getHeader("Referer");
 		response.sendRedirect(referer);
@@ -124,14 +141,21 @@ public class LoginRequestController extends HttpServlet {
 		try {
 			LoginInfo loginInfo = repository.getLoginInfoByLanguage(language);		
 			session.updateSessionAttribute("logininfo", loginInfo);
-
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(loginErrorJSP);
-			dispatcher.forward(request,response);
+			ServletContext context = getServletContext();
+			if (context!=null) {
+				RequestDispatcher dispatcher = context.getRequestDispatcher(loginErrorJSP);
+				dispatcher.forward(request,response);
+			}
 		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 
+	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
+		String exceptionMessage = e.getMessage();
+		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
+	}
+	
 	public Repository getRepository() {
 		return repository;
 	}
@@ -147,4 +171,21 @@ public class LoginRequestController extends HttpServlet {
 	public void setSession(Session session) {
 		this.session = session;
 	}
+
+	public LoginPageFactory getLoginPageFactory() {
+		return loginPageFactory;
+	}
+
+	public void setLoginPageFactory(LoginPageFactory loginPageFactory) {
+		this.loginPageFactory = loginPageFactory;
+	}
+
+	public UserRequestCommandManager getPageCommandManager() {
+		return pageCommandManager;
+	}
+
+	public void setPageCommandManager(UserRequestCommandManager pageCommandManager) {
+		this.pageCommandManager = pageCommandManager;
+	}
+	
 }

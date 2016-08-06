@@ -35,9 +35,11 @@ import lv.itsms.web.session.Session;
  */
 public class MenuBuilderController extends HttpServlet {
 
-	final static String ATTRIBUTE_MENUS = "menues";
-	final static String ATTRIBUTE_SUB_MENUS = "submenues";
-	final static String ATTRIBUTE_CUSTOMER_MENUS = "customermenues";
+	private static final long serialVersionUID = 1L;
+	
+	final static String ATTRIBUTE_MENUS = "menus";
+	final static String ATTRIBUTE_SUB_MENUS = "submenus";
+	final static String ATTRIBUTE_CUSTOMER_MENUS = "customermenus";
 
 	@Resource(name = "jdbc/ITSMSDBMenu") 
 	private DataSource dataSource;

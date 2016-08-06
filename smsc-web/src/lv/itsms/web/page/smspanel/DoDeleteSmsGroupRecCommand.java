@@ -1,12 +1,11 @@
 package lv.itsms.web.page.smspanel;
 
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdPostRequestParameter;
 import lv.itsms.web.service.Repository;
 
 public class DoDeleteSmsGroupRecCommand implements PageRequestCommand {
-
 
 	CustomerPanelCommandFactory factory;
 

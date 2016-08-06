@@ -1,14 +1,6 @@
 package lv.itsms.web.page.login;
 
-import javax.servlet.http.HttpServletRequest;
-
-import lv.itsms.web.page.PageRequestCommand;
-import lv.itsms.web.request.parameter.LoginFormRequestParameterBuilder;
-import lv.itsms.web.request.parameter.UserPageRequestParameter;
-import lv.itsms.web.request.validator.CustomerNotEmptyRule;
-import lv.itsms.web.request.validator.LoginFieldFormValidator;
-import lv.itsms.web.request.validator.Rule;
-import lv.itsms.web.service.Repository;
+import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
 
@@ -18,6 +10,12 @@ public class DoLoginFormRequestCommand implements PageRequestCommand {
 
 	Session session;
 
+	LoginPageFactory factory;
+			
+	public DoLoginFormRequestCommand(LoginPageFactory factory) {
+		this.factory = factory;
+	}
+
 	public DoLoginFormRequestCommand(Customer customer, Session session) {
 		this.customer = customer;
 		this.session = session;
@@ -25,7 +23,8 @@ public class DoLoginFormRequestCommand implements PageRequestCommand {
 
 	@Override
 	public void execute() throws RuntimeException {
-		session.updateSessionAttribute(Session.SESSION_CUSTOMER_LOGIN_PARAMETER, customer.getUserLogin());
-		session.updateSessionAttribute(Session.SESSION_CUSTOMER_ID_PARAMETER, customer.getId());
+		Customer customer = factory.getCustomer();
+		factory.getSession().updateSessionAttribute(Session.SESSION_CUSTOMER_LOGIN_PARAMETER, customer.getUserLogin());
+		factory.getSession().updateSessionAttribute(Session.SESSION_CUSTOMER_ID_PARAMETER, customer.getId());
 	}
 }

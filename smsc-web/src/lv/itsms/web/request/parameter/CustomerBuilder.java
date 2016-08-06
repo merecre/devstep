@@ -34,9 +34,9 @@ public class CustomerBuilder {
 	}
 
 	private class CustomerFirstnameRequest extends UserPageRequestParameter {
-		private final static String FIRST_NAME_PAREMETER = "fname";
+		private final static String URL_PARAMETER = "fname";
 		public CustomerFirstnameRequest() {
-			super(FIRST_NAME_PAREMETER);
+			super(URL_PARAMETER);
 		}
 
 		@Override
@@ -46,9 +46,9 @@ public class CustomerBuilder {
 	}
 
 	private class CustomerLastnameRequest extends UserPageRequestParameter {
-		private final static String LAST_NAME_PAREMETER = "lname";
+		private final static String URL_PARAMETER = "lname";
 		public CustomerLastnameRequest() {
-			super(LAST_NAME_PAREMETER);
+			super(URL_PARAMETER);
 		}
 
 		@Override
@@ -58,9 +58,9 @@ public class CustomerBuilder {
 	}
 
 	private class CustomerEmailRequest extends UserPageRequestParameter {
-		private final static String EMAIL_PAREMETER = "email";
+		private final static String URL_PARAMETER = "email";
 		public CustomerEmailRequest() {
-			super(EMAIL_PAREMETER);
+			super(URL_PARAMETER);
 		}
 
 		@Override
@@ -70,9 +70,9 @@ public class CustomerBuilder {
 	}
 
 	private class CustomerLoginRequest extends UserPageRequestParameter {
-		private final static String LOGIN_PAREMETER = "uname";
+		private final static String URL_PARAMETER = "uname";
 		public CustomerLoginRequest() {
-			super(LOGIN_PAREMETER);
+			super(URL_PARAMETER);
 		}
 
 		@Override
@@ -82,9 +82,9 @@ public class CustomerBuilder {
 	}
 
 	private class CustomerPasswordRequest extends UserPageRequestParameter {
-		private final static String PASSWORD_PAREMETER = "pass";
+		private final static String URL_PARAMETER = "pass";
 		public CustomerPasswordRequest() {
-			super(PASSWORD_PAREMETER);
+			super(URL_PARAMETER);
 		}
 
 		@Override

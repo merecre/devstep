@@ -25,6 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.page.smspanel.CustomerPanelCommandFactory;
 import lv.itsms.web.page.smspanel.SmsPanelController;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
@@ -45,7 +46,9 @@ public class LoginRequestControllerTest {
 	Repository repository;
 	Map<String, UserPageRequestParameter> urlParameters;
 	Map<String, Object> attributes;
-
+	LoginPageFactory userRequestCommandFactory;
+	UserRequestCommandManager pageManager;
+	
 	@Before
 	public void init() {
 
@@ -58,6 +61,9 @@ public class LoginRequestControllerTest {
 		session = Mockito.mock(Session.class);
 		repository = new Repository(DAOFactory.TEST_DAO);
 		attributes = new HashMap<>();
+		userRequestCommandFactory = new LoginPageFactory ();
+		
+		pageManager = new UserRequestCommandManager(userRequestCommandFactory);
 
 		Mockito.doAnswer(new Answer<Object>(){
 			@Override
@@ -75,11 +81,13 @@ public class LoginRequestControllerTest {
 		when(request.getParameter("uname")).thenReturn("Test");
 		when(request.getParameter("pass")).thenReturn("Test");
 		when(session.getSessionLanguage()).thenReturn("en");
-
+	
 		LoginRequestController loginServlet = new LoginRequestController();
 
 		loginServlet.setSession(session);
 		loginServlet.setRepository(repository);      
+		loginServlet.setLoginPageFactory(userRequestCommandFactory);
+		loginServlet.setPageCommandManager(pageManager);
 		loginServlet.doPost(request, response); 
 
 		String userName = (String) attributes.get("userid");

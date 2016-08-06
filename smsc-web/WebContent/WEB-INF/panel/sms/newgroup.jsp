@@ -48,7 +48,8 @@ function add_fields(divName, inpName, bntName, btnDelId) {
 <br>
 
 <%-- form group description fields --%>
-
+<font color="red">${error}</font>
+<c:remove var="error" scope="session" />
 <table>
 	<tr>
 		<td>Group description:</td>
@@ -114,9 +115,9 @@ $(function(){
 			<th>Phone</th>
 		</tr>
 		<c:set var="counter" value="0" scope="page" />
-		<c:if test="${empty phonegroups}">
+		<c:if test="${empty phone}">
 							<tr>
-						<td><input type="text" name="phone" value="${phonenumber1}" /></td>
+						<td><input type="text" name="phone" value="" /></td>
 						<td><input type="button" id="more_fields"
 							onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');"
 							value="Add row" /></td>
@@ -125,11 +126,11 @@ $(function(){
 					</tr>
 		
 		</c:if>
-		<c:forEach items="${phonegroups}" var="phonegroup">
+		<c:forEach items="${phone}" var="phonegroup">
 			<c:set var="counter" value="${counter + 1}" scope="page" />
 			<c:choose>
 				<c:when test="${counter eq 1}">
-					<c:set var="phonenumber1" value="${phonegroup.phonenumber}"
+					<c:set var="phonenumber1" value="${phonegroup}"
 						scope="page" />
 					<tr>
 						<td><input type="text" name="phone" value="${phonenumber1}" /></td>
@@ -145,7 +146,7 @@ $(function(){
 			<c:if test="${counter gt 1}">
 				<tr>
 					<td><input type="text" name="phone"
-						value="<c:out value="${phonegroup.phonenumber}"/>" /></td>
+						value="<c:out value="${phonegroup}"/>" /></td>
 					<td><input type="button" id="delete"
 						onClick="deleteThisRow(this, 'phone_group')" value="Delete" /></td>
 				</tr>

@@ -18,8 +18,6 @@ public class DeleteSmsGroupPostRequestParameter extends UserPageRequestParameter
 
 	@Override
 	public void update(HttpServletRequest request) {
-
 		parameterValue = request.getParameter(parameterKey);
-
 	}
 }
