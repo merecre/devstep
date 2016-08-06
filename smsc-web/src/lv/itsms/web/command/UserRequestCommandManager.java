@@ -1,4 +1,4 @@
-package lv.itsms.web.page.smspanel;
+package lv.itsms.web.command;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,8 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lt.isms.web.CommandTypeParameter;
-import lv.itsms.web.page.PageRequestCommand;
+import lv.itsms.web.page.login.LoginPageFactory;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 /**
@@ -19,29 +18,26 @@ import lv.itsms.web.request.parameter.UserPageRequestParameter;
  *
  */
 
-public class CustomerPanelPageManager {
+public class UserRequestCommandManager {
 
-	CustomerPanelCommandFactory commandFactory;
+	CommandFactory commandFactory;
 
 	private List<PageRequestCommand> commandExecutionSequence;
 
-	public CustomerPanelPageManager(CustomerPanelCommandFactory factory) {		
-
-		this.commandFactory = factory;
+	public UserRequestCommandManager(CommandFactory userRequestCommandFactory) {		
+		this.commandFactory = userRequestCommandFactory;
 		this.commandExecutionSequence = new LinkedList<>();
 	}
 
 	public List<PageRequestCommand> selectUserRequestedCommand(HttpServletRequest request) {		
-
 		CommandTypeParameter commandRequestID = parseUserRequestAndReturnCommandIdToExecute(request);		
 		populateCommandsToExecute(commandRequestID);	
 		return commandExecutionSequence;
 	}
 
 	private CommandTypeParameter parseUserRequestAndReturnCommandIdToExecute(HttpServletRequest request) {
-
-		Map<CommandTypeParameter, String> userRequestCommandLookups = CommandTypeParameter.getUserRequestCommandLookups();
-		Map<String, UserPageRequestParameter> urlParameters = CommandTypeParameter.getUserRequestParameters();
+		Map<CommandTypeParameter, String> userRequestCommandLookups = CommandTypeSingleton.getInstance().getCommandTypeByUserRequestParameter();
+		Map<String, UserPageRequestParameter> urlParameters = CommandTypeSingleton.getInstance().getUserRequestParameters();
 
 		for (CommandTypeParameter commandToLookupID : userRequestCommandLookups.keySet()) {
 
@@ -55,9 +51,8 @@ public class CustomerPanelPageManager {
 
 		return CommandTypeParameter.NO_COMMAND;
 	}
-	
-	private void populateCommandsToExecute(CommandTypeParameter commandRequestID) {
 
+	private void populateCommandsToExecute(CommandTypeParameter commandRequestID) {
 		commandExecutionSequence.clear();		
 		while (true) {
 			PageRequestCommand command = commandFactory.make(commandRequestID);			
@@ -74,7 +69,6 @@ public class CustomerPanelPageManager {
 	}
 
 	private CommandTypeParameter getNextSequencedCommand (CommandTypeParameter currentCommandID) {
-
 		CommandTypeParameter nextSequencedCommandID = CommandTypeParameter.NO_COMMAND;
 		if (currentCommandID == CommandTypeParameter.CMD_DELETE_SMS_GROUP_REC) {
 			nextSequencedCommandID = CommandTypeParameter.CMD_LOAD_SMS_GROUP_NAMES;
