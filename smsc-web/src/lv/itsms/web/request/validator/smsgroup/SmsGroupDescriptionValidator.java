@@ -5,7 +5,7 @@ import lv.itsms.web.request.validator.rule.FieldIsNotEmptyStringRule;
 import lv.itsms.web.request.validator.rule.Rule;
 
 public class SmsGroupDescriptionValidator extends UserRequestValidatorImpl {
-	final static String ERROR_MESSAGE = "Description is mandatory";
+	final static String ERROR_MESSAGE = "Description.is.mandatory";
 	
 	@Override
 	public void prepareRules() {
@@ -13,5 +13,6 @@ public class SmsGroupDescriptionValidator extends UserRequestValidatorImpl {
 		
 		Rule rule = new FieldIsNotEmptyStringRule(ERROR_MESSAGE);
 		rules.add(rule);
+		
 	}
 }

@@ -2,13 +2,15 @@ package lv.itsms.web.page.smspanel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lv.itsms.web.request.validator.*;
 import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
 import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
 import lv.itsms.web.command.PageRequestCommand;
@@ -79,12 +81,13 @@ public class SmsPanelController extends HttpServlet {
 		try {		
 			List<PageRequestCommand> commandsToBeExecuted = pageCommandManager.selectUserRequestedCommand(request);
 			executeUserRequestCommand(commandsToBeExecuted);
+			redirectToPage(request, response);	
 		} catch (RuntimeException exception) {
 			updateSessionExceptionError(exception, request);
-		} catch (Exception e) {
-			e.printStackTrace();			
-		} finally {
-			redirectToPage(request, response);			
+			redirectToPage(request, response);	
+		} catch (Exception e) {	
+			updateSessionExceptionError(e, request);			
+			forwardToPage(request, response);
 		}
 	}
 
@@ -95,7 +98,7 @@ public class SmsPanelController extends HttpServlet {
 		doGet(request, response);
 	}
 
-	private void executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) {
+	private void executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) throws Exception {
 		for (PageRequestCommand command : commandExecutionSequence) {
 			command.execute();
 		}		
@@ -122,6 +125,13 @@ public class SmsPanelController extends HttpServlet {
 
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
 		String exceptionMessage = e.getMessage();
+		String lng = session.getSessionLanguage(); 
+		
+		Locale currentLocale = new Locale(lng, lng.toUpperCase());
+		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+		if (messages.containsKey(exceptionMessage)) {
+			exceptionMessage = messages.getString(exceptionMessage);
+		}
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}
 	

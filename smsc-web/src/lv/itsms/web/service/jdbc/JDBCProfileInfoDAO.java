@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.page.info.ProfileInfo;
 import lv.itsms.web.service.DBDAOFactory;
 import lv.itsms.web.service.ProfileInfoDAO;

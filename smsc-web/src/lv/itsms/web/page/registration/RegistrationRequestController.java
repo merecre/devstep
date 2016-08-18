@@ -1,26 +1,19 @@
 package lv.itsms.web.page.registration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.CustomerBuilder;
 import lv.itsms.web.request.validator.UserRequestValidator;
 import lv.itsms.web.request.validator.customer.CustomerRegistrationFieldsValidator;
-import lv.itsms.web.request.validator.rule.CustomerNameIsNotUsed;
-import lv.itsms.web.request.validator.rule.CustomerNotEmptyRule;
-import lv.itsms.web.request.validator.rule.Rule;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
@@ -57,15 +50,15 @@ public class RegistrationRequestController extends HttpServlet {
 
 		session.setRequest(request);
 		session.setSession(request.getSession());;
-
-		Customer customer = null;		
+		
 		try {
-			customer = validateUserInputtedRegistrationFormFieldsAndBuildCustomer(request);
+			Customer customer = validateUserInputtedRegistrationFormFieldsAndBuildCustomer(request);
 			doCustomerRegistration(customer);
 		} catch (RuntimeException exception) {
 			updateSessionExceptionError(exception, request);
 		} catch (Exception e) {
 			e.printStackTrace();
+			updateSessionExceptionError(e, request);
 		} finally {
 			returnToBackPage(request, response);			
 		}
@@ -81,7 +74,8 @@ public class RegistrationRequestController extends HttpServlet {
 	private Customer validateUserInputtedRegistrationFormFieldsAndBuildCustomer(HttpServletRequest request) {
 		CustomerBuilder customerBuilder = new CustomerBuilder();
 		Customer customer = customerBuilder.build(request);
-
+		storeInRegFormAlreadyInputedRegistrationData(customer);
+		
 		UserRequestValidator customerValidator = new CustomerRegistrationFieldsValidator(repository);
 		customerValidator.prepareRules();
 		customerValidator.validate(customer);
@@ -89,7 +83,11 @@ public class RegistrationRequestController extends HttpServlet {
 		return customer;
 	}
 
-	private void doCustomerRegistration(Customer customer) {
+	private void storeInRegFormAlreadyInputedRegistrationData(Customer customer) {
+		session.updateSessionAttribute(Session.SESSION_CUSTOMER_REGISTRATION_PARAMETER, customer);
+	}
+
+	private void doCustomerRegistration(Customer customer) throws Exception {
 		PageRequestCommand pageRequestCommand = new DoRegistrationFormRequestCommand(customer, repository);
 		pageRequestCommand.execute();
 
@@ -110,6 +108,13 @@ public class RegistrationRequestController extends HttpServlet {
 
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
 		String exceptionMessage = e.getMessage();
+		
+		String lng = session.getSessionLanguage(); 
+		Locale currentLocale = new Locale(lng, lng.toUpperCase());
+		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+		if (messages.containsKey(exceptionMessage)) {
+			exceptionMessage = messages.getString(exceptionMessage);
+		}
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}
 

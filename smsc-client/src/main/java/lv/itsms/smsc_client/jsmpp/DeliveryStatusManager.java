@@ -16,7 +16,7 @@ import transfer.service.jpa.SmsDAO;
 public class DeliveryStatusManager {
 
 	DeliveryStatusUpdater statusUpdater;
-	
+
 	public DeliveryStatusManager(DeliveryStatusUpdater statusUpdater) {
 		this.statusUpdater = statusUpdater;
 	}
@@ -28,12 +28,12 @@ public class DeliveryStatusManager {
 			statusUpdater.updateSmsDeliveryStatus(smsId, messageSMPPIDec);
 		}
 	}
-	
+
 	public void updateSmsDeliveryStatusByReport(DeliveryReceipt delReceipt) {
 		long SMPPID = Long.parseLong(delReceipt.getId());
 		int status = delReceipt.getFinalStatus().value();
 		updateStatus(SMPPID, status);
-				
+
 		long id = SMPPID & 0xffffffff;
 		String messageId = Long.toString(id, 16).toUpperCase();		
 	}

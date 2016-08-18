@@ -2,14 +2,13 @@ package lv.itsms.web.request.parameter.smspanel;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class ViewSmsGroupNameListRequestParameter extends UserPageRequestParameter {
 
-	public final static String MENU_URL_PARAMETER = "cusMenu";
+	public final static String MENU_URL_PARAMETER = "viewGroups";
 
-	public final static String SMS_REPORT_GROUP_LIST_URL_VALUE = "smsPanel";
+	public final static String SMS_REPORT_GROUP_LIST_URL_VALUE = "true";
 	
 	public ViewSmsGroupNameListRequestParameter() {
 		super(MENU_URL_PARAMETER);

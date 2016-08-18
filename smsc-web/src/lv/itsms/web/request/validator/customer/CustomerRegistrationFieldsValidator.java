@@ -1,7 +1,5 @@
 package lv.itsms.web.request.validator.customer;
 
-import java.util.List;
-
 import lv.itsms.web.request.validator.PasswordValidator;
 import lv.itsms.web.request.validator.UserRequestValidatorImpl;
 import lv.itsms.web.service.Repository;

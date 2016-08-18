@@ -22,7 +22,6 @@ public class JDBCCustomerDAO implements CustomerDAO {
 	}
 
 	public Customer getCustomerByLoginAndPassword(String login, String password) throws SQLException, RuntimeException {
-		final String ERROR_SELECT = "Customer not found.";
 
 		String sql = "SELECT * FROM " + DB_TABLE 
 				+ " WHERE login='" + login + "'"
@@ -89,7 +88,9 @@ public class JDBCCustomerDAO implements CustomerDAO {
 		if (resultSet.next()) {
 			customer = populateData(resultSet);
 		}
-
+		resultSet.close();
+		statement.close();
+		factory.closeConnection(connection);
 		return customer;
 	}
 

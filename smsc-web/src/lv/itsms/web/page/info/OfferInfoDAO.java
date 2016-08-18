@@ -1,11 +1,8 @@
 package lv.itsms.web.page.info;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.sql.DataSource;
 
 import lv.itsms.web.service.jdbc.JDBCDataAccessObject;

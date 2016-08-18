@@ -1,14 +1,6 @@
 package lv.itsms.web.request.validator.smsgroup;
 
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.request.validator.UserRequestValidatorImpl;
-import lv.itsms.web.request.validator.rule.FieldIsNotEmptyStringRule;
-import lv.itsms.web.request.validator.rule.Rule;
 import transfer.domain.SmsGroup;
 
 public class SmsGroupFieldsValidator extends UserRequestValidatorImpl {
@@ -33,11 +25,11 @@ public class SmsGroupFieldsValidator extends UserRequestValidatorImpl {
 	@Override
 	public boolean validate(Object object) {
 		SmsGroup smsGroup = (SmsGroup)object;
-		
+
 		String smsGroupDescription = smsGroup.getSmsGroupName();
 		descriptionValidator.validate(smsGroupDescription);
 		
-		String smsGroupMessage = smsGroup.getSmsGroupName();
+		String smsGroupMessage = smsGroup.getGroupMessage();
 		messageValidator.validate(smsGroupMessage);
 		
 		java.util.Date date = smsGroup.getSendTime();

@@ -1,9 +1,10 @@
 package lv.itsms.web.service.console;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import lv.itsms.web.service.PhoneGroupDAO;
 import transfer.domain.PhoneGroup;
+import transfer.service.jpa.PhoneGroupDAO;
 
 public class TestPhoneGroupDAO implements PhoneGroupDAO {
 
@@ -15,7 +16,7 @@ public class TestPhoneGroupDAO implements PhoneGroupDAO {
 
 	@Override
 	public List<PhoneGroup> getPhonesByGroupId(long groupId) throws Exception {
-		List<PhoneGroup> phoneGroups = null;
+		List<PhoneGroup> phoneGroups = new ArrayList<>();
 		if (groupId == 20) {
 			PhoneGroup phoneGroup = new PhoneGroup();
 			phoneGroup.setGroupId(groupId);
@@ -31,9 +32,15 @@ public class TestPhoneGroupDAO implements PhoneGroupDAO {
 	}
 
 	@Override
-	public boolean deleteByGroupId(int groupId) throws Exception {
+	public boolean deleteByGroupId(long groupId) throws Exception {
 		System.out.print("Phone Group deleted " + groupId);
 		return false;
+	}
+
+	@Override
+	public PhoneGroup update(PhoneGroup smsGroup) {
+		System.out.print("Phone Group is Updated:"+ smsGroup);
+		return smsGroup;
 	}
 
 }

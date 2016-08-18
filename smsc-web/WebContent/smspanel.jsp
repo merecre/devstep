@@ -25,8 +25,8 @@
 	<form method="post" action="smscontroller.jsp">
 		<table width="100%" border="1">
 			<tr>
-				<td align="center" width="15%"><a	href='<%= request.getContextPath() %>/smspanel.jsp?cusMenu=smsPanel'>Groups</a></td>
-				<td><a	href='<%= request.getContextPath() %>/smspanel.jsp?newGroup=true'>New group</a></td>
+				<td align="center" width="15%"><a	href='<%= request.getContextPath() %>/smspanel.jsp?cusMenu=smsPanel&viewGroups=true'>${smspanelinfo.txtGroupList}</a></td>
+				<td><a	href='<%= request.getContextPath() %>/smspanel.jsp?cusMenu=smsPanel&newGroup=true'>${smspanelinfo.txtNewGroup}</a></td>
 			</tr>
 
 			<tr>
@@ -44,11 +44,12 @@
 					<c:if test="${param.viewGroup == 'true'}">
 						<%@	include file="WEB-INF/panel/sms/viewgroup.jsp"%>
 					</c:if> 
+					<c:if test="${param.editGroup == 'true'}">
+						<%@	include file="WEB-INF/panel/sms/editgroup.jsp"%>
+					</c:if> 
 				</td>
 			</tr>
 		</table>
-
 	</form>
-
 </body>
 </html>

@@ -1,8 +1,8 @@
 package lv.itsms.web.service.console;
 
 import lv.itsms.web.page.info.ProfileInfo;
-import lv.itsms.web.service.DBDAOFactory;
 import lv.itsms.web.service.ProfileInfoDAO;
+import lv.itsms.web.service.TestDAOFactory;
 
 public class TestProfileInfoDAO implements ProfileInfoDAO {
 

@@ -3,10 +3,6 @@ package lv.itsms.web.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.annotation.Resource;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import lv.itsms.web.service.jdbc.JDBCCustomerDAO;
@@ -16,7 +12,11 @@ import lv.itsms.web.service.jdbc.JDBCProfileInfoDAO;
 import lv.itsms.web.service.jdbc.JDBCRegistrationInfoDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
+import lv.itsms.web.service.jdbc.JDBCSmsPanelInfoDAO;
 import lv.itsms.web.service.jdbc.ServerContextSingleton;
+import transfer.service.jpa.PhoneGroupDAO;
+import transfer.service.jpa.SmsDAO;
+import transfer.service.jpa.SmsGroupDAO;
 
 public class DBDAOFactory extends DAOFactory {
 
@@ -28,7 +28,6 @@ public class DBDAOFactory extends DAOFactory {
 
 	public Connection createConnection() {
 
-		Connection connection = null;
 		try {
 			ServerContextSingleton serverContext = ServerContextSingleton.getInstance();
 			dataSource = serverContext.getDataSource();
@@ -61,11 +60,6 @@ public class DBDAOFactory extends DAOFactory {
 	}
 
 	@Override
-	public SmsDAO getSmsDAO() {
-		return new JDBCSmsDAO(this);
-	}
-
-	@Override
 	public SmsGroupDAO getSmsGroupDAO() {
 		return new JDBCSmsGroupDAO(this);
 	}
@@ -83,5 +77,48 @@ public class DBDAOFactory extends DAOFactory {
 	@Override
 	public ProfileInfoDAO getProfileInfoDAO() {		
 		return new JDBCProfileInfoDAO(this);
+	}
+
+	@Override
+	public SmsPanelInfoDAO getSmsPanelInfoDAO() {
+		return new JDBCSmsPanelInfoDAO(this);
+	}
+	
+	@Override
+	public SmsDAO getSmsDAO() {
+		return new JDBCSmsDAO(this);
+	}
+	
+	@Override
+	public void startTransaction() throws Exception {
+		createConnection() ;		
+		connection.setAutoCommit(false);
+
+	}
+
+	@Override
+	public void stopTransaction() {
+		closeConnection(connection);
+	}
+
+	@Override
+	public void commitTransaction() throws Exception {
+		connection.commit();
+	}
+
+	@Override
+	public void rollbackTransaction() throws Exception {
+		connection.rollback();	
+	}
+
+	public static int getNoRecords() {
+		return NO_RECORDS;
+	}
+
+	public Connection getConnection() {
+		if (connection == null ) {
+			return createConnection();
+		}
+		return connection;
 	}
 }

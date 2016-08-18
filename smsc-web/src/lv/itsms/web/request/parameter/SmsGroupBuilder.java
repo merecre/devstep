@@ -1,13 +1,8 @@
 package lv.itsms.web.request.parameter;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.request.parameter.menu.CustomerIdRequestParameter;
@@ -43,7 +38,7 @@ public class SmsGroupBuilder {
 
 		String userSendTime = userSendDate+" "+userSendHour+":"+userSendMinutes;
 
-		Date sendTime = formatSendTime(userSendTime);
+		java.sql.Timestamp sendTime = formatSendTime(userSendTime);
 		smsGroup.setSendTime(sendTime);
 
 		return smsGroup;
@@ -120,15 +115,14 @@ public class SmsGroupBuilder {
 		return Integer.parseInt(loginUserRequest.getParameter());
 	}
 
-	private Date formatSendTime(String sendtime) {
+	private java.sql.Timestamp formatSendTime(String sendtime) {
 		final String ERROR_DATE = "Incorrect Date";
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
-		java.sql.Date date = null;
+		java.sql.Timestamp  date = null;
 		try {
 			java.util.Date innerFormatDate = format.parse(sendtime);
-			date = new java.sql.Date(innerFormatDate.getTime());
-		} catch (ParseException e) {
-			//e.printStackTrace();
+			date = new java.sql.Timestamp(innerFormatDate.getTime());
+		} catch (Exception e) {
 			throw new RuntimeException(ERROR_DATE);
 		}
 		return date;

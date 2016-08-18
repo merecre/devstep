@@ -58,7 +58,7 @@ public class JSMPPGatewayClient extends GatewayClient {
 	@Override
 	public String send(Object object) { 
 		Sms sms = (Sms)object;   
-		
+
 		return sendSingleMessage(sms);
 	}
 
@@ -91,7 +91,7 @@ public class JSMPPGatewayClient extends GatewayClient {
 
 		return messageId;
 	}
-	
+
 	@Override
 	public void connect() {	
 

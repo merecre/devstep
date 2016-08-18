@@ -1,6 +1,5 @@
 package lv.itsms.web.menu.mainmenu;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

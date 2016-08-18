@@ -2,17 +2,12 @@ package lv.itsms.web.page.registration;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-
 import lv.itsms.web.command.PageRequestCommand;
-import lv.itsms.web.page.login.DoLoginFormRequestCommand;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 

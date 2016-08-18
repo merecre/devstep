@@ -8,12 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import lv.itsms.web.service.DBDAOFactory;
-import lv.itsms.web.service.SmsGroupDAO;
-import transfer.domain.PhoneGroup;
 import transfer.domain.SmsGroup;
+import transfer.service.jpa.SmsGroupDAO;
 
 public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
@@ -40,64 +37,56 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 	public boolean deleteByUserIdAndGroupName(int userId, String groupName) throws SQLException {
 
-		connection = factory.createConnection();
-
+		connection = factory.getConnection();
 		PreparedStatement statement = connection.prepareStatement(
 				"DELETE FROM " + DB_TABLE + " "
 						+ "WHERE "	+ "customer_id='" + userId + "' "
 						+ "AND group_name='" + groupName + "'");
-		System.out.println("Statement:"+ statement.toString());
 		statement.executeUpdate();
 		
 		statement.close();
-		factory.closeConnection(connection);
 
 		return true;
 	}
 
 	public boolean deleteByGroupId(int groupId) throws SQLException {
 
-		connection = factory.createConnection();
+		connection = factory.getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(
 				"DELETE FROM " + DB_TABLE + " "
 						+ "WHERE "	+ "id='" + groupId + "'");
-		System.out.println("Statement:"+ statement.toString());
 		statement.executeUpdate();
 		statement.close();
-		factory.closeConnection(connection);
 
 		return true;
 	}
 
 	public boolean insert(SmsGroup smsGroup) throws SQLException {
-		final String ERROR_INSERT = "Creating smsGroup failed, no rows affected.";
 
-		connection = factory.createConnection();
+		connection = factory.getConnection();
 		PreparedStatement statement = connection.prepareStatement(
 				"INSERT INTO " + DB_TABLE + " "
-						+ "(group_message, group_name, sendtime, customer_id)"
+						+ "(group_message, group_name, sendtime, customer_id, status)"
 						+ " VALUES (" 
 						+ "'"+ smsGroup.getGroupMessage() + "',"
 						+ "'"+ smsGroup.getSmsGroupName() + "',"
 						+ "'"+ smsGroup.getSendTime() + "',"
-						+ "'"+ smsGroup.getCustomerId() + "'"
+						+ "'"+ smsGroup.getCustomerId() + "',"
+						+ "'"+ smsGroup.getStatus() + "'"
 						+ ") "
 						+ " ON DUPLICATE KEY UPDATE " 
 						+ " group_message = '"+smsGroup.getGroupMessage() + "',"
 						+ " group_name = '"+smsGroup.getSmsGroupName() + "',"
 						+ " sendtime = '"+smsGroup.getSendTime() + "',"
-						+ " customer_id = '"+smsGroup.getCustomerId() + "'"            		
+						+ " customer_id = '"+smsGroup.getCustomerId() + "',"
+						+ " status = '" + smsGroup.getStatus() + "'"
 						,Statement.RETURN_GENERATED_KEYS);
-
-		System.out.println("Statement:"+statement.toString());
 
 		int updatedRows = statement.executeUpdate();
 		smsGroup.setSmsGroupId(getUpdatedGroupId(statement));
 
 		statement.close();
-		factory.closeConnection(connection);
-		System.out.println("Connection in SMS groupDAO" + connection);
 
 		return updatedRows != 0;
 	}
@@ -114,24 +103,21 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 	public boolean update(SmsGroup smsGroup) throws SQLException {
 
-		final String ERROR_UPDATE = "Creating smsGroup failed, no rows affected.";
-
-		connection = factory.createConnection();
+		connection = factory.getConnection();
 		String sql = "UPDATE " + DB_TABLE + " SET" 
 				+ " group_message = '"+smsGroup.getGroupMessage() + "',"
 				+ " group_name = '"+smsGroup.getSmsGroupName() + "',"
 				+ " sendtime = '"+smsGroup.getSendTime() + "',"
-				+ " customer_id = '"+smsGroup.getCustomerId() + "'"
+				+ " customer_id = '"+smsGroup.getCustomerId() + "',"
+				+ " status = '"+ smsGroup.getStatus() + "'"
 				+ " WHERE id = '" + smsGroup.getSmsGroupId() +"'";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
-		System.out.println("Statement:"+statement.toString());
 		int updatedRows = statement.executeUpdate();
 
 		statement.close();
-		factory.closeConnection(connection);
-		System.out.println("Connection in SMS groupDAO" + connection);
+
 		return (updatedRows != 0);
 	}
 
@@ -143,7 +129,8 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 				+ " WHERE group_name='" + smsGroup.getSmsGroupName() + "'"
 				+ " AND customer_id='" + smsGroup.getCustomerId() + "'";
 
-		connection = factory.createConnection();
+
+		connection = factory.getConnection();
 		PreparedStatement statement = connection.prepareStatement(sql, 
 				ResultSet.TYPE_FORWARD_ONLY,
 				ResultSet.CONCUR_UPDATABLE);
@@ -155,52 +142,40 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 		resultSet.close();
 		statement.close();
-		factory.closeConnection(connection);
+
 
 		return groupId;
 	}
 
 	public List<SmsGroup> getGroupsByUserId(long userId) throws SQLException {
 
-		//establishConnection();
-
 		List<SmsGroup> smsGroups = new ArrayList<>();
 
 		String sql = "SELECT * FROM " + DB_TABLE 
 				+ " WHERE customer_id='" + userId + "'";
 
-		connection = factory.createConnection();
+		connection = factory.getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
 		ResultSet resultSet = statement.executeQuery();
 		while (resultSet.next()) {
-			SmsGroup smsGroup = new SmsGroup();
-			smsGroup.setCustomerId(resultSet.getInt("customer_id"));
-			smsGroup.setGroupMessage(resultSet.getString("group_message"));
-			smsGroup.setSendTime(resultSet.getDate("sendtime"));
-			smsGroup.setSmsGroupId(resultSet.getInt("id"));
-			smsGroup.setSmsGroupName(resultSet.getString("group_name"));
-
+			SmsGroup smsGroup = populateSmsGroup(resultSet);
 			smsGroups.add(smsGroup);
 		}
 
 		resultSet.close();
 		statement.close();
-		factory.closeConnection(connection);
 
 		return smsGroups;
 	}
 
 	public SmsGroup getGroupById(long groupId) throws SQLException {
-		final String ERROR_GET_GROUP = "Sms group record not found ";
-
-		//establishConnection();
 
 		String sql = "SELECT * FROM " + DB_TABLE 
 				+ " WHERE id='" + groupId + "'";
 
-		connection = factory.createConnection();
+		connection = factory.getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(sql);
 
@@ -213,19 +188,90 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 		resultSet.close();
 		statement.close();
-		factory.closeConnection(connection);
 
 		return smsGroup;
 	}
 
+	@Override
+	public SmsGroup getGroupByIdAndCustomerId(long groupId, int customerId) throws Exception {
+		String sql = "SELECT * FROM " + DB_TABLE 
+				+ " WHERE id='" + groupId + "'" 
+				+ " AND customer_id='" + customerId  + "'";
+
+		connection = factory.getConnection();
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultSet = statement.executeQuery();
+		SmsGroup smsGroup = null;
+
+		if (resultSet.next()) {
+			smsGroup = populateSmsGroup(resultSet);
+		}
+
+		resultSet.close();
+		statement.close();
+
+		return smsGroup;
+	}
+	
 	private SmsGroup populateSmsGroup(ResultSet resultSet) throws SQLException {
 		SmsGroup smsGroup = new SmsGroup();
 		smsGroup.setCustomerId(resultSet.getInt("customer_id"));
 		smsGroup.setGroupMessage(resultSet.getString("group_message"));
-		smsGroup.setSendTime(resultSet.getDate("sendtime"));
+		smsGroup.setSendTime(resultSet.getTimestamp("sendtime"));
 		smsGroup.setSmsGroupId(resultSet.getInt("id"));
 		smsGroup.setSmsGroupName(resultSet.getString("group_name"));
 
 		return smsGroup;
+	}
+
+	@Override
+	public List<SmsGroup> findSmsGroupsByDatePeriodAndUserId(long userId, String startDate, String endDate) throws SQLException {
+		
+		String sql = "SELECT * FROM " + DB_TABLE 
+				+ " WHERE sendTime >='" + startDate + "'" 
+				+ " AND sendTime <='" + endDate  + "'";
+
+		connection = factory.getConnection();
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultSet = statement.executeQuery();
+		List<SmsGroup> smsGroups = new ArrayList<>();;
+		SmsGroup smsGroup = null;
+		
+		while (resultSet.next()) {
+			smsGroup = populateSmsGroup(resultSet);
+		}
+		
+		smsGroups.add(smsGroup);
+		resultSet.close();
+		statement.close();
+		
+		return smsGroups;
+	}
+
+	@Override
+	public List<SmsGroup> findAll() throws SQLException {
+		String sql = "SELECT * FROM " + DB_TABLE; 
+
+		connection = factory.getConnection();
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		ResultSet resultSet = statement.executeQuery();
+		List<SmsGroup> smsGroups = new ArrayList<>();;
+		SmsGroup smsGroup = null;
+		
+		while (resultSet.next()) {
+			smsGroup = populateSmsGroup(resultSet);
+		}
+		
+		smsGroups.add(smsGroup);
+		resultSet.close();
+		statement.close();
+		
+		return smsGroups;
 	}
 }

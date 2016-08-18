@@ -21,31 +21,33 @@ import transfer.service.jpa.SmsGroupDAO;
 public class MessageController {
 
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
-	
+
 	JPADAOfactory factoryDAO; 
-	
+
 	SmsDAO smsDAO;
-	
+
 	SmsGroupDAO smsGroupDAO;
-	
+
 	PhoneGroupDAO phoneGroupDAO;
-	
-	
+
+
 	public MessageController(JPADAOfactory factoryDAO) {
 		this.factoryDAO = factoryDAO;
-		
+
 		smsDAO = factoryDAO.getSmsDAO();
-		
+
 		smsGroupDAO = factoryDAO.getSmsGroupDAO();
-		
+
 		phoneGroupDAO = factoryDAO.getPhoneGroupDAO();
 	}
 
 	public void prepareSmsGroupSentMessages() {
-		try {					
-			List<SmsGroup> smsGroupsToBeSend = filterSmsGroups();
+		try {		
 			
-			for (SmsGroup smsGroup : smsGroupsToBeSend) {				
+			List<SmsGroup> allSmsGroups = populateSmsGroupRecords();
+			List<SmsGroup> filteredSmsGroupsToSend = filterSmsGroups(allSmsGroups);
+
+			for (SmsGroup smsGroup : filteredSmsGroupsToSend) {				
 				factoryDAO.startTransaction();
 				buildSmsRecordFromSmsGroup(smsGroup);				
 				factoryDAO.commitTransaction();
@@ -57,38 +59,39 @@ public class MessageController {
 			logger.error("prepareSmsGroupSentMessages error: " + e.getMessage());
 		}
 	}
+
+	private List<SmsGroup> populateSmsGroupRecords() throws Exception {
+		return smsGroupDAO.findAll();	
+	}
 	
-	private List<SmsGroup> filterSmsGroups() throws Exception {
-		
+	List<SmsGroup> filterSmsGroups(List<SmsGroup> smsGroups) throws Exception {
+
 		SmsGroupFilterRule smsGroupFilterRule = new SmsGroupFilterRule();
-		
-		List<SmsGroup> smsGroups = smsGroupDAO.findAll();
-		
 		List<SmsGroup> smsGroupsToBeSend = smsGroups
 				.stream()
 				.filter(sg -> smsGroupFilterRule.filter(sg))
 				.collect(Collectors.toList());
 		return smsGroupsToBeSend;
 	}
-	
+
 	private void buildSmsRecordFromSmsGroup(SmsGroup smsGroup) throws Exception {
 		long smsGroupId = smsGroup.getSmsGroupId();			
 		List<PhoneGroup> phoneGroups = phoneGroupDAO.getPhonesByGroupId(smsGroupId);				
-								
+
 		smsGroup.setStatus(SmsGroup.STATUS_SELECTED);
 		smsGroupDAO.update(smsGroup);
-		
+
 		for (PhoneGroup phoneGroup : phoneGroups) {
 			Sms sms = prepareAndStoreSmsGroupMessage(phoneGroup, smsGroup);
-			
+
 			phoneGroup.setSmsId(sms.getMSSID());
 			phoneGroupDAO.update(phoneGroup);
 		}
 	}
-	
+
 	private Sms prepareAndStoreSmsGroupMessage(PhoneGroup phoneGroup, SmsGroup smsGroup) {
 		Sms sms = new Sms();
-		
+
 		sms.setStatus(Sms.STATUS_NEW);
 		sms.setPhoneNumber(phoneGroup.getPhonenumber());
 		sms.setMessage(smsGroup.getGroupMessage());
@@ -96,25 +99,25 @@ public class MessageController {
 		sms.setSender(Long.toString(smsGroup.getCustomerId()));
 		sms.setSendTime(smsGroup.getSendTime());
 		sms.setSmsGroupId(smsGroup.getSmsGroupId());
-		
+
 		return smsDAO.insert(sms);
 	}
-	
+
 	public void updateSmsGroupStatusIfAllMessagesSent() {
 		try {
 			List<SmsGroup> smsGroups = smsGroupDAO.findAll();
-			
+
 			List<SmsGroup> smsGroupsToBeUpdated = smsGroups
 					.stream()
 					.filter(sg -> sg.getStatus().equals(SmsGroup.STATUS_SELECTED))
 					.collect(Collectors.toList());
-			
+
 			for (SmsGroup smsGroup : smsGroupsToBeUpdated) {
 				long smsGroupId = smsGroup.getSmsGroupId();						
 				List<PhoneGroup> phoneGroups = phoneGroupDAO.getPhonesByGroupId(smsGroupId);
-				
-				boolean isRecordsToSend = isSmsGroupMessageToSent(phoneGroups); 
-								
+
+				boolean isRecordsToSend = isSmsGroupMessageToSend(phoneGroups); 
+
 				if (!isRecordsToSend) {
 					factoryDAO.startTransaction();
 					smsGroup.setStatus(SmsGroup.STATUS_SENT);
@@ -129,10 +132,10 @@ public class MessageController {
 			e.printStackTrace();
 		}
 	}
-	
-	private boolean isSmsGroupMessageToSent(List<PhoneGroup> phoneGroups) {
+
+	private boolean isSmsGroupMessageToSend(List<PhoneGroup> phoneGroups) {
 		boolean isRecordsToSend = false;
-		
+
 		for (PhoneGroup phoneGroup : phoneGroups) {
 			try { 
 				Sms sms = smsDAO.findSms(phoneGroup.getSmsId());
@@ -151,26 +154,26 @@ public class MessageController {
 		factoryDAO.getConnection().getEntityManagerFactory().getCache().evictAll();
 		System.out.println("connection opened");
 	}
-	
+
 	public void releaseResource() {
 		factoryDAO.closeConnection();
 		System.out.println("connection closed");
 	}
-	
+
 	public void finish() {
 		factoryDAO.closeEntityFactory();
 	}
-	
+
 	public List<Sms> selectSmsToBeSend() {
-		
+
 		java.sql.Timestamp currentTimestamp = Utils.getCurrentDatetime();
 		List<Sms> smsToSend = smsDAO.findAllNewSms();
-		
+
 		List<Sms> filteredMessages = smsToSend
 				.stream()
 				.filter(sms -> sms.getSendTime().before(currentTimestamp))
 				.collect(Collectors.toList());
-		
+
 		return filteredMessages;
 	}
 }

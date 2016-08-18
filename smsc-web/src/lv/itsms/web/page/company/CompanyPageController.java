@@ -2,8 +2,6 @@ package lv.itsms.web.page.company;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

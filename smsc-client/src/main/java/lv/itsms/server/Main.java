@@ -21,14 +21,14 @@ public class Main {
 	final static String WAIT_STOP_MSG = "Please wait... thread is shutting down.";
 
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
-	
+
 	public static void main(String[] args) {
-		
+
 		JPADAOfactory factoryDAO = new JPADAOfactory(); 
-		
+
 		DeliveryStatusUpdater statusUpdater = new DBDeliveryStatusUpdater(factoryDAO);
 		DeliveryStatusManager deliveryManager = new DeliveryStatusManager(statusUpdater);
-		
+
 		GatewayClient gatewayClient = new JSMPPGatewayClient(new DeliveryReceiptMessageListener(deliveryManager));
 
 		MessageController messageController = new MessageController(factoryDAO);

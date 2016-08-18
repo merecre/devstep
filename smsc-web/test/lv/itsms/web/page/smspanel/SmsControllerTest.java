@@ -33,6 +33,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
@@ -141,7 +142,9 @@ public class SmsControllerTest {
 		smsServlet.setPageManager(pageManager);
 		smsServlet.doPost(request, response);  
 
-		assertEquals("SmsGroup saved: 20Insert 371777777Insert 37177778", outContent.toString());
+		String validAnswer = "SmsGroup saved: 20Insert 371777777Insert 37177778";
+		boolean result = outContent.toString().contains(validAnswer);
+		assertTrue(result);
 
 		System.setOut(System.out);
 		System.setErr(System.err);     
@@ -284,7 +287,9 @@ public class SmsControllerTest {
 		smsServlet.setPageManager(pageManager);
 		smsServlet.doPost(request, response);  
 
-		assertEquals("SmsGroup deleted by Id:20Phone Group deleted 20", outContent.toString());
+		String validAnswer = "SmsGroup deleted by Id:20Phone Group deleted 20";
+		boolean result = outContent.toString().contains(validAnswer);
+		assertTrue(result);
 
 		System.setOut(System.out);
 		System.setErr(System.err);
@@ -312,7 +317,7 @@ public class SmsControllerTest {
 		smsServlet.setCustomerPanelFactory(userRequestCommandFactory);
 		smsServlet.setPageManager(pageManager);
 
-		exception.expect(Exception.class);
+		exception.expect(RuntimeException.class);
 		exception.expectMessage("Group not found2");
 		smsServlet.doPost(request, response);
 	}

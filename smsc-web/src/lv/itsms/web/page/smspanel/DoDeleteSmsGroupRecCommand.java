@@ -14,13 +14,13 @@ public class DoDeleteSmsGroupRecCommand implements PageRequestCommand {
 	}
 
 	@Override
-	public void execute() {	
+	public void execute() throws Exception {	
 		String[] groupIds = getSmsGroups();
-		for (String smsGroupId : groupIds) {
-			int groupId = Integer.parseInt(smsGroupId);
+		if (groupIds!=null) {
 			Repository repository = factory.getRepository();
-			repository.deleteSmsGroupByGroupId(groupId);
+			repository.deleteSmsGroupsByGroupId(groupIds);
 		}
+
 	}
 
 	private String[] getSmsGroups () {

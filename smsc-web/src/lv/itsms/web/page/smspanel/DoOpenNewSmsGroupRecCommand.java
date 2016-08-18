@@ -1,15 +1,10 @@
 package lv.itsms.web.page.smspanel;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
 import lv.itsms.web.command.PageRequestCommand;
-import lv.itsms.web.request.parameter.SmsGroupBuilder;
 import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
 import lv.itsms.web.session.Session;
-import transfer.domain.PhoneGroup;
 import transfer.domain.SmsGroup;
 
 public class DoOpenNewSmsGroupRecCommand implements PageRequestCommand {
@@ -27,11 +22,7 @@ public class DoOpenNewSmsGroupRecCommand implements PageRequestCommand {
 		session.updateSessionAttribute(Session.SESSION_SMSGROUPREC_PARAMETER, smsGroup);
 		
 		String[] phoneNumbers = getPhoneNumbers();
-		//if (phoneNumbers!=null) {
-			session.updateSessionAttribute(Session.SESSION_PHONEGROUPS_PARAMETER, phoneNumbers);
-		//} else {
-			//session.updateSessionAttribute(SmsPhoneRequestParameter.PHONE_PARAMETER_KEY, null);
-		//}
+		session.updateSessionAttribute(Session.SESSION_PHONEGROUPS_PARAMETER, phoneNumbers);
 	}
 	
 	private SmsGroup getInputedSmsGroupRecord() {

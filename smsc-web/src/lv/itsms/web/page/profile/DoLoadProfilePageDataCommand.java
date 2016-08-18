@@ -30,7 +30,5 @@ public class DoLoadProfilePageDataCommand implements PageRequestCommand {
 			session.updateSessionAttribute(Session.SESSION_PROFILE_PARAMETER, customer);
 			session.updateSessionAttribute(Session.SESSION_PROFILEINFO_PARAMETER, profileInfo);
 		}
-
-		//session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, profileInfo);
 	}
 }

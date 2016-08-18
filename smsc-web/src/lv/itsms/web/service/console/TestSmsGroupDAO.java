@@ -3,8 +3,9 @@ package lv.itsms.web.service.console;
 import java.util.ArrayList;
 import java.util.List;
 
-import lv.itsms.web.service.SmsGroupDAO;
+import lv.itsms.web.service.TestDAOFactory;
 import transfer.domain.SmsGroup;
+import transfer.service.jpa.SmsGroupDAO;
 
 public class TestSmsGroupDAO implements SmsGroupDAO {
 
@@ -69,6 +70,32 @@ public class TestSmsGroupDAO implements SmsGroupDAO {
 		SmsGroup smsGroup = new SmsGroup();
 		smsGroup.setCustomerId(12);
 		return smsGroup;
+	}
+
+	@Override
+	public SmsGroup getGroupByIdAndCustomerId(long groupId, int customerId) throws Exception {
+		SmsGroup smsGroup = new SmsGroup();
+		smsGroup.setCustomerId(customerId);
+		return smsGroup;
+	}
+
+	@Override
+	public List<SmsGroup> findSmsGroupsByDatePeriodAndUserId(long userId, String startDate, String endDate)
+			throws Exception {
+		List<SmsGroup> smsGroups = new ArrayList<>();
+		SmsGroup smsGroup = new SmsGroup();
+		smsGroup.setCustomerId(userId);
+		smsGroups.add(smsGroup);
+		return smsGroups;
+	}
+
+	@Override
+	public List<SmsGroup> findAll() throws Exception {
+		List<SmsGroup> smsGroups = new ArrayList<>();
+		SmsGroup smsGroup = new SmsGroup();
+		smsGroup.setCustomerId(1);
+		smsGroups.add(smsGroup);
+		return smsGroups;
 	}
 
 }

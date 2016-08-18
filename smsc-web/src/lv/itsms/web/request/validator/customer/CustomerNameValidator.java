@@ -5,7 +5,7 @@ import lv.itsms.web.request.validator.rule.FieldIsNotEmptyStringRule;
 import lv.itsms.web.request.validator.rule.Rule;
 
 public class CustomerNameValidator extends UserRequestValidatorImpl {
-	final static String ERROR_MESSAGE = "Customer Name is mandatory";
+	final static String ERROR_MESSAGE = "Customer.Name.is.mandatory";
 	
 	@Override
 	public void prepareRules() {

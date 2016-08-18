@@ -8,9 +8,9 @@ import transfer.service.jpa.JPADAOfactory;
 import transfer.service.jpa.SmsDAO;
 
 public class DBDeliveryStatusUpdater implements DeliveryStatusUpdater {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(DeliveryStatusManager.class);
-	
+
 	private final static String[] DELIVERY_STATUSES = {
 			"UNKNOWN",
 			"DELIVERED",
@@ -21,10 +21,10 @@ public class DBDeliveryStatusUpdater implements DeliveryStatusUpdater {
 			"UNKNOWN",
 			"REJECTED"
 	}; 
-	
+
 	JPADAOfactory factoryDAO;
 	SmsDAO smsDAO;
-	
+
 	public DBDeliveryStatusUpdater(JPADAOfactory factoryDAO) {
 		this.factoryDAO = factoryDAO;
 		this.smsDAO = factoryDAO.getSmsDAO();
@@ -53,7 +53,7 @@ public class DBDeliveryStatusUpdater implements DeliveryStatusUpdater {
 			logger.error("Failed get delivery Status. Sms not found SMPPID: " + SMPPID);
 		}		
 	}
-	
+
 	private String getDeliveryStatusMesssage(int status) {
 		return DELIVERY_STATUSES[status]; 
 	}

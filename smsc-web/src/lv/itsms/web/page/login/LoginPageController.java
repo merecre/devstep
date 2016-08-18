@@ -1,23 +1,13 @@
 package lv.itsms.web.page.login;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.annotation.Resource;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-
-import lv.itsms.web.page.info.CompanyInfo;
-import lv.itsms.web.page.info.CompanyInfoDAO;
 import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.LoginInfoDAO;
-import lv.itsms.web.service.jdbc.JDBCLoginInfoDAO;
 import lv.itsms.web.session.Session;
 
 /**

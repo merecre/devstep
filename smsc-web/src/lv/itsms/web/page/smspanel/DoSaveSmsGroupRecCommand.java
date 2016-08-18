@@ -4,7 +4,6 @@ import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.SmsGroupBuilder;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
-import lv.itsms.web.request.validator.UserRequestValidator;
 import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
 import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
 import lv.itsms.web.service.Repository;
@@ -20,8 +19,9 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception {
 		SmsGroup smsGroup = getInputedSmsGroupRecord();
+		
 		String[] phoneNumbers = getInputedPhoneNumbers();
 		
 		factory.getSession().updateSessionAttribute(Session.SESSION_SMSGROUPREC_PARAMETER, smsGroup);				
@@ -32,6 +32,8 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 			result = validatePhoneNumbers(phoneNumbers);
 			if (result) {		
 				Repository repository = factory.getRepository();
+				
+				smsGroup.setStatus(SmsGroup.STATUS_ACTIVE);
 				repository.updateSmsGroup(smsGroup, phoneNumbers);
 			}
 		}
@@ -51,7 +53,6 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 	private boolean validateSmsGroupFields(SmsGroup smsGroup) {
 		SmsGroupFieldsValidator smsGroupValidator = factory.getFieldsValidator();
 		
-		//smsGroupValidator.setSmsGroup(smsGroup);	
 		smsGroupValidator.prepareRules();
 		return smsGroupValidator.validate(smsGroup);			
 	}

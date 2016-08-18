@@ -4,7 +4,7 @@ import lv.itsms.web.request.validator.rule.FieldIsNotEmptyStringRule;
 import lv.itsms.web.request.validator.rule.Rule;
 
 public class LoginnameValidator extends UserRequestValidatorImpl {
-	final static String ERROR_MESSAGE = "Login name is mandatory."; 
+	final static String ERROR_MESSAGE = "Login.name.is.mandatory."; 
 
 	@Override
 	public void prepareRules() {

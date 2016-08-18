@@ -15,7 +15,7 @@ public class MaxLengthRule implements Rule {
 	public boolean doRule(Object object) {
 
 		String field = (String) object;
-		if (field.length() > maxLength) {
+		if (field == null || field.length() > maxLength) {
 			throw new RuntimeException(errorMessage);
 		}
 

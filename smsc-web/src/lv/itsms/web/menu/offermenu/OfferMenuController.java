@@ -5,16 +5,13 @@ import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.page.info.OfferInfo;
 import lv.itsms.web.page.info.OfferInfoDAO;
-import lv.itsms.web.service.jdbc.JDBCLoginInfoDAO;
 import lv.itsms.web.session.Session;
 
 /**

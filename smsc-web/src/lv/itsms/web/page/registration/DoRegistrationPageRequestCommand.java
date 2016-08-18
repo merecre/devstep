@@ -4,8 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.page.info.RegistrationInfo;
+import lv.itsms.web.request.parameter.CustomerBuilder;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
+import transfer.domain.Customer;
 
 public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 
@@ -14,7 +16,7 @@ public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 	Repository repository;
 
 	Session session;
-
+	
 	public DoRegistrationPageRequestCommand(HttpServletRequest request, Repository repository, Session session) {
 		this.request = request;
 		this.repository = repository;
@@ -22,7 +24,7 @@ public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 	}
 
 	@Override
-	public void execute() {
+	public void execute() {		
 		String language = session.getSessionLanguage();
 
 		RegistrationInfo registrationInfo = repository.getRegistrationInfoByLanguage(language);	

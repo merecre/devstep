@@ -2,24 +2,20 @@ package lv.itsms.web.page.login;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.validator.LoginFieldsValidator;
-import lv.itsms.web.request.validator.rule.CustomerNotEmptyRule;
-import lv.itsms.web.request.validator.rule.Rule;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
@@ -72,10 +68,10 @@ public class LoginRequestController extends HttpServlet {
 			updateSessionExceptionError(exception, request);
 			forwardToLoginErrorPage(request, response);
 		} catch (Exception e) {
-			e.printStackTrace();			
-		} finally {
-			
-		}
+			e.printStackTrace();	
+			updateSessionExceptionError(e, request);
+			forwardToLoginErrorPage(request, response);
+		} 
 	}
 
 	/**
@@ -111,7 +107,7 @@ public class LoginRequestController extends HttpServlet {
 		return validator.validate(customer);
 	}
 
-	private void doLogging(String loginName, String userPassword, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void doLogging(String loginName, String userPassword, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		Customer customer = repository.getCustomerByLoginAndPassword(loginName, userPassword);	
 		isCorrectCustomerLogin(customer);
@@ -123,7 +119,7 @@ public class LoginRequestController extends HttpServlet {
 		executeUserRequestCommand(commandsToBeExecuted);
 	}
 
-	private void executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) {
+	private void executeUserRequestCommand(List<PageRequestCommand> commandExecutionSequence) throws Exception {
 		for (PageRequestCommand command : commandExecutionSequence) {
 			command.execute();
 		}		
@@ -152,7 +148,15 @@ public class LoginRequestController extends HttpServlet {
 	}
 
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
+		e.printStackTrace();
 		String exceptionMessage = e.getMessage();
+		
+		String lng = session.getSessionLanguage(); 
+		Locale currentLocale = new Locale(lng, lng.toUpperCase());
+		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+		if (messages.containsKey(exceptionMessage)) {
+			exceptionMessage = messages.getString(exceptionMessage);
+		}
 		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
 	}
 	

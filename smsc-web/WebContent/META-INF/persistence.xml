@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+     version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+     <persistence-unit name="Sms" transaction-type="RESOURCE_LOCAL">
+     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+          <class>transfer.domain.Sms</class>
+          <class>transfer.domain.SmsGroup</class>
+          <class>transfer.domain.PhoneGroup</class>
+          <class>transfer.domain.Customer</class>
+          <class>transfer.domain.Batch</class>
+          <class>transfer.domain.Recipient</class>
+          <class>transfer.domain.IPAddress</class>
+          <properties>
+               <property name="javax.persistence.jdbc.driver" value="org.gjt.mm.mysql.Driver" />
+               <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test_schema" />
+               <property name="javax.persistence.jdbc.username" value = ""/>
+               <property name="javax.persistence.jdbc.password" value = ""/>
+          </properties>
+     </persistence-unit>
+</persistence>

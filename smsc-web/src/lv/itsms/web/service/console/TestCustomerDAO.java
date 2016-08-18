@@ -1,6 +1,7 @@
 package lv.itsms.web.service.console;
 
 import lv.itsms.web.service.CustomerDAO;
+import lv.itsms.web.service.TestDAOFactory;
 import transfer.domain.Customer;
 
 public class TestCustomerDAO implements CustomerDAO {

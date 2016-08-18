@@ -6,8 +6,8 @@ import lv.itsms.web.request.validator.rule.Rule;
 import lv.itsms.web.request.validator.rule.ValidEmailFormatRule;
 
 public class CustomerEmailValidator extends UserRequestValidatorImpl {
-	final static String ERROR_MESSAGE = "Customer Email is mandatory";
-	final static String EMAIL_ERROR_MESSAGE = "Email format is not valid";
+	final static String ERROR_MESSAGE = "Customer.Email.is.mandatory";
+	final static String EMAIL_ERROR_MESSAGE = "Email.format.is.not.valid";
 	
 	@Override
 	public void prepareRules() {

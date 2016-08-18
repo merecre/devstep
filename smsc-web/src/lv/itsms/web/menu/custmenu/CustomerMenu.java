@@ -1,7 +1,5 @@
 package lv.itsms.web.menu.custmenu;
 
-import lv.itsms.web.menu.mainmenu.Menu;
-
 public class CustomerMenu {
 
 	private int menuId;

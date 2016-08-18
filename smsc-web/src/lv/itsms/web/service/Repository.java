@@ -1,49 +1,53 @@
 package lv.itsms.web.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
 
-import javax.sql.DataSource;
+import javax.persistence.PersistenceException;
 
 import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.page.info.ProfileInfo;
 import lv.itsms.web.page.info.RegistrationInfo;
-import lv.itsms.web.service.jdbc.JDBCCustomerDAO;
-import lv.itsms.web.service.jdbc.JDBCLoginInfoDAO;
-import lv.itsms.web.service.jdbc.JDBCPhoneGroupDAO;
-import lv.itsms.web.service.jdbc.JDBCRegistrationInfoDAO;
-import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
+import lv.itsms.web.page.info.SmsPanelInfo;
 import transfer.domain.Customer;
 import transfer.domain.PhoneGroup;
 import transfer.domain.Sms;
 import transfer.domain.SmsGroup;
+import transfer.service.jpa.JPADAOfactory;
+import transfer.service.jpa.PhoneGroupDAO;
+import transfer.service.jpa.SmsDAO;
+import transfer.service.jpa.SmsGroupDAO;
 
 public class Repository {
 
+	DAOFactory factoryDAO;
 	SmsGroupDAO smsGroupDAO;
 	PhoneGroupDAO phoneGroupDAO;
 	CustomerDAO customerDAO;
 	LoginInfoDAO loginInfoDAO;
 	RegistrationInfoDAO registrationInfoDAO;
-	SmsDAO smsDAO;
 	ProfileInfoDAO profileInfoDAO;
-
+	SmsPanelInfoDAO smsPanelInfoDAO;
+	SmsDAO smsDAO;
+	
+	JPADAOfactory JPAfactoryDAO;
+	
 	public Repository() {	
 		this(DAOFactory.DB_DAO);
 	}		
 
 	public Repository(int DAOType) {
 
-		DAOFactory factoryDAO = DAOFactory.getDAOFactory(DAOType);
+		factoryDAO = DAOFactory.getDAOFactory(DAOType);
 		this.customerDAO = factoryDAO.getCustomerDAO();
 		this.phoneGroupDAO = factoryDAO.getPhoneGroupDAO();		
 		this.smsGroupDAO = factoryDAO.getSmsGroupDAO();	
 		this.loginInfoDAO = factoryDAO.getLoginInfoDAO();	
 		this.registrationInfoDAO = factoryDAO.getRegistrationInfoDAO();	
-		this.smsDAO = factoryDAO.getSmsDAO();
 		this.profileInfoDAO = factoryDAO.getProfileInfoDAO();
+		this.smsPanelInfoDAO = factoryDAO.getSmsPanelInfoDAO();
+		this.JPAfactoryDAO = new JPADAOfactory();
+		this.smsDAO = JPAfactoryDAO.getSmsDAO();
 	}	
 
 	public void deleteSmsGroupByUserIdAndGroupName(int userId, String smsGroupName) {
@@ -55,58 +59,111 @@ public class Repository {
 		} 
 	}
 
-	public void deleteSmsGroupByGroupId(int groupId) {
+	public void deleteSmsGroupByGroupId(int groupId) throws Exception {
 
+		factoryDAO.startTransaction();
 		try {
 			smsGroupDAO.deleteByGroupId(groupId);
-
 			phoneGroupDAO.deleteByGroupId(groupId);
+			factoryDAO.commitTransaction();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+			factoryDAO.rollbackTransaction();
+		} finally {
+			factoryDAO.stopTransaction();
+		}
 	}
 
-	public void updateSmsGroup(SmsGroup smsGroup, String[] phoneNumbers) {
+	public void deleteSmsGroupsByGroupId(String[] groupIds) throws Exception {
 
+		factoryDAO.startTransaction();
+		try {
+			for (String smsGroupId : groupIds) {
+				int groupId = Integer.parseInt(smsGroupId);
+				smsGroupDAO.deleteByGroupId(groupId);
+				phoneGroupDAO.deleteByGroupId(groupId);
+			}
+			factoryDAO.commitTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+			factoryDAO.rollbackTransaction();			
+		} finally {
+			factoryDAO.stopTransaction();			
+		}
+	}
+	
+	public void updateSmsGroup(SmsGroup smsGroup, String[] phoneNumbers) throws Exception {
+		
+		factoryDAO.startTransaction();
+		JPAfactoryDAO.getConnection();
 		try {			
 			saveSmsGroup(smsGroup);
 			long smsGroupId = smsGroup.getSmsGroupId();
-			savePhoneListOfGroup(smsGroupId, phoneNumbers);		
-
+			
+			List<PhoneGroup> phoneGroups = phoneGroupDAO.getPhonesByGroupId(smsGroupId);
+			JPAfactoryDAO.startTransaction();		
+			phoneGroups
+				.stream()
+				.forEach(pg-> {	
+							smsDAO.deleteBySmsId(pg.getSmsId());
+						});
+			JPAfactoryDAO.commitTransaction();
+			phoneGroupDAO.deleteByGroupId(smsGroupId);
+			savePhoneListOfGroup(smsGroupId, phoneNumbers);	
+			factoryDAO.commitTransaction();
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			factoryDAO.rollbackTransaction();
+			JPAfactoryDAO.rollback();				
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+			factoryDAO.rollbackTransaction();
+			JPAfactoryDAO.rollback();			
+		} finally {
+			factoryDAO.stopTransaction();
+			JPAfactoryDAO.closeConnection();
+			JPAfactoryDAO.closeEntityFactory();
+		}
 	}
 
-	public List<SmsGroup> getSmsGroupByUserId(int userId) {
+	public List<SmsGroup> getSmsGroupByUserId(int userId) throws Exception {
 
+		factoryDAO.startTransaction();
 		List<SmsGroup> smsGroups = null;
-		try {
-			smsGroups = smsGroupDAO.getGroupsByUserId(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		smsGroups = smsGroupDAO.getGroupsByUserId(userId);
+		factoryDAO.stopTransaction();
+		
 		return smsGroups;
 	}
 
-	public SmsGroup getSmsGroupById(int groupId) {
+	public SmsGroup getSmsGroupById(int groupId) throws Exception {
 
 		SmsGroup smsGroup = null;
+		factoryDAO.startTransaction();
+		smsGroup = smsGroupDAO.getGroupById(groupId);
+		factoryDAO.stopTransaction();
 
-		try {
-			smsGroup = smsGroupDAO.getGroupById(groupId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
+		return smsGroup;
+	}
+	
+	public SmsGroup getSmsGroupByIdAndCustomerId(int groupId, int customerId) throws Exception {
+
+		SmsGroup smsGroup = null;
+		factoryDAO.startTransaction();
+		smsGroup = smsGroupDAO.getGroupByIdAndCustomerId(groupId, customerId);
+		factoryDAO.stopTransaction();
+
 		return smsGroup;
 	}
 
 	public List<PhoneGroup> getPhonesInGroupByGroupId (int groupId) {
 
 		List<PhoneGroup> phoneGroups = null;
-
+		
 		try {
+			factoryDAO.startTransaction();
 			phoneGroups = phoneGroupDAO.getPhonesByGroupId(groupId);
+			factoryDAO.stopTransaction();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -146,6 +203,23 @@ public class Repository {
 		return loginInfo;
 	}
 
+	public SmsPanelInfo getSmsPanelInfoByLanguage(String language) {
+		final String ERROR_MESSAGE = "SmsPanel Info not found";
+
+		SmsPanelInfo smsPanelInfo = null;		
+
+		try {
+			smsPanelInfo = smsPanelInfoDAO.getSmsPanelInfoByLanguage(language);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+
+		if (smsPanelInfo == null)
+			throw new RuntimeException(ERROR_MESSAGE);
+
+		return smsPanelInfo;	
+	}
+	
 	public RegistrationInfo getRegistrationInfoByLanguage(String language) {
 		final String ERROR_MESSAGE = "Registration Info DB request error";
 
@@ -198,12 +272,12 @@ public class Repository {
 		} 	
 	}
 
-	public List<Sms> findSmsGroupsByDatePeriod(long userId, String startDate, String endDate) {
+	public List<SmsGroup> findSmsGroupsByDatePeriod(long userId, String startDate, String endDate) {
 		final String ERROR_MESSAGE = "Error during sms loading occurred.";
 
-		List<Sms> smsGroup = null;
+		List<SmsGroup> smsGroup = null;
 		try {
-			smsGroup = smsDAO.findSmsGroupsByDatePeriodAndUserId(userId, startDate, endDate);
+			smsGroup = smsGroupDAO.findSmsGroupsByDatePeriodAndUserId(userId, startDate, endDate);
 		} catch (Exception e) {	
 			e.printStackTrace();
 			throw new RuntimeException(ERROR_MESSAGE);
@@ -212,6 +286,20 @@ public class Repository {
 		return smsGroup;
 	}
 
+	public List<Sms> findSmsByDatePeriod(long userId, Timestamp startDateTimestamp, Timestamp endDateTimestamp) {
+		final String ERROR_MESSAGE = "Error during sms loading occurred.";
+
+		List<Sms> smses = null;
+		try {
+			smses = smsDAO.findSmsByDatePeriodAndUserId(userId, startDateTimestamp, endDateTimestamp);
+		} catch (Exception e) {	
+			e.printStackTrace();
+			throw new RuntimeException(ERROR_MESSAGE);
+		} 
+
+		return smses;
+	}
+	
 	public ProfileInfo getProfileInfoByLanguage(String language) {	
 		final String ERROR_MESSAGE = "Error during profile info loading occurred.";
 
@@ -227,7 +315,6 @@ public class Repository {
 	}
 
 	private void saveSmsGroup(SmsGroup smsGroup) throws Exception {
-
 		smsGroupDAO.save(smsGroup);
 	}
 

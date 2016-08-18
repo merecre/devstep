@@ -5,7 +5,7 @@ import java.util.List;
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
-import lv.itsms.web.utils.Utils;
+import transfer.Utils;
 import transfer.domain.SmsGroup;
 
 public class DoViewSmsGroupNameCommand implements PageRequestCommand {
@@ -17,7 +17,7 @@ public class DoViewSmsGroupNameCommand implements PageRequestCommand {
 	}
 
 	@Override
-	public void execute() {
+	public void execute() throws Exception {
 		Session session = factory.getSession();
 		String sessionCustomerId = session.getSessionCustomerId();
 		if (Utils.isNumeric(sessionCustomerId)) {

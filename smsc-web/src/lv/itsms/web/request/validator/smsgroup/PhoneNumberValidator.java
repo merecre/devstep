@@ -6,7 +6,7 @@ import lv.itsms.web.request.validator.rule.Rule;
 
 public class PhoneNumberValidator extends UserRequestValidatorImpl {
 
-	final static String ERR_PHONENUMBER_IS_EMPTY = "Phone number is mandatory";
+	final static String ERR_PHONENUMBER_IS_EMPTY = "Phone.number.is.mandatory";
 	
 	String phoneNumber;
 	

@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lv.itsms.web.service.DBDAOFactory;
-import lv.itsms.web.service.PhoneGroupDAO;
 import transfer.domain.PhoneGroup;
+import transfer.service.jpa.PhoneGroupDAO;
 
 public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 
@@ -28,9 +28,10 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 	}
 
 	public boolean insert(PhoneGroup phoneGroup) throws SQLException {
-		final String ERROR_INSERT = "Creating PhoneGroup failed, no rows affected.";
+		//final String ERROR_INSERT = "Creating PhoneGroup failed, no rows affected.";
 
-		connection = factory.createConnection();
+		//connection = factory.createConnection();
+		connection = factory.getConnection();
 		PreparedStatement statement = connection.prepareStatement(
 				"INSERT INTO phone_group "
 						+ "(group_id, phonenumber)"
@@ -46,7 +47,7 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 		int updatedRows = statement.executeUpdate();
 
 		statement.close();
-		factory.closeConnection(connection);
+		//factory.closeConnection(connection);
 
 		return updatedRows != 0;
 	}
@@ -59,7 +60,8 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 				+ " WHERE group_id='" + groupId + "'"
 				+ " ORDER BY id";
 
-		connection = factory.createConnection();
+		//connection = factory.createConnection();
+		connection = factory.getConnection();
 
 		PreparedStatement statement = connection.prepareStatement(sql, 
 				ResultSet.TYPE_FORWARD_ONLY,
@@ -75,23 +77,26 @@ public class JDBCPhoneGroupDAO implements PhoneGroupDAO {
 
 		resultSet.close();
 		statement.close();
-		factory.closeConnection(connection);
+		//factory.closeConnection(connection);
 
 		return phoneGroups;
 	}
 
-	public boolean deleteByGroupId(int groupId) throws SQLException {
+	public boolean deleteByGroupId(long groupId) throws SQLException {
 
-		connection = factory.createConnection();
+		connection = factory.getConnection();
 		PreparedStatement statement = connection.prepareStatement(
 				"DELETE FROM " + DB_TABLE + " "
 						+ "WHERE "	+ "group_id='" + groupId + "'");
-		System.out.println("Statement:"+ statement.toString());
 		statement.executeUpdate();
-
 		statement.close();
-		factory.closeConnection(connection);
 
 		return true;
+	}
+
+	@Override
+	public PhoneGroup update(PhoneGroup smsGroup) {
+		
+		return null;
 	}
 }

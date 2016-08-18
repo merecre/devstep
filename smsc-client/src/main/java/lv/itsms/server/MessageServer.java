@@ -15,19 +15,19 @@ import transfer.domain.Sms;
 public class MessageServer implements Runnable {
 
 	final static int PARALLELISM_LEVEL = 4;
-	
+
 	private static long timePause = 30000;
 
 	private volatile boolean isRunning = true;
 
 	MessageController messageController;
-		
+
 	DeliveryStatusManager deliveryManager;
 
 	GatewayClient gatewayClient;	
-	
+
 	ForkJoinPool forkJoinPool = new ForkJoinPool(PARALLELISM_LEVEL);
-	
+
 	public MessageServer(MessageController messageController, DeliveryStatusManager deliveryManager, GatewayClient gatewayClient) {
 		this.messageController = messageController; 
 		this.deliveryManager = deliveryManager;
@@ -36,9 +36,9 @@ public class MessageServer implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		gatewayClient.connect();
-		
+
 		while (isRunning) {
 			processSms();
 			try {
@@ -48,7 +48,7 @@ public class MessageServer implements Runnable {
 				break;
 			}			
 		}
-		
+
 		forkJoinPool.shutdown();
 		gatewayClient.disconnect();
 		messageController.finish();
@@ -59,26 +59,26 @@ public class MessageServer implements Runnable {
 			System.out.println("Server is busy.");
 			return;
 		}
-		
+
 		System.out.println("Server is running.");
-	
+
 		messageController.setupController();
-		
+
 		messageController.prepareSmsGroupSentMessages();
 		messageController.updateSmsGroupStatusIfAllMessagesSent(); 
 
 		List<Sms> smsContainer = messageController.selectSmsToBeSend();
-	
+
 		final Stream<Sms> stream = smsContainer
 				.parallelStream();		
-								
+
 		Runnable task = () -> stream
 				.forEach(s -> { 
 					String hexMessageSMPPID = gatewayClient.send(s);
 					deliveryManager.updateSmsDeliveryStatus(s, hexMessageSMPPID);
 				});
 
-		
+
 		forkJoinPool.execute(task);		
 
 		if (forkJoinPool.isQuiescent())
@@ -92,7 +92,7 @@ public class MessageServer implements Runnable {
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
-	
+
 	public void kill() {
 		isRunning = false;
 		forkJoinPool.shutdown();

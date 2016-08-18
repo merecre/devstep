@@ -28,22 +28,22 @@
 					<tr>
 						<td bgcolor="#0fa1e0"><FONT COLOR=WHITE>${registrationinfo.txtFirstname}</FONT></td>
 						<td bgcolor="#0fa1e0"><input type="text" name="fname"
-							value="" /></td>
+							value="${customerdata.name}" /></td>
 					</tr>
 					<tr>
 						<td bgcolor="#a3d4a0"><FONT COLOR=WHITE>${registrationinfo.txtLastname}</FONT></td>
 						<td bgcolor="#a3d4a0"><input type="text" name="lname"
-							value="" /></td>
+							value="${customerdata.surname}" /></td>
 					</tr>
 					<tr>
 						<td bgcolor="#0fa1e0"><FONT COLOR=WHITE>${registrationinfo.txtEmail}</FONT></td>
 						<td bgcolor="#0fa1e0"><input type="text" name="email"
-							value="" /></td>
+							value="${customerdata.email}" /></td>
 					</tr>
 					<tr>
 						<td bgcolor="#a3d4a0"><FONT COLOR=WHITE>${registrationinfo.txtLogin}</FONT></td>
 						<td bgcolor="#a3d4a0"><input type="text" name="uname"
-							value="" /></td>
+							value="${customerdata.userLogin}" /></td>
 					</tr>
 					<tr>
 						<td bgcolor="#0fa1e0"><FONT COLOR=WHITE>${registrationinfo.txtPassword}</FONT></td>
