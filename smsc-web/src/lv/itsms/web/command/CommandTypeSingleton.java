@@ -4,23 +4,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import lv.itsms.web.page.login.DoLoginFormRequestCommand;
 import lv.itsms.web.page.login.LoginNameRequestParameter;
 import lv.itsms.web.page.login.LoginPasswordRequestParameter;
+import lv.itsms.web.page.report.DoLoadReportPageInfoCommand;
 import lv.itsms.web.page.report.DoPrepareReportDiagramCommand;
+import lv.itsms.web.page.report.DoViewReportPerMessageCommand;
+import lv.itsms.web.page.report.LoadReportPageInfoParameter;
 import lv.itsms.web.page.report.ReportEndDateRequestParameter;
 import lv.itsms.web.page.report.ReportStartDateRequestParameter;
-import lv.itsms.web.page.report.ViewReportByDateRequestParameter;
+import lv.itsms.web.page.report.ViewReportByDateRequestPostParameter;
+import lv.itsms.web.page.report.ViewReportPerMessagePostParameter;
 import lv.itsms.web.page.smspanel.DoDeleteSmsGroupRecCommand;
+import lv.itsms.web.page.smspanel.DoEditSmsGroupRecCommand;
+import lv.itsms.web.page.smspanel.DoLoadSmsPanelPageDataCommand;
 import lv.itsms.web.page.smspanel.DoOpenNewSmsGroupRecCommand;
 import lv.itsms.web.page.smspanel.DoSaveSmsGroupRecCommand;
 import lv.itsms.web.page.smspanel.DoViewSmsGroupNameCommand;
 import lv.itsms.web.page.smspanel.DoViewSmsGroupRecCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.DeleteSmsGroupPostRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.EditSmsGroupRecordRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.LoadSmsGroupPageInfoRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.OpenNewSmsGroupRecRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SaveSmsNewGroupRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdGetRequestParameter;
@@ -36,7 +45,9 @@ public class CommandTypeSingleton {
 	private static  Map<CommandTypeParameter, String> userRequestCommandLookups;
 
 	private static  Map<CommandTypeParameter, Class<?>> userRequestCommands;
-
+	
+	private static List<UserPageRequestParameter> urlParameterValues;
+	
 	private static CommandTypeSingleton instance = new CommandTypeSingleton();
 
 	public static CommandTypeSingleton getInstance() {
@@ -54,9 +65,13 @@ public class CommandTypeSingleton {
 		return userRequestCommandLookups;
 	}
 
-	public  Map<CommandTypeParameter, Class<?>> getCommandToBeExecutedByCommandType () {
+	public Map<CommandTypeParameter, Class<?>> getCommandToBeExecutedByCommandType () {
 
 		return userRequestCommands;
+	}
+	
+	public List<UserPageRequestParameter> getUrlParameterValues() {
+		return urlParameterValues;
 	}
 
 	public  UserPageRequestParameter getUserPageRequestParameter (String key) {
@@ -81,14 +96,19 @@ public class CommandTypeSingleton {
 		urlParameterList.add(new ReportEndDateRequestParameter());
 		urlParameterList.add(new LoginPasswordRequestParameter());
 		urlParameterList.add(new LoginNameRequestParameter());
-		urlParameterList.add(new ViewReportByDateRequestParameter());
-
-		Map<String, UserPageRequestParameter>  localUrlParameters = new HashMap<>();
+		urlParameterList.add(new ViewReportByDateRequestPostParameter());
+		urlParameterList.add(new EditSmsGroupRecordRequestParameter());
+		urlParameterList.add(new LoadSmsGroupPageInfoRequestParameter());
+		urlParameterList.add(new LoadReportPageInfoParameter());
+		urlParameterList.add(new ViewReportPerMessagePostParameter());
+		
+		Map<String, UserPageRequestParameter>  localUrlParameters = new LinkedHashMap<>();
 		for (UserPageRequestParameter userRequest : urlParameterList) {
 			localUrlParameters.put(userRequest.getParameterKey(), userRequest);
 		}	
 
-		urlParameters = Collections.unmodifiableMap(localUrlParameters);		
+		urlParameters = Collections.unmodifiableMap(localUrlParameters);
+		urlParameterValues = Collections.unmodifiableList(urlParameterList);
 	}
 
 	private static void linkCommandTypeToUserRequestParameter() {
@@ -102,7 +122,11 @@ public class CommandTypeSingleton {
 		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_DELETE_SMS_GROUP_REC, DeleteSmsGroupPostRequestParameter.DELETE_COMMAND_URL_PARAMETER);
 		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_SAVE_SMS_GROUP_REC, SaveSmsNewGroupRequestParameter.SAVE_COMMAND_URL_PARAMETER);
 		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_DO_LOGIN_USER, LoginPasswordRequestParameter.LOGIN_PASSWORD_PARAMETER);
-		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_VIEW_REPORT_DIAGRAM, ViewReportByDateRequestParameter.URL_PARAMETER);		
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_VIEW_REPORT_DIAGRAM, ViewReportByDateRequestPostParameter.URL_PARAMETER);
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_EDIT_SMS_GROUP_REC, EditSmsGroupRecordRequestParameter.URL_PARAMETER);
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_LOAD_SMS_PANEL_INFO, LoadSmsGroupPageInfoRequestParameter.URL_PARAMETER);
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_LOAD_REPORT_PAGE_INFO, LoadReportPageInfoParameter.URL_PARAMETER);
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_VIEW_REPORT_PER_MESSAGE, ViewReportPerMessagePostParameter.URL_PARAMETER);
 		userRequestCommandLookups = Collections.unmodifiableMap(localUserRequestCommandLookups);
 	}
 
@@ -118,7 +142,10 @@ public class CommandTypeSingleton {
 		localUserRequestCommands.put(CommandTypeParameter.CMD_OPEN_NEW_SMS_REC, DoOpenNewSmsGroupRecCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_DELETE_SMS_GROUP_REC, DoDeleteSmsGroupRecCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_SAVE_SMS_GROUP_REC, DoSaveSmsGroupRecCommand.class);
-
+		localUserRequestCommands.put(CommandTypeParameter.CMD_EDIT_SMS_GROUP_REC, DoEditSmsGroupRecCommand.class);
+		localUserRequestCommands.put(CommandTypeParameter.CMD_LOAD_SMS_PANEL_INFO, DoLoadSmsPanelPageDataCommand.class);
+		localUserRequestCommands.put(CommandTypeParameter.CMD_LOAD_REPORT_PAGE_INFO, DoLoadReportPageInfoCommand.class);
+		localUserRequestCommands.put(CommandTypeParameter.CMD_VIEW_REPORT_PER_MESSAGE, DoViewReportPerMessageCommand.class);
 		userRequestCommands = Collections.unmodifiableMap(localUserRequestCommands);
 	}	
 }

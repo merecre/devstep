@@ -4,13 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
-public class ViewReportByDateRequestParameter extends UserPageRequestParameter {
+public class ViewReportByDateRequestPostParameter extends UserPageRequestParameter {
 
-	public final static String URL_PARAMETER = "report";
+	public final static String URL_PARAMETER = "periodreportpost";
 
 	//private final static String URL_PARAMETER_VALUE = "doReport";
 	
-	public ViewReportByDateRequestParameter() {
+	public ViewReportByDateRequestPostParameter() {
 		super(URL_PARAMETER);
 	}
 

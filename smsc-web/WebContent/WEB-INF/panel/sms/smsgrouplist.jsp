@@ -2,7 +2,7 @@
 <table>
 	<tr>
 		<td colspan=2><input type="checkbox" onClick="toggle(this)" />
-				Toggle All
+				${smspanelinfo.txtAllCheckbox}
 		</td>
 	</tr>
 
@@ -12,7 +12,7 @@
 				<input type="checkbox" name="group_name" value="${smsgroup.smsGroupId}">
 			</td>
 			<td>
-				<a href='<%= request.getContextPath() %>/smspanel.jsp?viewGroup=true&groupID=${smsgroup.smsGroupId}'>${smsgroup.smsGroupName}</a>
+				<a href='<%= request.getContextPath() %>/smspanel.jsp?cusMenu=smsPanel&viewGroup=true&groupID=${smsgroup.smsGroupId}'>${smsgroup.smsGroupName}</a>
 			</td>
 			</tr>
 		</c:forEach>

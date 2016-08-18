@@ -5,10 +5,11 @@
 <%-- form group description fields --%>
 <table>
 	<tr>
-		<td>Group description:</td>
+		<td>${smspanelinfo.txtGroupDescription}:</td>
 		<td><input class="grey" type="text" name="g_common_name"
 			value="${viewsmsgrouprec.smsGroupName}" readonly>
 		</td>
+		<td><a	href='<%= request.getContextPath() %>/smspanel.jsp?cusMenu=smsPanel&editGroup=true&groupID=${viewsmsgrouprec.smsGroupId}'>${smspanelinfo.txtEditGroup}</a></td>
 	</tr>
 </table>
 
@@ -17,7 +18,7 @@
 <%-- form group message fields --%>
 <table>
 	<tr>
-		<td>Message:</td>
+		<td>${smspanelinfo.txtGroupMessage}:</td>
 		<td><input class="grey" type="text" name="g_common_message"
 			value="${viewsmsgrouprec.groupMessage}" size="60" readonly></td>
 	</tr>
@@ -27,7 +28,7 @@
 <table>
 	<tr>
 		<td>
-			<p>Send date:</p>
+			<p>${smspanelinfo.txtSendDate}:</p>
 		</td>
 		<td><c:set var="datetime" value="${viewsmsgrouprec.sendTime}"
 				scope="page" /> <fmt:formatDate var="date" value="${datetime}"
@@ -38,7 +39,7 @@
 			data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD"
 			size="10" readonly>
 		</td>
-		<td>Time:</td>
+		<td>${smspanelinfo.txtSendTime}:</td>
 		<td><input class="grey" type="time" value="${hour}" name="grp_send_time_hour"
 			maxlength="2" size="2" readonly></td>
 		<td>:</td>
@@ -56,7 +57,7 @@
 	</thead>
 	<tbody>
 		<tr>
-			<th>Phone</th>
+			<th>${smspanelinfo.txtPhonenumbers}</th>
 		</tr>
 		<c:set var="counter" value="0" scope="page" />
 		<c:forEach items="${phonegroups}" var="phonegroup">

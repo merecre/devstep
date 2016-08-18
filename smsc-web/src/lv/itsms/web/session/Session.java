@@ -1,13 +1,10 @@
 package lv.itsms.web.session;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.menu.LanguageRequestParameter;
-import transfer.domain.SmsGroup;
 
 /*
  * URL Session Parameters Facade
@@ -25,12 +22,17 @@ public class Session {
 	public final static String SESSION_ERROR_PARAMETER = "error";
 	public final static String SESSION_PROFILE_PARAMETER = "profile";
 	public final static String SESSION_REGISTRATION_PARAMETER = "registrationinfo";
+	public final static String SESSION_CUSTOMER_REGISTRATION_PARAMETER = "customerdata";
 	public final static String SESSION_CHARTLINE_PARAMETER = "chartLines";
 	public final static String SESSION_SMSGROUPS_PARAMETER = "smsgroups";
 	public final static String SESSION_SMSGROUPREC_PARAMETER = "smsgrouprec";
 	public final static String SESSION_VIEW_SMSGROUPREC_PARAMETER = "viewsmsgrouprec";
 	public final static String SESSION_PHONEGROUPS_PARAMETER = "phonegroups";
 	public final static String SESSION_PROFILEINFO_PARAMETER = "profileinfo";
+	public final static String SESSION_SMSPANELINFO_PARAMETER = "smspanelinfo";
+	public final static String SESSION_REPORTINFO_PARAMETER = "reportinfo";
+	public final static String SESSION_REPORTDATES_PARAMETER = "reportdates";
+	public final static String SESSION_REPORTDATA_PARAMETER = "reportdata";
 
 	HttpServletRequest request;
 

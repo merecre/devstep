@@ -1,12 +1,12 @@
 package lv.itsms.web.command;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lv.itsms.web.page.login.LoginPageFactory;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 /**
@@ -30,32 +30,44 @@ public class UserRequestCommandManager {
 	}
 
 	public List<PageRequestCommand> selectUserRequestedCommand(HttpServletRequest request) {		
-		CommandTypeParameter commandRequestID = parseUserRequestAndReturnCommandIdToExecute(request);		
-		populateCommandsToExecute(commandRequestID);	
+		List<CommandTypeParameter> commandTypeParameters = parseUserRequestAndReturnCommandIdToExecute(request);
+
+		commandExecutionSequence.clear();	
+		for (CommandTypeParameter commandRequestID:commandTypeParameters) {
+			populateCommandsToExecute(commandRequestID);	
+		}
 		return commandExecutionSequence;
 	}
 
-	private CommandTypeParameter parseUserRequestAndReturnCommandIdToExecute(HttpServletRequest request) {
+	private List<CommandTypeParameter> parseUserRequestAndReturnCommandIdToExecute(HttpServletRequest request) {
+
+		List<CommandTypeParameter> commandTypeParameters = new ArrayList<>();
 		Map<CommandTypeParameter, String> userRequestCommandLookups = CommandTypeSingleton.getInstance().getCommandTypeByUserRequestParameter();
-		Map<String, UserPageRequestParameter> urlParameters = CommandTypeSingleton.getInstance().getUserRequestParameters();
+		List<UserPageRequestParameter> urlParameters = CommandTypeSingleton.getInstance().getUrlParameterValues();
 
 		for (CommandTypeParameter commandToLookupID : userRequestCommandLookups.keySet()) {
-
 			String userRequestParameterKey = userRequestCommandLookups.get(commandToLookupID);
-			UserPageRequestParameter userRequest = urlParameters.get(userRequestParameterKey);
-			userRequest.update(request);
-			if (userRequest.isRequested()) {
-				return commandToLookupID;
+
+			for (UserPageRequestParameter userRequest : urlParameters) {
+				if (userRequest.getParameterKey().equals(userRequestParameterKey)) {
+					userRequest.update(request);
+					if (userRequest.isRequested()) {
+						commandTypeParameters.add(commandToLookupID);
+					}
+				}
 			}
 		}
 
-		return CommandTypeParameter.NO_COMMAND;
+		if (commandTypeParameters.isEmpty()) {
+			commandTypeParameters.add(CommandTypeParameter.NO_COMMAND);
+		}
+
+		return commandTypeParameters;
 	}
 
-	private void populateCommandsToExecute(CommandTypeParameter commandRequestID) {
-		commandExecutionSequence.clear();		
+	private void populateCommandsToExecute(CommandTypeParameter commandRequestID) {	
 		while (true) {
-			PageRequestCommand command = commandFactory.make(commandRequestID);			
+			PageRequestCommand command = commandFactory.make(commandRequestID);
 			commandExecutionSequence.add(command);			
 			commandRequestID = getNextSequencedCommand(commandRequestID);		
 			if (!isMoreCommand(commandRequestID)) {

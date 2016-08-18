@@ -9,6 +9,7 @@
 </head>
 <body>
 	${error}
+	<c:remove var="error" scope="session" />
 	<a href="${pageContext.servletContext.contextPath}/smspanel.jsp?cusMenu=smsPanel">"Return
 		to back page"</a>
 </body>

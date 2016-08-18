@@ -9,6 +9,7 @@
 </head>
 <body>
 	${error}
+	<c:remove var="error" scope="session" />
 	<a href="${pageContext.servletContext.contextPath}/chart.jsp">"Return
 		to back page"</a>
 </body>

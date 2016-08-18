@@ -52,7 +52,7 @@ function add_fields(divName, inpName, bntName, btnDelId) {
 <c:remove var="error" scope="session" />
 <table>
 	<tr>
-		<td>Group description:</td>
+		<td>${smspanelinfo.txtGroupDescription}:</td>
 		<td><input type="text" name="g_common_name"
 			value="${smsgrouprec.smsGroupName}" /></td>
 		<td><input type="submit" value="save group" name="save">
@@ -66,7 +66,7 @@ function add_fields(divName, inpName, bntName, btnDelId) {
 
 <table>
 	<tr>
-		<td>Message:</td>
+		<td>${smspanelinfo.txtGroupMessage}:</td>
 		<td><input type="text" name="g_common_message"
 			value="${smsgrouprec.groupMessage}" size="60" /></td>
 	</tr>
@@ -77,7 +77,7 @@ function add_fields(divName, inpName, bntName, btnDelId) {
 <table>
 	<tr>
 		<td>
-			<p>Send date:</p>
+			<p>${smspanelinfo.txtSendDate}:</p>
 		</td>
 		<td><c:set var="datetime" value="${smsgrouprec.sendTime}"
 				scope="page" /> <fmt:formatDate var="date" value="${datetime}"
@@ -94,7 +94,7 @@ $(function(){
     $("#grp_send_date").ionDatePicker();
 });
 </script></td>
-		<td>Time:</td>
+		<td>${smspanelinfo.txtSendTime}:</td>
 		<td><input type="time" value="${hour}" name="grp_send_time_hour"
 			maxlength="2" size="2"></td>
 		<td>:</td>
@@ -112,7 +112,7 @@ $(function(){
 	</thead>
 	<tbody>
 		<tr>
-			<th>Phone</th>
+			<th>${smspanelinfo.txtPhonenumbers}</th>
 		</tr>
 		<c:set var="counter" value="0" scope="page" />
 		<c:if test="${empty phone}">
