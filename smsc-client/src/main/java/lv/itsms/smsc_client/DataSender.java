@@ -1,5 +1,5 @@
 package lv.itsms.smsc_client;
 
 public interface DataSender {
-	String send(Object object) ;
+	String send(Object object) throws Exception ;
 }

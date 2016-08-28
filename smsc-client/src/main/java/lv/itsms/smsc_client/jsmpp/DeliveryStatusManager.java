@@ -15,6 +15,8 @@ import transfer.service.jpa.SmsDAO;
 
 public class DeliveryStatusManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(DeliveryStatusManager.class);
+
 	DeliveryStatusUpdater statusUpdater;
 
 	public DeliveryStatusManager(DeliveryStatusUpdater statusUpdater) {
@@ -22,10 +24,16 @@ public class DeliveryStatusManager {
 	}
 
 	public void updateSmsDeliveryStatus(Sms sms, String hexMessageSmscId) {
+		long smsId = sms.getMSSID();
 		if (hexMessageSmscId != null) {
-			long messageSMPPIDec = Long.parseLong(hexMessageSmscId, 16);
-			long smsId = sms.getMSSID();
-			statusUpdater.updateSmsDeliveryStatus(smsId, messageSMPPIDec);
+			try {
+				long messageSMPPIDec = Long.parseLong(hexMessageSmscId, 16);
+				statusUpdater.updateSmsDeliveryStatus(smsId, messageSMPPIDec);
+			} catch (NumberFormatException exception) {
+				logger.error("updateSmsDeliveryStatus error :" + smsId + " " + exception.getMessage());				
+			}
+		} else {
+			logger.error("updateSmsDeliveryStatus error :" + smsId);
 		}
 	}
 

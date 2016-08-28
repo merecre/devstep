@@ -1,17 +1,22 @@
 package lv.itsms.smsc_client.jsmpp;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.jsmpp.InvalidResponseException;
 import org.jsmpp.PDUException;
 import org.jsmpp.bean.AlertNotification;
+import org.jsmpp.bean.Alphabet;
 import org.jsmpp.bean.BindType;
+import org.jsmpp.bean.DataCoding;
 import org.jsmpp.bean.DataCodings;
 import org.jsmpp.bean.DataSm;
 import org.jsmpp.bean.DeliverSm;
 import org.jsmpp.bean.DeliveryReceipt;
 import org.jsmpp.bean.ESMClass;
+import org.jsmpp.bean.GeneralDataCoding;
+import org.jsmpp.bean.MessageClass;
 import org.jsmpp.bean.MessageType;
 import org.jsmpp.bean.NumberingPlanIndicator;
 import org.jsmpp.bean.RegisteredDelivery;
@@ -28,15 +33,25 @@ import org.jsmpp.util.InvalidDeliveryReceiptException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lv.itsms.smsc_client.DataSender;
 import lv.itsms.smsc_client.GatewayClient;
+import transfer.Utils;
 import transfer.domain.Sms;
 
 public class JSMPPGatewayClient extends GatewayClient {
 
+	/*
+	 * CMT: Cellular Messaging
+	 * CPT: Cellular Paging
+	 * VMN: Voice Mail Notification
+	 * VMA: Voice Mail Alerting
+	 * WAP: Wireless Application Protocol
+	 * USSD: Unstructured Supplementary Services Data
+	 */
+		
 	private static final String DEFAULT_PASSWORD = "jpwd";
 	private static final String DEFAULT_SYSID = "j";
-	private static final String DEFAULT_DESTADDR = "62161616";
-	private static final String DEFAULT_SOURCEADDR = "1616";
+	
 	private static final Logger logger = LoggerFactory.getLogger(JSMPPGatewayClient.class);
 	private static final String DEFAULT_LOG4J_PATH = "stress/client-log4j.properties";
 	private static final String DEFAULT_HOST = "localhost";
@@ -45,61 +60,29 @@ public class JSMPPGatewayClient extends GatewayClient {
 	private static final Integer DEFAULT_BULK_SIZE = 100000;
 	private static final Integer DEFAULT_PROCESSOR_DEGREE = 3;
 	private static final Integer DEFAULT_MAX_OUTSTANDING = 10;
+	
+	DataSender messageSender;
 
-	private SMPPSession smppSession = new SMPPSession();
-
-	MessageReceiverListener deliveryMessageListener;
-
-	public JSMPPGatewayClient(MessageReceiverListener deliveryMessageListener) {
-		this.deliveryMessageListener = deliveryMessageListener;
-		smppSession.setMessageReceiverListener(deliveryMessageListener);
+	private SMPPSession smppSession;
+	
+	public JSMPPGatewayClient(MessageReceiverListener deliveryMessageListener) {	
+		this.smppSession = new SMPPSession();
+		this.smppSession.setMessageReceiverListener(deliveryMessageListener); 
+		this.messageSender = new MultipartMessageSender(smppSession);
 	}
 
 	@Override
-	public String send(Object object) { 
+	public String send(Object object) throws Exception { 
 		Sms sms = (Sms)object;   
-
-		return sendSingleMessage(sms);
+		return messageSender.send(sms);
 	}
-
-	private String sendSingleMessage(Sms sms) {
-		String destinationAddr = sms.getPhoneNumber();
-		String sourceAddr = sms.getSender();
-		String message = sms.getMessage();
-		String messageId = null;
-		try {
-			final RegisteredDelivery registeredDelivery = new RegisteredDelivery();
-			registeredDelivery.setSMSCDeliveryReceipt(SMSCDeliveryReceipt.SUCCESS_FAILURE);
-			messageId = smppSession.submitShortMessage(null, TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN, sourceAddr, 
-					TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN, destinationAddr, 
-					new ESMClass(), (byte)0, (byte)0, 
-					null, null, registeredDelivery, 
-					(byte)0, 
-					DataCodings.ZERO, 
-					(byte)0, message.getBytes());
-		} catch (PDUException e) {
-			logger.error("Failed submit short message '" + message + "'", e);
-		} catch (ResponseTimeoutException e) {
-			logger.error("Failed submit short message '" + message + "'", e);
-		} catch (InvalidResponseException e) {
-			logger.error("Failed submit short message '" + message + "'", e);
-		} catch (NegativeResponseException e) {
-			logger.error("Failed submit short message '" + message + "'", e);
-		} catch (IOException e) {
-			logger.error("Failed submit short message '" + message + "'", e);
-		}
-
-		return messageId;
-	}
-
+	
 	@Override
 	public void connect() {	
 
 		String host = System.getProperty("jsmpp.client.host", DEFAULT_HOST);
 		String systemId = System.getProperty("jsmpp.client.systemId", DEFAULT_SYSID);
 		String password = System.getProperty("jsmpp.client.password", DEFAULT_PASSWORD);
-		String sourceAddr = System.getProperty("jsmpp.client.sourceAddr", DEFAULT_SOURCEADDR);
-		String destinationAddr = System.getProperty("jsmpp.client.destinationAddr", DEFAULT_DESTADDR);
 
 		int port;
 		try {
@@ -142,8 +125,6 @@ public class JSMPPGatewayClient extends GatewayClient {
 		logger.info("Target server {}:{}", host, port);
 		logger.info("System ID: {}", systemId);
 		logger.info("Password: {}", password);
-		logger.info("Source address: {}", sourceAddr);
-		logger.info("Destination address: {}", destinationAddr);
 		logger.info("Transaction timer: {}", transactionTimer);
 		logger.info("Bulk size: {}", bulkSize);
 		logger.info("Max outstanding: {}", maxOutstanding);

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +18,16 @@ import lv.itsms.smsc_client.jsmpp.DeliveryStatusUpdater;
 
 public class Main {
 
+    private static final String DEFAULT_LOG4J_PATH = "stress/server-log4j.properties";
+	
 	final static String STOP_SERVER_MSG = "Type 'Stop' to stop server";
 	final static String WAIT_STOP_MSG = "Please wait... thread is shutting down.";
 
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
-
+        PropertyConfigurator.configure(DEFAULT_LOG4J_PATH);
+		
 		JPADAOfactory factoryDAO = new JPADAOfactory(); 
 
 		DeliveryStatusUpdater statusUpdater = new DBDeliveryStatusUpdater(factoryDAO);

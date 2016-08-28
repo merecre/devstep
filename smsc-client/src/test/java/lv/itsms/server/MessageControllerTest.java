@@ -55,7 +55,7 @@ public class MessageControllerTest {
 		smsGroup.setSmsGroupId(1);
 		smsGroup.setSmsGroupName("Group name 1");
 		smsGroup.setSendTime(Utils.getCurrentDatetime());
-		smsGroup.setStatus(SmsGroup.STATUS_SENT);
+		smsGroup.setStatus(SmsGroup.STATUS_COMPLETED);
 		
 		List<SmsGroup> smsGroups = new ArrayList<>();
 		smsGroups.add(smsGroup);

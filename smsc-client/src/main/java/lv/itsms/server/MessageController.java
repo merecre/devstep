@@ -8,10 +8,15 @@ import javax.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lv.itsms.smsc_client.jsmpp.DBDeliveryStatusUpdater;
+import lv.itsms.smsc_client.jsmpp.MultipartMessageSender;
+import transfer.Gsm0338;
 import transfer.Utils;
+import transfer.domain.DeliveryStatus;
 import transfer.domain.PhoneGroup;
 import transfer.domain.Sms;
 import transfer.domain.SmsGroup;
+import transfer.service.jpa.DeliveryStatusDAO;
 import transfer.service.jpa.JPADAOfactory;
 import transfer.service.jpa.ObjectNotFoundException;
 import transfer.service.jpa.PhoneGroupDAO;
@@ -20,7 +25,7 @@ import transfer.service.jpa.SmsGroupDAO;
 
 public class MessageController {
 
-	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
 	JPADAOfactory factoryDAO; 
 
@@ -30,6 +35,7 @@ public class MessageController {
 
 	PhoneGroupDAO phoneGroupDAO;
 
+	DeliveryStatusDAO deliveryStatusDAO;
 
 	public MessageController(JPADAOfactory factoryDAO) {
 		this.factoryDAO = factoryDAO;
@@ -39,11 +45,13 @@ public class MessageController {
 		smsGroupDAO = factoryDAO.getSmsGroupDAO();
 
 		phoneGroupDAO = factoryDAO.getPhoneGroupDAO();
+
+		deliveryStatusDAO = factoryDAO.getDeliveryStatusDAO();
 	}
 
 	public void prepareSmsGroupSentMessages() {
 		try {		
-			
+
 			List<SmsGroup> allSmsGroups = populateSmsGroupRecords();
 			List<SmsGroup> filteredSmsGroupsToSend = filterSmsGroups(allSmsGroups);
 
@@ -63,7 +71,7 @@ public class MessageController {
 	private List<SmsGroup> populateSmsGroupRecords() throws Exception {
 		return smsGroupDAO.findAll();	
 	}
-	
+
 	List<SmsGroup> filterSmsGroups(List<SmsGroup> smsGroups) throws Exception {
 
 		SmsGroupFilterRule smsGroupFilterRule = new SmsGroupFilterRule();
@@ -100,7 +108,7 @@ public class MessageController {
 		sms.setSendTime(smsGroup.getSendTime());
 		sms.setSmsGroupId(smsGroup.getSmsGroupId());
 
-		return smsDAO.insert(sms);
+		return smsDAO.update(sms);
 	}
 
 	public void updateSmsGroupStatusIfAllMessagesSent() {
@@ -120,7 +128,7 @@ public class MessageController {
 
 				if (!isRecordsToSend) {
 					factoryDAO.startTransaction();
-					smsGroup.setStatus(SmsGroup.STATUS_SENT);
+					smsGroup.setStatus(SmsGroup.STATUS_COMPLETED);
 					smsGroupDAO.update(smsGroup);
 					factoryDAO.commitTransaction();
 				}
@@ -150,9 +158,39 @@ public class MessageController {
 		return isRecordsToSend;
 	}
 
+	public void updateSmsDeliveryStatus() {
+		List<Sms> sentSmses = smsDAO.findSmsByStatus(Sms.STATUS_SENT);
+
+		sentSmses
+		.stream()
+		.forEach(s->{
+			try {
+				DeliveryStatus deliveryStatus = deliveryStatusDAO.findBySMPPID(s.getMessageSMPPID());
+				logger.info("deliveryStatus"+deliveryStatus.getSmppID()+" "+s.getMessageSMPPID());
+				int status = deliveryStatus.getStatus();
+				String statusMessage = DBDeliveryStatusUpdater.getDeliveryStatusMesssage(status);
+				factoryDAO.startTransaction();
+				if (isMultipartMessage(s.getMessage())) {
+					s.setConcatenated(Sms.CONCATENATED_TRUE);
+				}
+				s.setStatus(statusMessage);
+				s.setSMPPStatus(status);
+				smsDAO.update(s);
+				factoryDAO.commitTransaction();
+			} catch (Exception exception) {
+				logger.error("MessageController error: " + exception.getMessage() + " " + s.getMSSID());
+			}
+		});		
+	}
+
+	private boolean isMultipartMessage(String message) {
+		return Gsm0338.isMultipartMessage(message);
+	}
+	
 	public void setupController() {
+		factoryDAO.getConnection().clear();
 		factoryDAO.getConnection().getEntityManagerFactory().getCache().evictAll();
-		System.out.println("connection opened");
+		//System.out.println("connection opened");
 	}
 
 	public void releaseResource() {

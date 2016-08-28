@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lv.itsms.smsc_client.GatewayClient;
 import lv.itsms.smsc_client.jsmpp.DeliveryStatusManager;
+import lv.itsms.smsc_client.jsmpp.MultipartMessageSender;
 import transfer.domain.Sms;
 
 /**
@@ -14,6 +18,8 @@ import transfer.domain.Sms;
 
 public class MessageServer implements Runnable {
 
+	private static final Logger logger = LoggerFactory.getLogger(MessageServer.class);
+	
 	final static int PARALLELISM_LEVEL = 4;
 
 	private static long timePause = 30000;
@@ -60,11 +66,12 @@ public class MessageServer implements Runnable {
 			return;
 		}
 
-		System.out.println("Server is running.");
+		//System.out.println("Server is running.");
 
 		messageController.setupController();
 
 		messageController.prepareSmsGroupSentMessages();
+		messageController.updateSmsDeliveryStatus();
 		messageController.updateSmsGroupStatusIfAllMessagesSent(); 
 
 		List<Sms> smsContainer = messageController.selectSmsToBeSend();
@@ -74,10 +81,14 @@ public class MessageServer implements Runnable {
 
 		Runnable task = () -> stream
 				.forEach(s -> { 
-					String hexMessageSMPPID = gatewayClient.send(s);
-					deliveryManager.updateSmsDeliveryStatus(s, hexMessageSMPPID);
+					String hexMessageSMPPID;
+					try {
+						hexMessageSMPPID = gatewayClient.send(s);
+						deliveryManager.updateSmsDeliveryStatus(s, hexMessageSMPPID);
+					} catch (Exception e) {
+						logger.error("Failed send message '" + s.getMSSID() + "'", e);
+					}
 				});
-
 
 		forkJoinPool.execute(task);		
 
