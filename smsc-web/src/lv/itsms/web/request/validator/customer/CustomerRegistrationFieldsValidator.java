@@ -1,9 +1,9 @@
 package lv.itsms.web.request.validator.customer;
 
 import lv.itsms.web.request.validator.PasswordValidator;
-import lv.itsms.web.request.validator.UserRequestValidatorImpl;
 import lv.itsms.web.service.Repository;
 import transfer.domain.Customer;
+import transfer.validator.UserRequestValidatorImpl;
 
 public class CustomerRegistrationFieldsValidator extends UserRequestValidatorImpl {
 	

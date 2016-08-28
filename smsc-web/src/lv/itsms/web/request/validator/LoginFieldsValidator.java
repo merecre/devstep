@@ -3,20 +3,22 @@ package lv.itsms.web.request.validator;
 import java.util.ArrayList;
 import java.util.List;
 
-import lv.itsms.web.request.validator.rule.Rule;
 import transfer.domain.Customer;
+import transfer.validator.Rule;
+import transfer.validator.UserRequestValidatorImpl;
 
 public class LoginFieldsValidator extends UserRequestValidatorImpl {
 
 	PasswordValidator passwordValidator;
 	LoginnameValidator loginnameValidator;
-	
+	CustomerStatusValidator customerStatusValidator;
 	List<Rule> rules;
 
 	public LoginFieldsValidator() {
 		this.rules = new ArrayList<Rule>();
 		passwordValidator = new PasswordValidator();
 		loginnameValidator = new LoginnameValidator();
+		customerStatusValidator = new CustomerStatusValidator();
 	}
 
 	public LoginFieldsValidator(List<Rule> rules) {
@@ -26,6 +28,7 @@ public class LoginFieldsValidator extends UserRequestValidatorImpl {
 	public void prepareRules() {
 		passwordValidator.prepareRules();
 		loginnameValidator.prepareRules();
+		customerStatusValidator.prepareRules();
 	}
 	
 	@Override
@@ -38,6 +41,10 @@ public class LoginFieldsValidator extends UserRequestValidatorImpl {
 		
 		String loginName = customer.getUserLogin(); 
 		loginnameValidator.validate(loginName);
+		
+		String customerStatus = customer.getStatus();
+		System.out.println("Status:"+customerStatus);
+		customerStatusValidator.validate(customerStatus);
 		
 		return true;
 	}

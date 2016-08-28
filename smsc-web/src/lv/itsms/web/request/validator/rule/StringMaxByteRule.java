@@ -2,6 +2,8 @@ package lv.itsms.web.request.validator.rule;
 
 import java.io.UnsupportedEncodingException;
 
+import transfer.validator.Rule;
+
 public class StringMaxByteRule implements Rule {
 
 	String errorMessage = "";

@@ -1,5 +1,6 @@
 package lv.itsms.web.request.validator.rule;
 import transfer.domain.Customer;
+import transfer.validator.Rule;
 
 public class CustomerNotEmptyRule implements Rule {
 

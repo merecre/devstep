@@ -1,7 +1,8 @@
 package lv.itsms.web.request.validator;
 
-import lv.itsms.web.request.validator.rule.FieldIsNotEmptyStringRule;
-import lv.itsms.web.request.validator.rule.Rule;
+import transfer.validator.Rule;
+import transfer.validator.UserRequestValidatorImpl;
+import transfer.validator.rule.FieldIsNotEmptyStringRule;
 
 public class LoginnameValidator extends UserRequestValidatorImpl {
 	final static String ERROR_MESSAGE = "Login.name.is.mandatory."; 

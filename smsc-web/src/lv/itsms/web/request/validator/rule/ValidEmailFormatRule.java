@@ -3,6 +3,8 @@ package lv.itsms.web.request.validator.rule;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import transfer.validator.Rule;
+
 public class ValidEmailFormatRule implements Rule {
 
 	String errorMessage;

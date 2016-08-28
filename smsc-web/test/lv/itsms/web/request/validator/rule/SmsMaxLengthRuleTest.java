@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import lv.itsms.web.request.validator.rule.Rule;
-import lv.itsms.web.request.validator.rule.SmsMaxLengthRule;
+import transfer.validator.Rule;
+import transfer.validator.rule.SmsMaxLengthRule;
 
 public class SmsMaxLengthRuleTest {
 

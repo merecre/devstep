@@ -1,18 +1,23 @@
 package lv.itsms.web.request.validator.smsgroup;
 
-import lv.itsms.web.request.validator.UserRequestValidatorImpl;
 import transfer.domain.SmsGroup;
+import transfer.validator.SmsDatetimeValidator;
+import transfer.validator.SmsMessageValidator;
+import transfer.validator.SmsSenderValidator;
+import transfer.validator.UserRequestValidatorImpl;
 
 public class SmsGroupFieldsValidator extends UserRequestValidatorImpl {
 		
 	SmsGroupDescriptionValidator descriptionValidator;
-	SmsGroupMessageValidator messageValidator;
-	SmsGroupDatetimeValidator datetimeValidator;
+	SmsMessageValidator messageValidator;
+	SmsDatetimeValidator datetimeValidator;
+	SmsSenderValidator smsSenderValidator;
 	
 	public SmsGroupFieldsValidator() {
 		this.descriptionValidator = new SmsGroupDescriptionValidator();
-		messageValidator = new SmsGroupMessageValidator();
-		datetimeValidator = new SmsGroupDatetimeValidator();
+		messageValidator = new SmsMessageValidator();
+		datetimeValidator = new SmsDatetimeValidator();
+		smsSenderValidator = new SmsSenderValidator();
 	}
 	
 	@Override
@@ -20,6 +25,7 @@ public class SmsGroupFieldsValidator extends UserRequestValidatorImpl {
 		descriptionValidator.prepareRules();
 		messageValidator.prepareRules();
 		datetimeValidator.prepareRules();
+		smsSenderValidator.prepareRules();
 	}
 	
 	@Override
@@ -28,11 +34,15 @@ public class SmsGroupFieldsValidator extends UserRequestValidatorImpl {
 
 		String smsGroupDescription = smsGroup.getSmsGroupName();
 		descriptionValidator.validate(smsGroupDescription);
+
+		String smsSender = smsGroup.getSender();
+		smsSenderValidator.validate(smsSender);
 		
 		String smsGroupMessage = smsGroup.getGroupMessage();
 		messageValidator.validate(smsGroupMessage);
 		
 		java.util.Date date = smsGroup.getSendTime();
+
 		datetimeValidator.validate(date);
 		return true;
 	}	

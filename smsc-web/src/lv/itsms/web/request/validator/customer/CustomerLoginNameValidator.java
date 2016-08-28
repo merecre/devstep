@@ -1,11 +1,11 @@
 package lv.itsms.web.request.validator.customer;
 
-import lv.itsms.web.request.validator.UserRequestValidatorImpl;
-import lv.itsms.web.request.validator.rule.LoginNameIsNotReserved;
-import lv.itsms.web.request.validator.rule.FieldIsNotEmptyStringRule;
-import lv.itsms.web.request.validator.rule.MaxLengthRule;
-import lv.itsms.web.request.validator.rule.Rule;
+import lv.itsms.web.request.validator.rule.LoginNameIsNotReservedRule;
 import lv.itsms.web.service.Repository;
+import transfer.validator.Rule;
+import transfer.validator.UserRequestValidatorImpl;
+import transfer.validator.rule.FieldIsNotEmptyStringRule;
+import transfer.validator.rule.MaxLengthRule;
 
 public class CustomerLoginNameValidator extends UserRequestValidatorImpl {
 	final static String ERROR_MESSAGE = "Customer.Login.is.mandatory";
@@ -24,7 +24,7 @@ public class CustomerLoginNameValidator extends UserRequestValidatorImpl {
 		Rule rule = new FieldIsNotEmptyStringRule(ERROR_MESSAGE);
 		rules.add(rule);
 		
-		rule = new LoginNameIsNotReserved(repository);
+		rule = new LoginNameIsNotReservedRule(repository);
 		rules.add(rule);
 		
 		rule = new MaxLengthRule(MAX_LENGTH, MAX_LEN_ERROR_MESSAGE);

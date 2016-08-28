@@ -11,10 +11,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import lv.itsms.web.request.validator.customer.CustomerRegistrationFieldsValidator;
-import lv.itsms.web.request.validator.rule.Rule;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.Repository;
 import transfer.domain.Customer;
+import transfer.validator.Rule;
+import transfer.validator.UserRequestValidator;
 
 public class CustomerValidatorTest {
 
