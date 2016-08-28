@@ -6,8 +6,7 @@
 				<td>
 					<p>${reportinfo['startDate']}:</p>
 				</td>
-				<td><input type="text" value="${reportdates['startDate']}" name="startdate" id="startdate"
-					data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" required />
+				<td><input type="text" value="${reportdates['startDate']}" name="startdate" id="startdate" data-lang="${sessionScope.language}" data-years="2015-2035" data-format="YYYY-MM-DD" required />
 					<script
 						src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 						<script src="js/moment-with-locales.min.js"></script> <script
@@ -20,13 +19,26 @@
 					<td>
 						<p>${reportinfo['endDate']}:</p>
 					</td>
-					<td><input type="text" value="${reportdates['endDate']}" name="enddate" id="enddate"	data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" required/>
+					<td><input type="text" value="${reportdates['endDate']}" name="enddate" id="enddate" data-lang="${sessionScope.language}" data-years="2015-2035" data-format="YYYY-MM-DD" required/>
 					<script>
 					$(function(){
     				$("#enddate").ionDatePicker();
 					});
 					</script></td>
 				<td><input type="submit" value="Report" name="periodreportpost"></td>
+			</tr>
+			<tr><td>${reportinfo['txtMessageStatus']}:</td>
+			<td> 
+			<select name="status">
+				<option value="${reportdates['selectedStatus']}" selected>${reportdates['selectedStatus']}</option>
+    			<c:forEach items="${smsstatus}" var="status">
+    				<c:if test="${status != reportdates['selectedStatus']}">
+        				<option value="${status}">${status}</option>
+        			</c:if>
+   			 	</c:forEach>
+   			 	<option value="">...</option>
+			</select>
+			</td>
 			</tr>
 		</table>
 	</form>

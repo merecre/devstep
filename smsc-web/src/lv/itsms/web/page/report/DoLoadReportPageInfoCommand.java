@@ -42,6 +42,8 @@ public class DoLoadReportPageInfoCommand implements PageRequestCommand {
 			"headerPhoneNumber",
 			"headerStatus",
 			"headerMessage",
+			"headerDatetime",
+			"txtMessageStatus"
 	};
 
 	CustomerPanelCommandFactory factory;
@@ -68,6 +70,7 @@ public class DoLoadReportPageInfoCommand implements PageRequestCommand {
 			}
 		}
 
-		factory.getSession().updateSessionAttribute(Session.SESSION_REPORTINFO_PARAMETER, reportInfo);	
+		factory.getSession().updateSessionAttribute(Session.SESSION_REPORTINFO_PARAMETER, reportInfo);
+		factory.getSession().updateSessionAttribute(Session.SESSION_SMSSTATTUS_PARAMETER, Sms.STATUSES);
 	}	
 }

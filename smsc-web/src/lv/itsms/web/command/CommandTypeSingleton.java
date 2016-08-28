@@ -12,29 +12,34 @@ import lv.itsms.web.page.login.DoLoginFormRequestCommand;
 import lv.itsms.web.page.login.LoginNameRequestParameter;
 import lv.itsms.web.page.login.LoginPasswordRequestParameter;
 import lv.itsms.web.page.report.DoLoadReportPageInfoCommand;
-import lv.itsms.web.page.report.DoPrepareReportDiagramCommand;
+import lv.itsms.web.page.report.DoViewReportByPeriodCommand;
 import lv.itsms.web.page.report.DoViewReportPerMessageCommand;
 import lv.itsms.web.page.report.LoadReportPageInfoParameter;
 import lv.itsms.web.page.report.ReportEndDateRequestParameter;
+import lv.itsms.web.page.report.ReportSmsStatusRequestParameter;
 import lv.itsms.web.page.report.ReportStartDateRequestParameter;
 import lv.itsms.web.page.report.ViewReportByDateRequestPostParameter;
 import lv.itsms.web.page.report.ViewReportPerMessagePostParameter;
 import lv.itsms.web.page.smspanel.DoDeleteSmsGroupRecCommand;
 import lv.itsms.web.page.smspanel.DoEditSmsGroupRecCommand;
+import lv.itsms.web.page.smspanel.DoImportSmsGroupContacts;
 import lv.itsms.web.page.smspanel.DoLoadSmsPanelPageDataCommand;
 import lv.itsms.web.page.smspanel.DoOpenNewSmsGroupRecCommand;
+import lv.itsms.web.page.smspanel.DoSaveNewMessageRecCommand;
 import lv.itsms.web.page.smspanel.DoSaveSmsGroupRecCommand;
 import lv.itsms.web.page.smspanel.DoViewSmsGroupNameCommand;
 import lv.itsms.web.page.smspanel.DoViewSmsGroupRecCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.DeleteSmsGroupPostRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.EditSmsGroupRecordRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.ImportSmsGroupContactsRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.LoadSmsGroupPageInfoRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.OpenNewSmsGroupRecRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SaveNewMessageRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SaveSmsNewGroupRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdGetRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdPostRequestParameter;
-import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhonesRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.ViewSmsGroupNameListRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.ViewSmsGroupRecordRequestParameter;
 
@@ -88,7 +93,7 @@ public class CommandTypeSingleton {
 		urlParameterList.add(new DeleteSmsGroupPostRequestParameter());
 		urlParameterList.add(new SmsGroupIdPostRequestParameter());
 		urlParameterList.add(new SaveSmsNewGroupRequestParameter());
-		urlParameterList.add(new SmsPhoneRequestParameter());
+		urlParameterList.add(new SmsPhonesRequestParameter());
 		urlParameterList.add(new SmsGroupIdGetRequestParameter());
 		urlParameterList.add(new OpenNewSmsGroupRecRequestParameter());
 		urlParameterList.add(new ViewSmsGroupRecordRequestParameter());
@@ -101,6 +106,9 @@ public class CommandTypeSingleton {
 		urlParameterList.add(new LoadSmsGroupPageInfoRequestParameter());
 		urlParameterList.add(new LoadReportPageInfoParameter());
 		urlParameterList.add(new ViewReportPerMessagePostParameter());
+		urlParameterList.add(new SaveNewMessageRequestParameter());
+		urlParameterList.add(new ReportSmsStatusRequestParameter());
+		urlParameterList.add(new ImportSmsGroupContactsRequestParameter());
 		
 		Map<String, UserPageRequestParameter>  localUrlParameters = new LinkedHashMap<>();
 		for (UserPageRequestParameter userRequest : urlParameterList) {
@@ -127,6 +135,8 @@ public class CommandTypeSingleton {
 		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_LOAD_SMS_PANEL_INFO, LoadSmsGroupPageInfoRequestParameter.URL_PARAMETER);
 		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_LOAD_REPORT_PAGE_INFO, LoadReportPageInfoParameter.URL_PARAMETER);
 		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_VIEW_REPORT_PER_MESSAGE, ViewReportPerMessagePostParameter.URL_PARAMETER);
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_SAVE_NEW_MESSAGE, SaveNewMessageRequestParameter.URL_PARAMETER);
+		localUserRequestCommandLookups.put(CommandTypeParameter.CMD_IMPORT_CONTACTS, ImportSmsGroupContactsRequestParameter.URL_PARAMETER);
 		userRequestCommandLookups = Collections.unmodifiableMap(localUserRequestCommandLookups);
 	}
 
@@ -135,7 +145,7 @@ public class CommandTypeSingleton {
 			return;
 		
 		Map<CommandTypeParameter, Class<?>> localUserRequestCommands = new EnumMap<>(CommandTypeParameter.class);
-		localUserRequestCommands.put(CommandTypeParameter.CMD_VIEW_REPORT_DIAGRAM, DoPrepareReportDiagramCommand.class);
+		localUserRequestCommands.put(CommandTypeParameter.CMD_VIEW_REPORT_DIAGRAM, DoViewReportByPeriodCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_DO_LOGIN_USER, DoLoginFormRequestCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_LOAD_SMS_GROUP_NAMES, DoViewSmsGroupNameCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_LOAD_SMS_GROUP_REC, DoViewSmsGroupRecCommand.class);
@@ -146,6 +156,8 @@ public class CommandTypeSingleton {
 		localUserRequestCommands.put(CommandTypeParameter.CMD_LOAD_SMS_PANEL_INFO, DoLoadSmsPanelPageDataCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_LOAD_REPORT_PAGE_INFO, DoLoadReportPageInfoCommand.class);
 		localUserRequestCommands.put(CommandTypeParameter.CMD_VIEW_REPORT_PER_MESSAGE, DoViewReportPerMessageCommand.class);
+		localUserRequestCommands.put(CommandTypeParameter.CMD_SAVE_NEW_MESSAGE, DoSaveNewMessageRecCommand.class);
+		localUserRequestCommands.put(CommandTypeParameter.CMD_IMPORT_CONTACTS, DoImportSmsGroupContacts.class);
 		userRequestCommands = Collections.unmodifiableMap(localUserRequestCommands);
 	}	
 }

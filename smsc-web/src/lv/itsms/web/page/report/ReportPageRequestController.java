@@ -56,7 +56,8 @@ public class ReportPageRequestController extends HttpServlet {
 	 */
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		//request.setCharacterEncoding("UTF-8");
+		
 		session.setRequest(request);
 		session.setSession(request.getSession());	
 
@@ -69,8 +70,6 @@ public class ReportPageRequestController extends HttpServlet {
 				CommandTypeSingleton.getInstance().getUserPageRequestParameter(ReportEndDateRequestParameter.URL_PARAMETER);
 		reportEndDateUserParameter.update(request);
 		String reportEndDate = reportEndDateUserParameter.getParameter();
-
-		System.out.println("Report " + reportStartDate + " " + reportEndDate);
 
 		/* TODO
 		 * User inputed date validation

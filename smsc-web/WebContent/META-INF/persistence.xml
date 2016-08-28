@@ -11,9 +11,11 @@
           <class>transfer.domain.Batch</class>
           <class>transfer.domain.Recipient</class>
           <class>transfer.domain.IPAddress</class>
+          <class>transfer.domain.DeliveryStatus</class>
           <properties>
+               <property name="eclipselink.query-results-cache" value="false"/>
                <property name="javax.persistence.jdbc.driver" value="org.gjt.mm.mysql.Driver" />
-               <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test_schema" />
+               <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test_schema?useUnicode=yes&amp;characterEncoding=UTF-8" />
                <property name="javax.persistence.jdbc.username" value = ""/>
                <property name="javax.persistence.jdbc.password" value = ""/>
           </properties>

@@ -6,6 +6,8 @@ import lv.itsms.web.request.parameter.UserPageRequestParameter;
 
 public class ReportStartDateRequestParameter extends UserPageRequestParameter {
 
+	public static String DATE_FORMAT = "yyyy-MM-dd";
+	
 	public  static String URL_PARAMETER = "startdate";
 
 	public ReportStartDateRequestParameter() {
