@@ -14,6 +14,8 @@ import lv.itsms.web.service.jdbc.JDBCSmsDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsGroupDAO;
 import lv.itsms.web.service.jdbc.JDBCSmsPanelInfoDAO;
 import lv.itsms.web.service.jdbc.ServerContextSingleton;
+import transfer.service.jpa.CustomerDAO;
+import transfer.service.jpa.DeliveryStatusDAO;
 import transfer.service.jpa.PhoneGroupDAO;
 import transfer.service.jpa.SmsDAO;
 import transfer.service.jpa.SmsGroupDAO;
@@ -120,5 +122,11 @@ public class DBDAOFactory extends DAOFactory {
 			return createConnection();
 		}
 		return connection;
+	}
+
+	@Override
+	public DeliveryStatusDAO getDeliveryStatusDAO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

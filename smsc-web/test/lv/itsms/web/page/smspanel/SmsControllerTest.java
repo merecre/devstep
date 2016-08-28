@@ -15,7 +15,7 @@ import lv.itsms.web.request.parameter.smspanel.OpenNewSmsGroupRecRequestParamete
 import lv.itsms.web.request.parameter.smspanel.SaveSmsNewGroupRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdGetRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdPostRequestParameter;
-import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhonesRequestParameter;
 import lv.itsms.web.service.DAOFactory;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;

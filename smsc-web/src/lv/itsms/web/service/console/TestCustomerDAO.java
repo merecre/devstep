@@ -1,8 +1,8 @@
 package lv.itsms.web.service.console;
 
-import lv.itsms.web.service.CustomerDAO;
 import lv.itsms.web.service.TestDAOFactory;
 import transfer.domain.Customer;
+import transfer.service.jpa.CustomerDAO;
 
 public class TestCustomerDAO implements CustomerDAO {
 
@@ -53,6 +53,30 @@ public class TestCustomerDAO implements CustomerDAO {
 		}
 
 		return true;
+	}
+
+	@Override
+	public Customer findCustomerByApiKey(String field) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Customer createCustomer(String apiKey, String name, String surname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Customer findCustomer(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeCustomer(long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.CustomerBuilder;
-import lv.itsms.web.request.validator.UserRequestValidator;
 import lv.itsms.web.request.validator.customer.CustomerRegistrationFieldsValidator;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
+import transfer.validator.UserRequestValidator;
 
 /**
  * Servlet implementation class RegistrationRequestController
@@ -54,6 +54,7 @@ public class RegistrationRequestController extends HttpServlet {
 		try {
 			Customer customer = validateUserInputtedRegistrationFormFieldsAndBuildCustomer(request);
 			doCustomerRegistration(customer);
+			updateInformationMessage(request, response);
 		} catch (RuntimeException exception) {
 			updateSessionExceptionError(exception, request);
 		} catch (Exception e) {
@@ -88,7 +89,7 @@ public class RegistrationRequestController extends HttpServlet {
 	}
 
 	private void doCustomerRegistration(Customer customer) throws Exception {
-		PageRequestCommand pageRequestCommand = new DoRegistrationFormRequestCommand(customer, repository);
+		PageRequestCommand pageRequestCommand = new DoRegistrationFormRequestCommand(customer, repository, session);
 		pageRequestCommand.execute();
 
 	}
@@ -108,14 +109,31 @@ public class RegistrationRequestController extends HttpServlet {
 
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
 		String exceptionMessage = e.getMessage();
+		exceptionMessage = getLocalisedMessage(exceptionMessage);
+		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
+	}
+	
+	private void updateInformationMessage(HttpServletRequest request, HttpServletResponse response) {
+		String information = (String) request.getSession().getAttribute(Session.SESSION_INFORMATION_PARAMETER);
+		if (information != null) {
+			information = getLocalisedMessage(information);
+			session.updateSessionAttribute(Session.SESSION_INFORMATION_PARAMETER, information);
+		}		
+	}
+	
+	private String getLocalisedMessage(String message) {
+		
+		String localisedMessage = message;
 		
 		String lng = session.getSessionLanguage(); 
+		
 		Locale currentLocale = new Locale(lng, lng.toUpperCase());
 		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-		if (messages.containsKey(exceptionMessage)) {
-			exceptionMessage = messages.getString(exceptionMessage);
+		if (messages.containsKey(message)) {
+			localisedMessage = messages.getString(message);
 		}
-		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
+		
+		return localisedMessage;
 	}
 
 	private void returnToBackPage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

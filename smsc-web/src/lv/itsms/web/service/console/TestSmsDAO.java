@@ -98,4 +98,22 @@ public class TestSmsDAO implements SmsDAO {
 		return null;
 	}
 
+	@Override
+	public List<Sms> findSmsRecordsBySQL(String sql) {
+		
+		return null;
+	}
+
+	@Override
+	public List<Sms> findSmsByStatus(String status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Sms update(Sms sms) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

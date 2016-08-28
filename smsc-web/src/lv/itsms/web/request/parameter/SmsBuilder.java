@@ -6,52 +6,56 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import lv.itsms.web.request.parameter.menu.CustomerIdRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhonesRequestParameter;
+import transfer.domain.Sms;
 import transfer.domain.SmsGroup;
 
-public class SmsGroupBuilder {
+public class SmsBuilder {
 
-	public SmsGroup build(HttpServletRequest request) {
+	public Sms build(HttpServletRequest request) {
 
-		SmsGroup smsGroup = new SmsGroup();
+		Sms sms = new Sms();
 
-		UserPageRequestParameter smsGroupUserRequest = new SmsGroupNameUserRequest();
-		smsGroupUserRequest.update(request);
-		smsGroup.setSmsGroupName(smsGroupUserRequest.getParameter());
+		UserPageRequestParameter smsUserRequest = new SmsSenderUserRequest();
+		smsUserRequest.update(request);
+		sms.setSender(smsUserRequest.getParameter());		
 
-		smsGroupUserRequest = new SmsGroupSenderUserRequest();
-		smsGroupUserRequest.update(request);
-		smsGroup.setSender(smsGroupUserRequest.getParameter());
-		
-		smsGroupUserRequest = new SmsGroupMessageUserRequest();
-		smsGroupUserRequest.update(request);
-		smsGroup.setGroupMessage(smsGroupUserRequest.getParameter());
+		smsUserRequest = new SmsGroupMessageUserRequest();
+		smsUserRequest.update(request);
+		sms.setMessage(smsUserRequest.getParameter());
 
-		smsGroup.setCustomerId(getSmsOwnerId(request));
+		smsUserRequest = new SmsPhoneRequestParameter();
+		smsUserRequest.update(request);
+		String phoneNumber = smsUserRequest.getParameter();
+		sms.setPhoneNumber(phoneNumber);
 
-		smsGroupUserRequest = new SmsGroupSendDateUserRequest();
-		smsGroupUserRequest.update(request);
-		String userSendDate = smsGroupUserRequest.getParameter();
+		sms.setCustomerID(getSmsOwnerId(request));
 
-		smsGroupUserRequest = new SmsGroupSendHourUserRequest();
-		smsGroupUserRequest.update(request);
-		String userSendHour = smsGroupUserRequest.getParameter();
+		smsUserRequest = new SmsGroupSendDateUserRequest();
+		smsUserRequest.update(request);
+		String userSendDate = smsUserRequest.getParameter();
 
-		smsGroupUserRequest = new SmsGroupSendMinutesUserRequest();
-		smsGroupUserRequest.update(request);
-		String userSendMinutes = smsGroupUserRequest.getParameter();
+		smsUserRequest = new SmsGroupSendHourUserRequest();
+		smsUserRequest.update(request);
+		String userSendHour = smsUserRequest.getParameter();
+
+		smsUserRequest = new SmsGroupSendMinutesUserRequest();
+		smsUserRequest.update(request);
+		String userSendMinutes = smsUserRequest.getParameter();
 
 		String userSendTime = userSendDate+" "+userSendHour+":"+userSendMinutes;
 
 		java.sql.Timestamp sendTime = formatSendTime(userSendTime);
-		smsGroup.setSendTime(sendTime);
+		sms.setSendTime(sendTime);
 
-		return smsGroup;
+		return sms;
 	}
 
-	private class SmsGroupNameUserRequest extends UserPageRequestParameter {
-		private final static String GROUP_NAME_KEY = "g_common_name";
-		public SmsGroupNameUserRequest() {
-			super(GROUP_NAME_KEY);
+	private class SmsSenderUserRequest extends UserPageRequestParameter {
+		private final static String URL_PARAMETER = "sms_sender";
+		public SmsSenderUserRequest() {
+			super(URL_PARAMETER);
 		}
 
 		@Override
@@ -62,9 +66,9 @@ public class SmsGroupBuilder {
 	}
 
 	private class SmsGroupMessageUserRequest extends UserPageRequestParameter {
-		private final static String GROUP_MESSAGE_KEY = "g_common_message";
+		private final static String SMS_MESSAGE_KEY = "sms_message";
 		public SmsGroupMessageUserRequest() {
-			super(GROUP_MESSAGE_KEY);
+			super(SMS_MESSAGE_KEY);
 		}
 
 		@Override
@@ -75,7 +79,7 @@ public class SmsGroupBuilder {
 	}
 
 	private class SmsGroupSendDateUserRequest extends UserPageRequestParameter {
-		private final static String GROUP_DATE_KEY = "grp_send_date";
+		private final static String GROUP_DATE_KEY = "sms_send_date";
 		public SmsGroupSendDateUserRequest() {
 			super(GROUP_DATE_KEY );
 		}
@@ -88,7 +92,7 @@ public class SmsGroupBuilder {
 	}
 
 	private class SmsGroupSendHourUserRequest extends UserPageRequestParameter {
-		private final static String GROUP_HOUR_KEY = "grp_send_time_hour";
+		private final static String GROUP_HOUR_KEY = "sms_send_time_hour";
 		public SmsGroupSendHourUserRequest() {
 			super(GROUP_HOUR_KEY );
 		}
@@ -101,22 +105,9 @@ public class SmsGroupBuilder {
 	}
 
 	private class SmsGroupSendMinutesUserRequest extends UserPageRequestParameter {
-		private final static String GROUP_MINUTES_KEY = "grp_send_time_min";
+		private final static String GROUP_MINUTES_KEY = "sms_send_time_min";
 		public SmsGroupSendMinutesUserRequest() {
 			super(GROUP_MINUTES_KEY );
-		}
-
-		@Override
-		public void update(HttpServletRequest request) {
-			parameterValue = request.getParameter(parameterKey);
-		}
-
-	}
-	
-	private class SmsGroupSenderUserRequest extends UserPageRequestParameter {
-		private final static String GROUP_SENDER_KEY = "g_common_sender";
-		public SmsGroupSenderUserRequest() {
-			super(GROUP_SENDER_KEY);
 		}
 
 		@Override
@@ -133,7 +124,7 @@ public class SmsGroupBuilder {
 	}
 
 	private java.sql.Timestamp formatSendTime(String sendtime) {
-		final String ERROR_DATE = "Incorrect Date";
+		final String ERROR_DATE = "Incorrect.Date";
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 		java.sql.Timestamp  date = null;
 		try {

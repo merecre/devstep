@@ -32,9 +32,9 @@ public class TestSmsGroupDAO implements SmsGroupDAO {
 	}
 
 	@Override
-	public boolean insert(SmsGroup smsGroup) throws Exception {
+	public SmsGroup insert(SmsGroup smsGroup) throws Exception {
 		System.out.print("SmsGroup inserted " + smsGroup);
-		return false;
+		return smsGroup;
 	}
 
 	@Override

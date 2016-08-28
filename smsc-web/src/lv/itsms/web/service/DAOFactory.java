@@ -1,6 +1,8 @@
 package lv.itsms.web.service;
 
 import transfer.domain.Sms;
+import transfer.service.jpa.CustomerDAO;
+import transfer.service.jpa.DeliveryStatusDAO;
 import transfer.service.jpa.PhoneGroupDAO;
 import transfer.service.jpa.SmsDAO;
 import transfer.service.jpa.SmsGroupDAO;
@@ -18,6 +20,7 @@ public abstract class DAOFactory {
 	public abstract ProfileInfoDAO getProfileInfoDAO(); 
 	public abstract SmsPanelInfoDAO getSmsPanelInfoDAO();
 	public abstract SmsDAO getSmsDAO();
+	public abstract DeliveryStatusDAO getDeliveryStatusDAO();
 
 	public abstract void startTransaction() throws Exception;
 	public abstract void stopTransaction() throws Exception;

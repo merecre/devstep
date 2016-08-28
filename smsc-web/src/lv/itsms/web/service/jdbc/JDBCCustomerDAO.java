@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import lv.itsms.web.service.CustomerDAO;
 import lv.itsms.web.service.DBDAOFactory;
 import transfer.domain.Customer;
+import transfer.service.jpa.CustomerDAO;
 
 public class JDBCCustomerDAO implements CustomerDAO {
 
@@ -103,6 +103,7 @@ public class JDBCCustomerDAO implements CustomerDAO {
 		customer.setPassword(resultSet.getString("password"));
 		customer.setUserLogin(resultSet.getString("login"));
 		customer.setEmail(resultSet.getString("email"));
+		customer.setStatus(resultSet.getString("status"));
 
 		return customer;
 	}
@@ -116,5 +117,29 @@ public class JDBCCustomerDAO implements CustomerDAO {
 		}
 
 		return true;
+	}
+
+	@Override
+	public Customer findCustomerByApiKey(String field) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Customer createCustomer(String apiKey, String name, String surname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Customer findCustomer(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeCustomer(long id) {
+		// TODO Auto-generated method stub
+		
 	}
 }

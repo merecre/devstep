@@ -7,6 +7,8 @@ import lv.itsms.web.service.console.TestProfileInfoDAO;
 import lv.itsms.web.service.console.TestSmsDAO;
 import lv.itsms.web.service.console.TestSmsGroupDAO;
 import lv.itsms.web.service.console.TestSmsPanelInfoDAO;
+import transfer.service.jpa.CustomerDAO;
+import transfer.service.jpa.DeliveryStatusDAO;
 import transfer.service.jpa.PhoneGroupDAO;
 import transfer.service.jpa.SmsDAO;
 import transfer.service.jpa.SmsGroupDAO;
@@ -72,5 +74,11 @@ public class TestDAOFactory extends DAOFactory {
 	@Override
 	public SmsDAO getSmsDAO() {
 		return new TestSmsDAO(this);
+	}
+
+	@Override
+	public DeliveryStatusDAO getDeliveryStatusDAO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

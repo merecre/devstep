@@ -33,6 +33,10 @@ public class Session {
 	public final static String SESSION_REPORTINFO_PARAMETER = "reportinfo";
 	public final static String SESSION_REPORTDATES_PARAMETER = "reportdates";
 	public final static String SESSION_REPORTDATA_PARAMETER = "reportdata";
+	public final static String SESSION_SMSDATA_PARAMETER = "smsrec";
+	public final static String SESSION_SMSSTATTUS_PARAMETER = "smsstatus";
+	public final static String SESSION_INFORMATION_PARAMETER = "information";
+	public final static String SESSION_IMPORTPHONE_PARAMETER = "phone";
 
 	HttpServletRequest request;
 

@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import lv.itsms.web.page.info.LoginInfo;
 import lv.itsms.web.page.info.ProfileInfo;
@@ -13,6 +15,7 @@ import transfer.domain.Customer;
 import transfer.domain.PhoneGroup;
 import transfer.domain.Sms;
 import transfer.domain.SmsGroup;
+import transfer.service.jpa.CustomerDAO;
 import transfer.service.jpa.JPADAOfactory;
 import transfer.service.jpa.PhoneGroupDAO;
 import transfer.service.jpa.SmsDAO;
@@ -328,4 +331,37 @@ public class Repository {
 			phoneGroupDAO.insert(phoneGroup);		
 		}
 	}
+
+	public void insertSms(Sms sms) {
+		final String ERROR_MESSAGE = "Error during sms inserting occurred.";
+		try {
+			//JPAfactoryDAO.getConnection();
+			JPAfactoryDAO.startTransaction();
+			smsDAO.insert(sms);
+			JPAfactoryDAO.commitTransaction();
+			JPAfactoryDAO.closeConnection();
+			//JPAfactoryDAO.closeEntityFactory();
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(ERROR_MESSAGE);
+		}	
+	}
+	
+	public List<Sms> findSMSRecordsByCustomerIdAndSmsPeriodAndStatus(long userId, Timestamp startDateTimestamp, Timestamp endDateTimestamp, String status) {
+		final String ERROR_MESSAGE = "Error during sms loading occurred.";
+
+		List<Sms> smses = null;
+		String sql = "SELECT m from Sms m" 
+			    + " WHERE m.sendTime >= '" + startDateTimestamp 
+			    + "' AND m.sendTime <= '" + endDateTimestamp +"'"
+				+ " AND m.status='"+ status + "'";
+		
+		try {
+			smses = smsDAO.findSmsRecordsBySQL(sql);
+		} catch (Exception e) {	
+			e.printStackTrace();
+			throw new RuntimeException(ERROR_MESSAGE);
+		} 
+		return smses;
+	}	
 }

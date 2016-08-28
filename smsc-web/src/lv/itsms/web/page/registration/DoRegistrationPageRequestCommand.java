@@ -10,7 +10,7 @@ import lv.itsms.web.session.Session;
 import transfer.domain.Customer;
 
 public class DoRegistrationPageRequestCommand implements PageRequestCommand {
-
+	
 	HttpServletRequest request;
 
 	Repository repository;
@@ -28,6 +28,7 @@ public class DoRegistrationPageRequestCommand implements PageRequestCommand {
 		String language = session.getSessionLanguage();
 
 		RegistrationInfo registrationInfo = repository.getRegistrationInfoByLanguage(language);	
+		
 		session.updateSessionAttribute(Session.SESSION_REGISTRATION_PARAMETER, registrationInfo);
 	}
 }

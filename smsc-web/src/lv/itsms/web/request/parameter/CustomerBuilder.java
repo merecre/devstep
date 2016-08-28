@@ -9,7 +9,8 @@ public class CustomerBuilder {
 	public Customer build(HttpServletRequest request) {
 
 		Customer customer = new Customer();
-
+		customer.setStatus(Customer.STATUS_INACTIVE);
+		
 		UserPageRequestParameter userRequest = new CustomerFirstnameRequest();
 		userRequest.update(request);
 		customer.setName(userRequest.getParameter());

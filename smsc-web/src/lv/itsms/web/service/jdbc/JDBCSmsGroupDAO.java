@@ -62,7 +62,7 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 		return true;
 	}
 
-	public boolean insert(SmsGroup smsGroup) throws SQLException {
+	public SmsGroup insert(SmsGroup smsGroup) throws SQLException {
 
 		connection = factory.getConnection();
 		PreparedStatement statement = connection.prepareStatement(
@@ -73,14 +73,16 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 						+ "'"+ smsGroup.getSmsGroupName() + "',"
 						+ "'"+ smsGroup.getSendTime() + "',"
 						+ "'"+ smsGroup.getCustomerId() + "',"
-						+ "'"+ smsGroup.getStatus() + "'"
+						+ "'"+ smsGroup.getStatus() + "',"
+						+ "'"+ smsGroup.getSender() + "'"
 						+ ") "
 						+ " ON DUPLICATE KEY UPDATE " 
 						+ " group_message = '"+smsGroup.getGroupMessage() + "',"
 						+ " group_name = '"+smsGroup.getSmsGroupName() + "',"
 						+ " sendtime = '"+smsGroup.getSendTime() + "',"
 						+ " customer_id = '"+smsGroup.getCustomerId() + "',"
-						+ " status = '" + smsGroup.getStatus() + "'"
+						+ " status = '" + smsGroup.getStatus() + "',"
+						+ " sender = '" + smsGroup.getSender() + "'"
 						,Statement.RETURN_GENERATED_KEYS);
 
 		int updatedRows = statement.executeUpdate();
@@ -88,7 +90,7 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 
 		statement.close();
 
-		return updatedRows != 0;
+		return smsGroup;
 	}
 
 	private int getUpdatedGroupId (PreparedStatement statement) throws SQLException {
@@ -109,7 +111,8 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 				+ " group_name = '"+smsGroup.getSmsGroupName() + "',"
 				+ " sendtime = '"+smsGroup.getSendTime() + "',"
 				+ " customer_id = '"+smsGroup.getCustomerId() + "',"
-				+ " status = '"+ smsGroup.getStatus() + "'"
+				+ " status = '"+ smsGroup.getStatus() + "',"
+				+ " sender = '"+ smsGroup.getSender() + "'"
 				+ " WHERE id = '" + smsGroup.getSmsGroupId() +"'";
 
 		PreparedStatement statement = connection.prepareStatement(sql);
@@ -222,6 +225,7 @@ public class JDBCSmsGroupDAO implements SmsGroupDAO {
 		smsGroup.setSendTime(resultSet.getTimestamp("sendtime"));
 		smsGroup.setSmsGroupId(resultSet.getInt("id"));
 		smsGroup.setSmsGroupName(resultSet.getString("group_name"));
+		smsGroup.setSender(resultSet.getString("sender"));
 
 		return smsGroup;
 	}

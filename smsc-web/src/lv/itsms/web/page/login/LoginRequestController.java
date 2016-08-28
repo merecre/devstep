@@ -95,6 +95,7 @@ public class LoginRequestController extends HttpServlet {
 		Customer customer = new Customer();
 		customer.setUserLogin(loginName);
 		customer.setPassword(userPassword);
+		customer.setStatus(Customer.STATUS_ACTIVE);
 
 		isCorrectCustomerLogin(customer);
 

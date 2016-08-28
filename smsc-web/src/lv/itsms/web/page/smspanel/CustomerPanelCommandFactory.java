@@ -12,10 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import lv.itsms.web.command.CommandFactory;
 import lv.itsms.web.command.CommandTypeSingleton;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
-import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
+import lv.itsms.web.request.validator.sms.SmsFieldsValidator;
 import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
+import transfer.validator.PhoneNumberValidator;
 
 /**
  * 
@@ -38,6 +39,8 @@ public class CustomerPanelCommandFactory extends CommandFactory {
 	SmsGroupFieldsValidator smsGroupValidator;
 	
 	PhoneNumberValidator phoneNumberValidator;
+	
+	SmsFieldsValidator smsFieldsValidator;
 	
 	public CustomerPanelCommandFactory(Repository repository) {
 		this.repository = repository;
@@ -97,6 +100,14 @@ public class CustomerPanelCommandFactory extends CommandFactory {
 
 	public void setPhoneNumberValidator(PhoneNumberValidator phoneNumberValidator) {
 		this.phoneNumberValidator = phoneNumberValidator;
+	}
+	
+	public SmsFieldsValidator getSmsFieldsValidator() {
+		return smsFieldsValidator;
+	}
+
+	public void setSmsFieldsValidator(SmsFieldsValidator smsFieldsValidator) {
+		this.smsFieldsValidator = smsFieldsValidator;
 	}
 
 	@Override

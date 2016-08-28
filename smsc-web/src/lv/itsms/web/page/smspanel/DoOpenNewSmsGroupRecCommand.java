@@ -3,7 +3,7 @@ package lv.itsms.web.page.smspanel;
 import java.util.Calendar;
 import java.util.Date;
 import lv.itsms.web.command.PageRequestCommand;
-import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhonesRequestParameter;
 import lv.itsms.web.session.Session;
 import transfer.domain.SmsGroup;
 
@@ -37,7 +37,7 @@ public class DoOpenNewSmsGroupRecCommand implements PageRequestCommand {
 	
 	private String[] getPhoneNumbers() {
 		try {
-			Object[] phoneNumbers = (Object[])factory.getRequest().getSession().getAttribute(SmsPhoneRequestParameter.PHONE_PARAMETER_KEY);
+			Object[] phoneNumbers = (Object[])factory.getRequest().getSession().getAttribute(SmsPhonesRequestParameter.PHONE_PARAMETER_KEY);
 			if (phoneNumbers!=null) {
 				return (String[])phoneNumbers;			
 			}

@@ -5,7 +5,7 @@ import java.util.List;
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
 import lv.itsms.web.request.parameter.smspanel.SmsGroupIdGetRequestParameter;
-import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
+import lv.itsms.web.request.parameter.smspanel.SmsPhonesRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.Utils;
@@ -42,7 +42,7 @@ public class DoViewSmsGroupRecCommand implements PageRequestCommand {
 
 	private void clearNewSmsGroupAttributes(Session session) {
 		session.updateSessionAttribute(Session.SESSION_SMSGROUPREC_PARAMETER, null);
-		session.updateSessionAttribute(SmsPhoneRequestParameter.PHONE_PARAMETER_KEY, null);
+		session.updateSessionAttribute(SmsPhonesRequestParameter.PHONE_PARAMETER_KEY, null);
 	}
 	
 	private String getSmsGroupId (Session session) {

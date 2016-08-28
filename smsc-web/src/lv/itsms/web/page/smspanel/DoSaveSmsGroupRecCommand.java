@@ -3,15 +3,17 @@ package lv.itsms.web.page.smspanel;
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.request.parameter.SmsGroupBuilder;
 import lv.itsms.web.request.parameter.UserPageRequestParameter;
-import lv.itsms.web.request.parameter.smspanel.SmsPhoneRequestParameter;
-import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
+import lv.itsms.web.request.parameter.smspanel.SmsPhonesRequestParameter;
 import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
 import transfer.domain.SmsGroup;
+import transfer.validator.PhoneNumberValidator;
 
 public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 
+	private final static String COMMAND_INFO = "Message.saved.successesfully";
+	
 	CustomerPanelCommandFactory factory;
 
 	public DoSaveSmsGroupRecCommand(CustomerPanelCommandFactory factory) {
@@ -20,12 +22,11 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 
 	@Override
 	public void execute() throws Exception {
-		SmsGroup smsGroup = getInputedSmsGroupRecord();
 		
+		SmsGroup smsGroup = getInputedSmsGroupRecord();
 		String[] phoneNumbers = getInputedPhoneNumbers();
 		
-		factory.getSession().updateSessionAttribute(Session.SESSION_SMSGROUPREC_PARAMETER, smsGroup);				
-		factory.getSession().updateSessionAttribute(SmsPhoneRequestParameter.PHONE_PARAMETER_KEY, phoneNumbers);
+		storeUserInputedSmsGroupData(smsGroup, phoneNumbers);
 		
 		boolean result = validateSmsGroupFields(smsGroup);
 		if (result) { 
@@ -35,8 +36,15 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 				
 				smsGroup.setStatus(SmsGroup.STATUS_ACTIVE);
 				repository.updateSmsGroup(smsGroup, phoneNumbers);
+				factory.getSession().updateSessionAttribute(Session.SESSION_INFORMATION_PARAMETER, COMMAND_INFO);
 			}
 		}
+	}
+	
+	private void storeUserInputedSmsGroupData(SmsGroup smsGroup, String[] phoneNumbers) {
+			
+		factory.getSession().updateSessionAttribute(Session.SESSION_SMSGROUPREC_PARAMETER, smsGroup);		
+		factory.getSession().updateSessionAttribute(SmsPhonesRequestParameter.PHONE_PARAMETER_KEY, phoneNumbers);
 	}
 	
 	private SmsGroup getInputedSmsGroupRecord() {
@@ -45,7 +53,7 @@ public class DoSaveSmsGroupRecCommand implements PageRequestCommand {
 	}
 	
 	private String[] getInputedPhoneNumbers() {
-		UserPageRequestParameter phoneNumberUserRequest = factory.getUserPageRequest(SmsPhoneRequestParameter.PHONE_PARAMETER_KEY);
+		UserPageRequestParameter phoneNumberUserRequest = factory.getUserPageRequest(SmsPhonesRequestParameter.PHONE_PARAMETER_KEY);
 		phoneNumberUserRequest.update(factory.getRequest());
 		return phoneNumberUserRequest.getParameterValues();		
 	}

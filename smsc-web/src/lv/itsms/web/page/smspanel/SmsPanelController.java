@@ -8,21 +8,25 @@ import java.util.ResourceBundle;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lv.itsms.web.request.validator.smsgroup.PhoneNumberValidator;
+
+import lv.itsms.web.request.validator.sms.SmsFieldsValidator;
 import lv.itsms.web.request.validator.smsgroup.SmsGroupFieldsValidator;
 import lv.itsms.web.command.PageRequestCommand;
 import lv.itsms.web.command.UserRequestCommandManager;
 import lv.itsms.web.request.parameter.menu.CustomerMenuRequestParameter;
 import lv.itsms.web.service.Repository;
 import lv.itsms.web.session.Session;
+import transfer.validator.PhoneNumberValidator;
 
 /**
  * Parses URL and executes User SMS panel page requests
  */
 
+@MultipartConfig
 public class SmsPanelController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -66,6 +70,8 @@ public class SmsPanelController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//request.setCharacterEncoding("UTF-8");
+		
 		session.setRequest(request);
 		session.setSession(request.getSession());
 
@@ -78,9 +84,13 @@ public class SmsPanelController extends HttpServlet {
 		PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
 		userRequestCommandFactory.setPhoneNumberValidator(phoneNumberValidator);
 		
+		SmsFieldsValidator smsFieldsValidator = new SmsFieldsValidator();
+		userRequestCommandFactory.setSmsFieldsValidator(smsFieldsValidator);
+		
 		try {		
 			List<PageRequestCommand> commandsToBeExecuted = pageCommandManager.selectUserRequestedCommand(request);
 			executeUserRequestCommand(commandsToBeExecuted);
+			updateInformationMessage(request, response);
 			redirectToPage(request, response);	
 		} catch (RuntimeException exception) {
 			updateSessionExceptionError(exception, request);
@@ -95,6 +105,9 @@ public class SmsPanelController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		
+		System.out.println("Form buttron names " + request.getParameter("save"));
+
 		doGet(request, response);
 	}
 
@@ -124,15 +137,33 @@ public class SmsPanelController extends HttpServlet {
 	}
 
 	private void updateSessionExceptionError(Exception e, HttpServletRequest request) {
+		e.printStackTrace();
 		String exceptionMessage = e.getMessage();
+		exceptionMessage = getLocalisedMessage(exceptionMessage);
+		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
+	}
+	
+	private void updateInformationMessage(HttpServletRequest request, HttpServletResponse response) {
+		String information = (String) request.getSession().getAttribute(Session.SESSION_INFORMATION_PARAMETER);
+		if (information != null) {
+			information = getLocalisedMessage(information);
+			session.updateSessionAttribute(Session.SESSION_INFORMATION_PARAMETER, information);
+		}		
+	}
+	
+	private String getLocalisedMessage(String message) {
+		
+		String localisedMessage = message;
+		
 		String lng = session.getSessionLanguage(); 
 		
 		Locale currentLocale = new Locale(lng, lng.toUpperCase());
 		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-		if (messages.containsKey(exceptionMessage)) {
-			exceptionMessage = messages.getString(exceptionMessage);
+		if (messages.containsKey(message)) {
+			localisedMessage = messages.getString(message);
 		}
-		session.updateSessionAttribute(Session.SESSION_ERROR_PARAMETER, exceptionMessage);
+		
+		return localisedMessage;
 	}
 	
 	public Repository getRepository() {
