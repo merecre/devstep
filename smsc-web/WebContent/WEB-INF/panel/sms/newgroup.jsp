@@ -45,55 +45,67 @@ function add_fields(divName, inpName, bntName, btnDelId) {
      }
 </script>
 
-<br>
-
 <%-- form group description fields --%>
-<font color="red">${error}</font>
-<c:remove var="error" scope="session" />
+<form method="post" enctype="multipart/form-data" action="smscontroller.jsp">
 <table>
+	<tr><td colspan='6' align="center"><h3>${smspanelinfo.txtNewGroup}</h3></td></tr>
 	<tr>
 		<td>${smspanelinfo.txtGroupDescription}:</td>
-		<td><input type="text" name="g_common_name"
-			value="${smsgrouprec.smsGroupName}" /></td>
-		<td><input type="submit" value="save group" name="save">
+		<td colspan='2'><input type="text" name="g_common_name"	value="${smsgrouprec.smsGroupName}" /></td>
+		<td colspan='3'><input type="submit" value="${smspanelinfo.btnSend}" name="save">
 		</td>
 	</tr>
-</table>
-
-<br>
+	<tr>
+	
+	<td>${smspanelinfo.txtSender}:</td>
+	<td colspan='4'><input type="text" name="g_common_sender" value="${smsgrouprec.sender}" />
+	</tr>
 
 <%-- form group message fields --%>
 
-<table>
 	<tr>
 		<td>${smspanelinfo.txtGroupMessage}:</td>
-		<td><input type="text" name="g_common_message"
-			value="${smsgrouprec.groupMessage}" size="60" /></td>
+		<td colspan='5'>
+		<textarea id="sms_message" name="g_common_message" rows="2" cols="35" maxlength= "800">${smsgrouprec.groupMessage}</textarea>
+		<div style="font-size: small; font-family: sans-serif; color:#636260" id="counter"></div>
+		</td>
 	</tr>
-</table>
-
+	<tr><td colspan='6'>
+		<div style="font-size: small; font-family: sans-serif; color:#636260">
+			${smspanelinfo.txtCharInformation}
+		</div>
+	</td></tr>
+	</table>
+	
+<script language = "JavaScript">
+var area = document.getElementById("sms_message");
+var message = document.getElementById("counter");
+var maxLength = 800;
+var checkLength = function() {
+    if(area.value.length <= maxLength) {
+        message.innerHTML = (area.value.length) + " "+ "${smspanelinfo.txtCharCounterMsg}.";
+    }
+}
+setInterval(checkLength, 300);
+</script>	
+	
+	<table>
 <%-- form send date and time fields --%>
-
-<table>
 	<tr>
 		<td>
 			<p>${smspanelinfo.txtSendDate}:</p>
 		</td>
-		<td><c:set var="datetime" value="${smsgrouprec.sendTime}"
-				scope="page" /> <fmt:formatDate var="date" value="${datetime}"
-				pattern="yyyy-MM-dd" /> <fmt:formatDate var="hour"
-				value="${datetime}" pattern="HH" /> <fmt:formatDate var="minutes"
-				value="${datetime}" pattern="mm" /> <input type="text"
-			value="${date}" name="grp_send_date" id="grp_send_date"
-			data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD"
-			size="10" /> <script
-				src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-			<script src="js/moment-with-locales.min.js"></script> <script
-				src="js/ion.calendar.js"></script> <script>
-$(function(){
-    $("#grp_send_date").ionDatePicker();
-});
-</script></td>
+		<td>
+		<c:set var="datetime" value="${smsgrouprec.sendTime}" scope="page" /> 
+		<fmt:formatDate var="date" value="${datetime}" pattern="yyyy-MM-dd" /> 
+		<fmt:formatDate var="hour" value="${datetime}" pattern="HH" /> 
+		<fmt:formatDate var="minutes" value="${datetime}" pattern="mm" /> 
+		<input type="text" value="${date}" name="grp_send_date" id="grp_send_date" data-lang="lv" data-years="2015-2035" data-format="YYYY-MM-DD" size="10" /> 
+		<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="js/moment-with-locales.min.js"></script> 
+		<script	src="js/ion.calendar.js"></script> 
+		<script> $(function(){ $("#grp_send_date").ionDatePicker();});</script>
+		</td>
 		<td>${smspanelinfo.txtSendTime}:</td>
 		<td><input type="time" value="${hour}" name="grp_send_time_hour"
 			maxlength="2" size="2"></td>
@@ -103,8 +115,39 @@ $(function(){
 	</tr>
 </table>
 
+
 <%-- Phone numbers list and input buttons: deleteRow; addRow  --%>
 
+<script language="JavaScript" type="text/javascript">
+
+function HandleBrowseClick()
+{
+    var fileinput = document.getElementById("browse");
+    fileinput.click();
+}
+
+function Handlechange()
+{
+var fileinput = document.getElementById("browse");
+var textinput = document.getElementById("filename");
+textinput.value = fileinput.value;
+}
+</script>
+
+
+
+<table>
+	<tr><td align='center' colspan='3'>${smspanelinfo.txtTitleImport}:</td></tr>
+	<tr>
+	<td><input type="file" id="browse" name="contacts" style="display: none" accept=".csv" onChange="Handlechange();">
+	<input type="text" id="filename" readonly/></td>
+	<td><input type="button" value="${smspanelinfo.txtBtnToSelectFile}" id="fakeBrowse" onclick="HandleBrowseClick();"/></td>
+	<td><input type="submit" value="${smspanelinfo.txtBtnImport}" name="importfile"></td>
+
+	</tr>
+</table>
+
+<%-- Phone numbers list and input buttons: deleteRow; addRow  --%>
 <table id="phone_group">
 	<thead>
 		<tr>
@@ -119,10 +162,10 @@ $(function(){
 							<tr>
 						<td><input type="text" name="phone" value="" /></td>
 						<td><input type="button" id="more_fields"
-							onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');"
-							value="Add row" /></td>
+							onclick="add_fields('phone_group', 'phone', '${smspanelinfo.txtRemoveRow}', 'delete');"
+							value="${smspanelinfo.txtAddRow}" /></td>
 						<td><input type="button" id="delete"
-							onclick="deleteLastRow('phone_group');" value="Delete row" /></td>
+							onclick="deleteLastRow('phone_group');" value="${smspanelinfo.txtRemoveRow}" /></td>
 					</tr>
 		
 		</c:if>
@@ -135,10 +178,10 @@ $(function(){
 					<tr>
 						<td><input type="text" name="phone" value="${phonenumber1}" /></td>
 						<td><input type="button" id="more_fields"
-							onclick="add_fields('phone_group', 'phone', 'Delete', 'delete');"
-							value="Add row" /></td>
+							onclick="add_fields('phone_group', 'phone', '${smspanelinfo.txtRemoveRow}', 'delete');"
+							value="${smspanelinfo.txtAddRow}" /></td>
 						<td><input type="button" id="delete"
-							onclick="deleteLastRow('phone_group');" value="Delete row" /></td>
+							onclick="deleteLastRow('phone_group');" value="${smspanelinfo.txtRemoveRow}" /></td>
 					</tr>
 				</c:when>
 			</c:choose>
@@ -148,10 +191,11 @@ $(function(){
 					<td><input type="text" name="phone"
 						value="<c:out value="${phonegroup}"/>" /></td>
 					<td><input type="button" id="delete"
-						onClick="deleteThisRow(this, 'phone_group')" value="Delete" /></td>
+						onClick="deleteThisRow(this, 'phone_group')" value="${smspanelinfo.txtRemoveRow}" /></td>
 				</tr>
 			</c:if>
 
 		</c:forEach>
 	</tbody>
 </table>
+</form>

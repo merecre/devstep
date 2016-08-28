@@ -21,11 +21,15 @@
 	
 	<jsp:include page="/reportrequest.jsp" />
 	
-	<table align="center" width="25%" border="0">
+	<table align="center" border="0">
+	<tr><td>
+		<table cellspacing="10">
 		<tr>
-			<td align="center"><a	href='<%= request.getContextPath() %>/chart.jsp?id=Home&cusMenu=Sms&report=Period'>${reportinfo['hrefPeriodReport']}</a></td>
-			<td align="center"><a	href='<%= request.getContextPath() %>/chart.jsp?id=Home&cusMenu=Sms&report=Message'>${reportinfo['hrefPerMessageReport']}</a></td>
+			<td align="center"><a class='report' href='<%= request.getContextPath() %>/chart.jsp?id=Home&cusMenu=Sms&report=Period'>${reportinfo['hrefPeriodReport']}</a></td>
+			<td align="center"><a class='report' href='<%= request.getContextPath() %>/chart.jsp?id=Home&cusMenu=Sms&report=Message'>${reportinfo['hrefPerMessageReport']}</a></td>
 		</tr>
+		</table>
+	</td></tr>
 	</table>
 	
 	<c:if test="${param.cusMenu == 'Sms' && param.report == 'Period'}">	

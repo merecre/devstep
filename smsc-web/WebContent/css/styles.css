@@ -253,6 +253,10 @@ h2 {
 	color: #0c7fb0;
 }
 
+h3 {
+	color:  #33CC99;
+}
+
 table.t th {
 	color: #a3d4a0;
 }
@@ -266,7 +270,8 @@ td.grey {
 }
 
 input.grey {
-    background-color: lightgrey;
+    background-color: 	#E8E8E8;
+    border: 0;
 }
 
 table.sub {
@@ -325,6 +330,26 @@ a.login:hover {
 a.login {
 	color: #ffffff;
 	text-decoration: none;
+}
+
+a.report:hover {
+	color: #ff5c33;
+	text-decoration: none;
+}
+
+a.report: active {
+	color: #ff5c33;
+	text-decoration: none;
+}
+
+a.report {
+	color: #0066cc;
+	text-decoration: none;
+}
+
+table.smsreport {
+	border-collapse:separate; 
+	border-spacing:0.5em;
 }
 
 #lang {

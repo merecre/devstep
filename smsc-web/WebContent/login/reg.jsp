@@ -13,6 +13,9 @@
 
 	<jsp:include page="/registrationloader.jsp" />
 
+	<font color="green">${information}</font>
+	<c:remove var="information" scope="session" />
+
 	<form method="post"
 		action="<%= request.getContextPath() %>/login/registration.jsp">
 		<center>
